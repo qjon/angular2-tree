@@ -3,6 +3,14 @@
   "version": "0.2.2",
   "license": "MIT",
   "angular-cli": {},
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve --proxy-config proxy.config.json",
+    "lint": "tslint \"src/**/*.ts\"",
+    "test": "ng test",
+    "pree2e": "webdriver-manager update --standalone false --gecko false",
+    "e2e": "protractor"
+  },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/qjon/ri-angular-tree2.git"
