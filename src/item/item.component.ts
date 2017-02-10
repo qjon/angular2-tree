@@ -6,8 +6,8 @@ import {ContextMenuService} from 'angular2-contextmenu';
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'tree-item',
-  templateUrl: './item.component.html',
-  styleUrls: ['./item.component.css']
+  templateUrl: 'item.component.html',
+  styleUrls: ['item.component.css']
 })
 export class ItemComponent {
   @ViewChild('inputElement') input: any;

@@ -8,8 +8,8 @@ import {NodeModel} from './models/NodeModel';
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'ri-tree',
-  templateUrl: './tree.component.html',
-  styleUrls: ['./tree.component.less']
+  templateUrl: 'tree.component.html',
+  styleUrls: ['tree.component.less']
 })
 export class TreeComponent implements OnChanges {
   /**
