@@ -1,5 +1,5 @@
 {
-  "name": "@rign/angular-tree",
+  "name": "@rign/angular2-tree",
   "version": "0.3.1",
   "license": "MIT",
   "angular-cli": {},
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/qjon/ri-angular-tree2.git"
+    "url": "git+ssh://git@github.com/qjon/angular2-tree.git"
   },
   "main": "main.ts",
   "author": "Rafal Ignaszewski <rafal@ignaszewski.pl> http://ignaszewski.pl",

@@ -1,4 +1,4 @@
-# ri-angular-tree
+# angular2-tree
 
 ## Instalation
 
