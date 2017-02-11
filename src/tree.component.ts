@@ -7,7 +7,7 @@ import {NodeModel} from './models/NodeModel';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
-  selector: 'ri-tree',
+  selector: 'rign-tree',
   templateUrl: 'tree.component.html',
   styleUrls: ['tree.component.less']
 })
@@ -90,16 +90,16 @@ export class TreeComponent implements OnChanges {
    * @param node - node item
    */
   public onContextMenuClick(name: string, node: NodeModel) {
-    // switch (name) {
-    //   case 'onEdit':
-    //     event.stopPropagation();
-    //     node.setEditMode(true);
-    //     break;
-    //   case 'onDelete':
-    //     node.onRemove();
-    //     break;
-    //   default:
-    //     this.onContextMenuItemClick({eventName: name, node: node});
-    // }
+    switch (name) {
+      case 'onEdit':
+        event.stopPropagation();
+        node.setEditMode(true);
+        break;
+      case 'onDelete':
+        node.onRemove();
+        break;
+      default:
+        this.onContextMenuItemClick({eventName: name, node: node});
+    }
   }
 }

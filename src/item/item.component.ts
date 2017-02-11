@@ -5,7 +5,7 @@ import {ContextMenuService} from 'angular2-contextmenu';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
-  selector: 'tree-item',
+  selector: 'rign-tree-item',
   templateUrl: 'item.component.html',
   styleUrls: ['item.component.css']
 })
