@@ -2,7 +2,7 @@
 
 ## Installation
 
-    npm i rign/angular2-tree
+    npm i @rign/angular2-tree
     
 ## Usage
     
