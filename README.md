@@ -4,6 +4,17 @@
 
     npm i @rign/angular2-tree
     
+## Changes
+
+### v0.6.0
+
+* upgrade angular/cli to version _beta.32.3_
+* fix demo
+
+### v0.5.0
+
+* primary version with all features described below.
+
 ## Usage
     
 Include _TreeModule_ in your application module;
@@ -53,9 +64,9 @@ Each of above _$event_ parameter is _ITreeItemEvent_ which contains:
 * _node_: NodeModel - current node on which the event is fired
 * _status_: boolean - optional parameter (used in _onToggle_ event: _true_ - expand , _false_ - collapse)
     
-## Example
+## Demo
 
-In folder example you can find application which use _TreeModule_
+In folder _demo_ you can find application which use _TreeModule_
 
 To run this example run in console:
     
@@ -63,6 +74,6 @@ To run this example run in console:
     
         npm start
         
-* backend (be sure that directory _backend/data_ has permissions to write)
+* backend (be sure that directory _demo/backend/data_ has permissions to write)
 
         npm run backend

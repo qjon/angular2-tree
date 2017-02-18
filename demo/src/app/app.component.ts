@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {IOuterNode, FolderService, ITreeItemEvent, TreeComponent, IContextMenu} from '../../main';
+import {IOuterNode, FolderService, ITreeItemEvent, TreeComponent, IContextMenu} from '../../../main';
 
 @Component({
   selector: 'app-root',

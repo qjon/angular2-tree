@@ -6,7 +6,6 @@ import {ConfigService} from './config.service';
 import {HttpModule} from '@angular/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ContextMenuModule} from 'angular2-contextmenu';
-import {BrowserModule} from '@angular/platform-browser';
 import {TreeComponent} from './tree.component';
 
 @NgModule({

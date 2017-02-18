@@ -77,7 +77,7 @@ app.put('/folders', function (req, res) {
 app.post('/folders', function (req, res) {
     var data = req.body;
     var folder = data.node;
-    var parentFolderId = data.parentNodeId;
+    var parentFolderId = data.parentNodeId || '';
     var newDirId = parentFolderId + '/' + folder.name;
 
     if (!isDirectory(newDirId)) {
