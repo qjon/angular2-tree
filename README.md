@@ -6,6 +6,10 @@
     
 ## Changes
 
+### v0.6.1
+
+* expose _ConfigService_ - it allow override urls for create, edit, and delete folder
+
 ### v0.6.0
 
 * upgrade angular/cli to version _beta.32.3_
