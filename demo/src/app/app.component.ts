@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {IOuterNode, FolderService, ITreeItemEvent, TreeComponent, IContextMenu} from '../../../main';
+import {IOuterNode, NodeService, ITreeItemEvent, TreeComponent, IContextMenu} from '../../../main';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
 
   public contextMenu: IContextMenu[] = [];
 
-  public constructor(protected folderService: FolderService) {
+  public constructor(protected folderService: NodeService) {
   }
 
   public ngOnInit() {

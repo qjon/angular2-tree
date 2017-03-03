@@ -6,6 +6,12 @@
     
 ## Changes
 
+### v0.6.2
+
+* change name FolderService to NodeService
+* change params names from _dirId_ to _nodeId_
+* now you can use in your API paths parameter _{nodeId}_ which will be replaced on _nodeId_
+
 ### v0.6.1
 
 * expose _ConfigService_ - it allow override urls for create, edit, and delete folder

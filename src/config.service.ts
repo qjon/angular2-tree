@@ -8,9 +8,9 @@ export class ConfigService {
   public removeUrl: string;
 
   public constructor() {
-    this.addUrl = '/api/folder';
-    this.getUrl = '/api/folder';
-    this.updateUrl = '/api/folder';
-    this.removeUrl = '/api/folder';
+    this.addUrl = '/api/nodes';
+    this.getUrl = '/api/nodes';
+    this.updateUrl = '/api/nodes';
+    this.removeUrl = '/api/nodes';
   }
 }

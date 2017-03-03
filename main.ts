@@ -8,7 +8,7 @@ import {IContextMenu} from "./src/interfaces/IContextMenu";
 import {ITreeItemEvent} from "./src/interfaces/ITreeItemEvent";
 import {IOuterNode} from "./src/interfaces/IOuterNode";
 import {TREE_EVENTS} from "./src/constants/events";
-import {FolderService} from "./src/folder.service";
+import {NodeService} from "./src/node.service";
 import {ConfigService} from "./src/config.service";
 
 export {
@@ -16,7 +16,7 @@ export {
   TreeModule,
   TreeComponent,
   ItemComponent,
-  FolderService,
+  NodeService,
   NodeModel,
   TreeModel,
   IAppConfig,

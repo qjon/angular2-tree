@@ -1,7 +1,7 @@
 import {NgModule, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ItemComponent} from './item/item.component';
-import {FolderService} from './folder.service';
+import {NodeService} from './node.service';
 import {ConfigService} from './config.service';
 import {HttpModule} from '@angular/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -18,7 +18,7 @@ import {TreeComponent} from './tree.component';
   ],
   declarations: [TreeComponent, ItemComponent],
   exports: [TreeComponent],
-  providers: [FolderService, ConfigService],
+  providers: [NodeService, ConfigService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TreeModule {
