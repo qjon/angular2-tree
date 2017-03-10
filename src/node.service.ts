@@ -2,12 +2,14 @@ import {Injectable} from '@angular/core';
 import {Http, URLSearchParams, Response} from '@angular/http';
 import {Observable} from 'rxjs';
 import {IOuterNode} from './interfaces/IOuterNode';
-import {ConfigService} from './config.service';
+import {IApiConfig} from './IApiConfig.service';
 
 @Injectable()
 export class NodeService {
 
-  public constructor(private http: Http, private apiConfig: ConfigService) {
+  protected apiConfig: IApiConfig;
+
+  public constructor(private http: Http) {
   }
 
   public load(nodeId = ''): Observable<IOuterNode[]> {
@@ -66,6 +68,10 @@ export class NodeService {
    * @returns {string|void}
    */
   private getPath(type: string, nodeId: string) {
+    if (!this.apiConfig) {
+      throw 'No API configuration for Tree';
+    }
+
     let urlMap = {
       'GET': this.apiConfig.getUrl,
       'CREATE': this.apiConfig.addUrl,

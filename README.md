@@ -6,6 +6,10 @@
     
 ## Changes
 
+### v0.7.0
+
+* remove API config service (see section _Usage_)
+
 ### v0.6.2
 
 * change name FolderService to NodeService
@@ -53,6 +57,20 @@ In any html file put
       (onToggle)="onToggle($event)"
       (onSelect)="onSelect($event)"
     ></rign-tree>
+    
+Create your own loader service as it is done in example        
+
+    @Injectable()
+    export class AppNodeService extends NodeService {
+      protected apiConfig = {
+        addUrl: '/api/nodes',
+        getUrl: '/api/nodes',
+        updateUrl: '/api/nodes',
+        removeUrl: '/api/nodes',
+      }
+    }
+
+and use it to load data.
     
 ## Parameters
 

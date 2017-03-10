@@ -9,10 +9,10 @@ import {ITreeItemEvent} from "./src/interfaces/ITreeItemEvent";
 import {IOuterNode} from "./src/interfaces/IOuterNode";
 import {TREE_EVENTS} from "./src/constants/events";
 import {NodeService} from "./src/node.service";
-import {ConfigService} from "./src/config.service";
+import {IApiConfig} from "./src/IApiConfig.service";
 
 export {
-  ConfigService,
+  IApiConfig,
   TreeModule,
   TreeComponent,
   ItemComponent,
