@@ -6,6 +6,10 @@
     
 ## Changes
 
+### v0.8.1
+
+* fix package.json
+
 ### v0.8.0
 
 * allow to create own template for tree item (if not specify it use default) - look in demo
