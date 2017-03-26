@@ -1,0 +1,13 @@
+<rign-tree
+  [disableContextMenu]="true"
+  [showAddButton]="true"
+  [nodes]="folders"
+  [menu]="contextMenu"
+  (onAdd)="onAdd($event)"
+  (onChange)="onChange($event)"
+  (onRemove)="onRemove($event)"
+  (onToggle)="onToggle($event)"
+  (onSelect)="onSelect($event)"
+>
+    <new-tree-item *ngFor="let node of treeComponent.tree.nodes" [node]="node"></new-tree-item>
+</rign-tree>

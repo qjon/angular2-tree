@@ -2,8 +2,11 @@
   <button *ngIf="showAddButton" class="btn btn-default" (click)="addNode()">
     <i class="fa fa-plus"></i> Add node
   </button>
-  <rign-tree-item *ngFor="let node of tree.nodes" [node]="node"></rign-tree-item>
-  <context-menu>
+  <div #customTemplate><ng-content></ng-content></div>
+  <div *ngIf="customTemplate.childNodes.length === 0">
+    <rign-tree-item *ngFor="let node of tree.nodes" [node]="node"></rign-tree-item>
+  </div>
+  <context-menu #contextMenu>
     <template *ngFor="let menuItem of menuList" contextMenuItem let-item (execute)="onContextMenuClick(menuItem.name, $event.item)">
       <span class="{{menuItem.iconCls}}" style="width: 20px; display: inline-block;"></span>
       {{menuItem.text}}

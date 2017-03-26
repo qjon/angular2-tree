@@ -10,11 +10,25 @@ import {ContextMenuService} from 'angular2-contextmenu';
   styleUrls: ['item.component.css']
 })
 export class ItemComponent {
+  /**
+   * Input field where we can change node name
+   */
   @ViewChild('inputElement') input: any;
+
+  /**
+   * Node instance
+   */
   @Input() node: NodeModel;
 
+  /**
+   * Form field to change node name
+   * @type {FormControl}
+   */
   public nameField = new FormControl();
 
+  /**
+   * @param contextMenuService
+   */
   public constructor(private contextMenuService: ContextMenuService) {
     this.nameField.registerOnChange(() => {
       this.setFocus();
@@ -57,15 +71,13 @@ export class ItemComponent {
    * @param node
    */
   public onContextMenu($event: MouseEvent, node: NodeModel) {
-    this.contextMenuService.show.next({
-      event: $event,
-      item: node
-    });
+    node.tree.onOpenContextMenu($event, node);
+
     $event.preventDefault();
     $event.stopPropagation();
   }
 
-  private setFocus() {
+  protected setFocus() {
     setTimeout(() => this.input.nativeElement.focus());
   }
 }

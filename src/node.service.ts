@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, Inject} from '@angular/core';
 import {Http, URLSearchParams, Response} from '@angular/http';
 import {Observable} from 'rxjs';
 import {IOuterNode} from './interfaces/IOuterNode';
@@ -6,8 +6,7 @@ import {IApiConfig} from './IApiConfig.service';
 
 @Injectable()
 export class NodeService {
-
-  protected apiConfig: IApiConfig;
+  protected apiConfig: IApiConfig
 
   public constructor(private http: Http) {
   }

@@ -2,23 +2,22 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
-import {AppComponent} from './app.component';
-import {TreeOneModule} from "./treeOne/treeOne.module";
-import {TreeTwoModule} from "./treeTwo/treeTwo.module";
+import {TreeModule} from '../../../../main';
+import {TreeOneComponent} from "./treeOne.component";
+import {TreeOneNodeService} from "./treeOneNode.service";
 
 @NgModule({
   declarations: [
-    AppComponent
+    TreeOneComponent
   ],
+  exports: [TreeOneComponent],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
-    TreeOneModule,
-    TreeTwoModule
+    TreeModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [TreeOneNodeService]
 })
-export class AppModule {
+export class TreeOneModule {
 }

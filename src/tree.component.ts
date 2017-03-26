@@ -1,9 +1,17 @@
-import {Component, OnChanges, Input, Output, EventEmitter, ViewEncapsulation} from '@angular/core';
+import {
+  Component,
+  OnChanges,
+  Input,
+  Output,
+  EventEmitter,
+  ViewEncapsulation, ViewChild
+} from '@angular/core';
 import {IOuterNode} from './interfaces/IOuterNode';
 import {IContextMenu} from './interfaces/IContextMenu';
 import {TreeModel} from './models/TreeModel';
 import {TREE_EVENTS} from './constants/events';
 import {NodeModel} from './models/NodeModel';
+import {ContextMenuComponent} from "angular2-contextmenu";
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -16,9 +24,24 @@ export class TreeComponent implements OnChanges {
    * list of nodes on which is build the tree
    */
   @Input() nodes: Array<IOuterNode>;
+
+  /**
+   * Is "Add button" enabled
+   * @type {boolean}
+   */
   @Input() showAddButton = false;
+
+  /**
+   * Context menu
+   * @type {Array}
+   */
   @Input() menu: IContextMenu[] = [];
 
+  /**
+   * If context menu should be disabled
+   * @type {boolean}
+   */
+  @Input() disableContextMenu: boolean = false;
 
   @Output() onSelect: any;
   @Output() onToggle: any;
@@ -26,6 +49,11 @@ export class TreeComponent implements OnChanges {
   @Output() onAdd: any;
   @Output() onRemove: any;
   @Output() onContextMenuItemClick: any;
+
+  private onContextMenuOpen = new EventEmitter();
+
+  @ViewChild('contextMenu')
+  public contextMenu: ContextMenuComponent;
 
   /**
    * List of default options for context menu
@@ -45,6 +73,9 @@ export class TreeComponent implements OnChanges {
     }
   ];
 
+  /**
+   * Tree model
+   */
   public tree: TreeModel;
 
   /**
@@ -55,13 +86,16 @@ export class TreeComponent implements OnChanges {
   public menuList: IContextMenu[] = [];
 
   public constructor() {
-    this.tree = new TreeModel();
-
-    Object.keys(TREE_EVENTS).forEach((eventName: string) => {
-      this.tree.registerEvent(eventName, this[eventName] = new EventEmitter());
-    });
+    this.createTreeModel();
+    this.registerTreeEvents();
+    this.subscribeToOnOpenContextMenu();
   }
 
+  /**
+   * Add new node
+   * @param name
+   * @returns {NodeModel}
+   */
   public addNode(name = 'New node'): NodeModel {
     let node = this.tree.addNode({id: null, name: name, children: []});
     node.setEditMode(true);
@@ -72,7 +106,7 @@ export class TreeComponent implements OnChanges {
     return node;
   }
 
-  public ngOnChanges() {
+  public ngOnChanges(data: any) {
     this.tree.nodes = this.nodes;
 
     this.menuList = [];
@@ -101,5 +135,30 @@ export class TreeComponent implements OnChanges {
       default:
         this.onContextMenuItemClick({eventName: name, node: node});
     }
+  }
+
+  /**
+   * Create tree model
+   */
+  private createTreeModel() {
+    this.tree = new TreeModel();
+  }
+
+  private registerTreeEvents() {
+    Object.keys(TREE_EVENTS)
+      .forEach((eventName: string) => {
+        this.tree.registerEvent(eventName, this[eventName] = new EventEmitter());
+      });
+
+    this.tree.registerEvent('onOpenContextMenu', this.onContextMenuOpen);
+  }
+
+  private subscribeToOnOpenContextMenu() {
+    this.onContextMenuOpen
+      .subscribe((data: any) => {
+        if (!this.disableContextMenu) {
+          this.contextMenu.onMenuEvent(data);
+        }
+      });
   }
 }

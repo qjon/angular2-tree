@@ -3,8 +3,6 @@ import {NodeModel} from './NodeModel';
 import {IOuterNode} from '../interfaces/IOuterNode';
 import {ITreeItemEvent} from '../interfaces/ITreeItemEvent';
 import {TREE_EVENTS} from '../constants/events';
-import {Observable} from 'rxjs';
-import {PromiseObservable} from 'rxjs/observable/PromiseObservable';
 
 export class TreeModel {
   private _nodes: Array<NodeModel> = [];
@@ -84,6 +82,19 @@ export class TreeModel {
    */
   public onChange(event: ITreeItemEvent) {
     this.events[TREE_EVENTS.onChange].next(event);
+  }
+
+  /**
+   * Fired when user open context menu
+   *
+   * @param event
+   * @param node
+   */
+  public onOpenContextMenu(event: MouseEvent, node: NodeModel) {
+    this.events['onOpenContextMenu'].next({
+      event: event,
+      item: node
+    })
   }
 
   /**
