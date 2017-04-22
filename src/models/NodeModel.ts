@@ -148,6 +148,12 @@ export class NodeModel {
     return this._open;
   }
 
+  public reorderChilds() {
+    this._children.sort((a: NodeModel, b: NodeModel): number => {
+      return a.name > b.name ? 1 : -1;
+    })
+  }
+
   /**
    * Remove current node from structure
    */

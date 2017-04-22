@@ -3,5 +3,6 @@ export const TREE_EVENTS = {
   onChange: 'onChange',
   onSelect: 'onSelect',
   onRemove: 'onRemove',
-  onToggle: 'onToggle'
+  onToggle: 'onToggle',
+  onMove: 'onMove'
 };

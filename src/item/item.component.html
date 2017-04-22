@@ -1,14 +1,21 @@
-<div class="tree-item" (contextmenu)="onContextMenu($event, node)" [ngClass]="{'tree-item-selected': node.isSelected}">
+<div class="tree-item"
+     ri-droppable
+     ri-draggable
+     [dropConfig]="{dropAllowedCssClass: 'drop-allowed'}"
+     [node]="node"
+     [ngClass]="{'tree-item-selected': node.isSelected}"
+     (contextmenu)="onContextMenu($event, node)"
+>
   <i *ngIf="!node.isExpanded()" (click)="node.expand()" class="fa fa-caret-right pointer"></i>
   <i *ngIf="node.isExpanded()" (click)="node.collapse()" class="fa fa-caret-down pointer"></i>
-  <span *ngIf="!node.editMode" class="tree-item-name" (click)="node.onSelect()">
+  <span *ngIf="!node.editMode" class="tree-item-name" (click)="node.onSelect()" ri-draggable [node]="node">
                 {{node.name}}
             </span>
   <form name="form">
     <input #inputElement type="text" class="form-control" *ngIf="node.editMode" [formControl]="nameField"
            [(ngModel)]="node.name" name="name" (keydown)="onChange($event)" (blur)="onBlur($event)"/>
   </form>
-  <div class="tree" *ngIf="node.isExpanded() && node.hasChildren()">
-    <rign-tree-item *ngFor="let child of node.children" [node]="child"></rign-tree-item>
-  </div>
+</div>
+<div class="tree" *ngIf="node.isExpanded() && node.hasChildren()">
+  <rign-tree-item *ngFor="let child of node.children" [node]="child"></rign-tree-item>
 </div>

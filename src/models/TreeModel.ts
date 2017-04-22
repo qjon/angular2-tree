@@ -3,11 +3,14 @@ import {NodeModel} from './NodeModel';
 import {IOuterNode} from '../interfaces/IOuterNode';
 import {ITreeItemEvent} from '../interfaces/ITreeItemEvent';
 import {TREE_EVENTS} from '../constants/events';
+import {IConfiguration} from "../interfaces/IConfiguration";
 
 export class TreeModel {
+  private _configuration: IConfiguration;
   private _nodes: Array<NodeModel> = [];
   private _selected: NodeModel = null;
   private events = {};
+
 
   public constructor(private _orgNodes: Array<IOuterNode> = null) {
     this.nodes = _orgNodes;
@@ -27,6 +30,14 @@ export class TreeModel {
     }
   }
 
+  get configuration() {
+    return this._configuration;
+  }
+
+  set configuration(configuration: IConfiguration) {
+    this._configuration = configuration;
+  }
+
   /**
    * Create node and add it to current selected node or as rootNode element
    * @param {IOuterNode} nodeData
@@ -38,11 +49,17 @@ export class TreeModel {
     if (this._selected) {
       node = this._selected.addChild(nodeData);
     } else {
-      node = new NodeModel(nodeData, null, this);
-      this._nodes.push(node);
+      node = this.createRootNode(nodeData);
     }
 
     node.isNew = true;
+
+    return node;
+  }
+
+  public createRootNode(nodeData: IOuterNode) {
+    let node = new NodeModel(nodeData, null, this);
+    this._nodes.push(node);
 
     return node;
   }
@@ -54,6 +71,12 @@ export class TreeModel {
    */
   public registerEvent(eventName: string, emitter: EventEmitter<any>) {
     this.events[eventName] = emitter;
+  }
+
+  public reorderRootNodes() {
+    this._nodes.sort((a: NodeModel, b: NodeModel): number => {
+      return a.name > b.name ? 1 : -1;
+    })
   }
 
   /**
@@ -94,6 +117,19 @@ export class TreeModel {
     this.events['onOpenContextMenu'].next({
       event: event,
       item: node
+    })
+  }
+
+  /**
+   * Fired when one node is moved to another
+   *
+   * @param source
+   * @param target
+   */
+  public onMove(source: NodeModel, target: NodeModel) {
+    this.events['onMove'].next({
+      source: source,
+      target: target
     })
   }
 

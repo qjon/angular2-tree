@@ -3,6 +3,7 @@ import {Http, URLSearchParams, Response} from '@angular/http';
 import {Observable} from 'rxjs';
 import {IOuterNode} from './interfaces/IOuterNode';
 import {IApiConfig} from './IApiConfig.service';
+import {NodeModel} from "./models/NodeModel";
 
 @Injectable()
 export class NodeService {
@@ -39,6 +40,29 @@ export class NodeService {
       });
   }
 
+  public move(srcNode: NodeModel, targetNode: NodeModel | null): Observable<IOuterNode> {
+    let srcId = srcNode.id;
+    let targetId = targetNode ? targetNode.id : null;
+
+    return this.http.put(this.getPath('MOVE', srcId, targetId), {source: srcId, target: targetId})
+      .map((res: Response) => {
+        let body = res.json();
+
+        srcNode.remove();
+
+        if (targetNode) {
+          if (targetNode.isExpanded()) {
+            targetNode.addChild(body);
+            targetNode.reorderChilds();
+          }
+        } else {
+          srcNode.tree.createRootNode(body);
+          srcNode.tree.reorderRootNodes();
+        }
+
+        return body || [];
+      });
+  }
 
   public update(node: IOuterNode): Observable<IOuterNode> {
     return this.http.put(this.getPath('UPDATE', node.id), node)
@@ -48,7 +72,6 @@ export class NodeService {
         return body || [];
       });
   }
-
 
   public remove(nodeId: string): Observable<any> {
     return this.http.delete(this.getPath('REMOVE', nodeId), {body: {nodeId: nodeId}})
@@ -60,13 +83,15 @@ export class NodeService {
   }
 
   /**
-   * Replace in url {id} to nodeId
+   *
+   * Replace in url nodeIds
    *
    * @param type
    * @param nodeId
-   * @returns {string|void}
+   * @param destNodeId
+   * @returns {void|string|any}
    */
-  private getPath(type: string, nodeId: string) {
+  private getPath(type: string, nodeId: string, destNodeId: string = null) {
     if (!this.apiConfig) {
       throw 'No API configuration for Tree';
     }
@@ -75,9 +100,16 @@ export class NodeService {
       'GET': this.apiConfig.getUrl,
       'CREATE': this.apiConfig.addUrl,
       'REMOVE': this.apiConfig.removeUrl,
-      'UPDATE': this.apiConfig.updateUrl
+      'UPDATE': this.apiConfig.updateUrl,
+      'MOVE': this.apiConfig.moveUrl
     };
 
-    return urlMap[type].replace('{nodeId}', nodeId);
+    let path = urlMap[type].replace('{nodeId}', nodeId);
+
+    if (destNodeId) {
+      path = path.replace('{destNodeId}', destNodeId);
+    }
+
+    return path;
   }
 }

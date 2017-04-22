@@ -1,14 +1,15 @@
-<div class="tree-item row" (contextmenu)="onContextMenu($event, node)" [ngClass]="{'tree-item-selected': node.isSelected}">
-    <div class="col-sm-8">
-      <i *ngIf="!node.isExpanded()" (click)="node.expand()" class="fa fa-plus pointer"></i>
-      <i *ngIf="node.isExpanded()" (click)="node.collapse()" class="fa fa-minus pointer"></i>
-      <span *ngIf="!node.editMode" class="tree-item-name" (click)="node.onSelect()">{{node.name}}</span>
-      <form name="form">
-          <input #inputElement type="text" class="form-control" *ngIf="node.editMode" [formControl]="nameField"
-                 [(ngModel)]="node.name" name="name" (keydown)="onChange($event)" (blur)="onBlur($event)"/>
-      </form>
-    </div>
-    <div class="col-sm-4 text-right">
+<div class="tree-item row" ri-droppable [dropConfig]="{dropAllowedCssClass: 'drop-enabled'}" ri-draggable [node]="node"
+     (contextmenu)="onContextMenu($event, node)" [ngClass]="{'tree-item-selected': node.isSelected}">
+  <div class="col-sm-8">
+    <i *ngIf="!node.isExpanded()" (click)="node.expand()" class="fa fa-plus pointer"></i>
+    <i *ngIf="node.isExpanded()" (click)="node.collapse()" class="fa fa-minus pointer"></i>
+    <span *ngIf="!node.editMode" class="tree-item-name" (click)="node.onSelect()">{{node.name}}</span>
+    <form name="form">
+      <input #inputElement type="text" class="form-control" *ngIf="node.editMode" [formControl]="nameField"
+             [(ngModel)]="node.name" name="name" (keydown)="onChange($event)" (blur)="onBlur($event)"/>
+    </form>
+  </div>
+  <div class="col-sm-4 text-right">
       <span class="btn-group btn-group-sm">
         <button class="btn btn-primary" (click)="node.setEditMode(true)" [disabled]="node.editMode">
           <i class="fa fa-edit"></i>
@@ -17,8 +18,8 @@
           <i class="fa fa-trash"></i>
         </button>
       </span>
-    </div>
+  </div>
 </div>
 <div class="tree" *ngIf="node.isExpanded() && node.hasChildren()">
-    <new-tree-item *ngFor="let child of node.children" [node]="child"></new-tree-item>
+  <new-tree-item *ngFor="let child of node.children" [node]="child"></new-tree-item>
 </div>

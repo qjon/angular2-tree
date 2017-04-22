@@ -1,13 +1,15 @@
 <rign-tree
   [disableContextMenu]="true"
-  [showAddButton]="true"
+  [configuration]="treeConfiguration"
   [nodes]="folders"
   [menu]="contextMenu"
   (onAdd)="onAdd($event)"
   (onChange)="onChange($event)"
+  (onMove)="onMove($event)"
   (onRemove)="onRemove($event)"
   (onToggle)="onToggle($event)"
   (onSelect)="onSelect($event)"
 >
-    <new-tree-item *ngFor="let node of treeComponent.tree.nodes" [node]="node"></new-tree-item>
+  <new-tree-item *ngFor="let node of treeComponent.tree.nodes" [node]="node"></new-tree-item>
+  <ri-dropzone [tree]="treeComponent.tree"></ri-dropzone>
 </rign-tree>

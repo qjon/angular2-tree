@@ -1,6 +1,8 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {IOuterNode, ITreeItemEvent, TreeComponent, IContextMenu} from '../../../../main';
+import {IOuterNode, ITreeItemEvent, TreeComponent, IConfiguration, IContextMenu} from '../../../../main';
 import {TreeTwoNodeService} from "./treeTwoNode.service";
+import {NodeModel} from "../../../../src/models/NodeModel";
+import {ITreeItemMoveEvent} from "../../../../src/interfaces/ITreeItemMoveEvent";
 
 @Component({
   selector: 'app-tree-two',
@@ -13,6 +15,10 @@ export class TreeTwoComponent implements OnInit {
   public folders: IOuterNode[] = [];
 
   public contextMenu: IContextMenu[] = [];
+
+  public treeConfiguration: IConfiguration = {
+    showAddButton: true
+  };
 
   public constructor(protected folderService: TreeTwoNodeService) {
   }
@@ -41,6 +47,12 @@ export class TreeTwoComponent implements OnInit {
           node.remove();
         }
       );
+  }
+
+  public onMove(event: ITreeItemMoveEvent) {
+    this.folderService.move(event.source, event.target)
+      .subscribe(() => {
+      });
   }
 
   public onRemove(event: ITreeItemEvent) {

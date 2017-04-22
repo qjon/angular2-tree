@@ -1,5 +1,12 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {IOuterNode, ITreeItemEvent, TreeComponent, IContextMenu} from '../../../../main';
+import {
+  IOuterNode,
+  ITreeItemEvent,
+  TreeComponent,
+  IConfiguration,
+  IContextMenu,
+  ITreeItemMoveEvent
+} from '../../../../main';
 import {TreeOneNodeService} from "./treeOneNode.service";
 
 @Component({
@@ -13,6 +20,11 @@ export class TreeOneComponent implements OnInit {
   public folders: IOuterNode[] = [];
 
   public contextMenu: IContextMenu[] = [];
+
+  public treeConfiguration: IConfiguration = {
+    showAddButton: true,
+    disableMoveNodes: false
+  };
 
   public constructor(protected folderService: TreeOneNodeService) {
 
@@ -63,6 +75,13 @@ export class TreeOneComponent implements OnInit {
         node.refresh(folder);
         node.collapse();
         node.expand();
+      });
+  }
+
+  public onMove(event: ITreeItemMoveEvent) {
+    console.log('Move', event);
+    this.folderService.move(event.source, event.target)
+      .subscribe(() => {
       });
   }
 
