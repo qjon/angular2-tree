@@ -1,34 +1,33 @@
-import {Injectable} from "@angular/core";
-import {BehaviorSubject, Observable, Subject} from "rxjs";
-import {NodeModel} from "../models/NodeModel";
-import {IDragAndDrop} from "../interfaces/IDragAndDrop";
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {IDragAndDrop, IDragElement, IDropElement} from '../interfaces/IDragAndDrop';
 
 @Injectable()
 export class DragAndDrop {
-  protected dropStream: Subject<NodeModel | null> = new Subject();
-  protected dragStream: BehaviorSubject<NodeModel | null> = new BehaviorSubject(null);
+  protected dropStream: Subject<IDropElement | null> = new Subject();
+  protected dragStream: BehaviorSubject<IDragElement | null> = new BehaviorSubject(null);
 
   public drop = new Observable();
 
   public constructor() {
-    this.drop = this.dropStream.withLatestFrom(this.dragStream, (dropNode: NodeModel, dragNode: NodeModel): IDragAndDrop => {
+    this.drop = this.dropStream.withLatestFrom(this.dragStream, (dropNode: IDropElement, dragNode: IDragElement): IDragAndDrop => {
       return {dragNode: dragNode, dropNode: dropNode};
     });
   }
 
-  public dragStart(node: NodeModel) {
+  public dragStart(node: IDragElement) {
     this.dragStream.next(node);
   }
 
-  public dragEnd(node: NodeModel | null) {
+  public dragEnd(node: IDropElement | null) {
     this.dropStream.next(node);
   }
 
-  public getDragStream(): BehaviorSubject<NodeModel | null> {
+  public getDragStream(): BehaviorSubject<IDragElement | null> {
     return this.dragStream;
   }
 
-  public getLastDragElement() {
+  public getLastDragElement(): IDragElement {
     return this.dragStream.getValue();
   }
 }

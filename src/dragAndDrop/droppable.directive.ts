@@ -1,9 +1,10 @@
-import {Directive, ElementRef, Input, OnInit, Renderer} from "@angular/core";
-import {DragAndDrop} from "./dragAndDrop.service";
-import {NodeModel} from "../models/NodeModel";
+import {Directive, ElementRef, Input, OnInit, Renderer} from '@angular/core';
+import {DragAndDrop} from './dragAndDrop.service';
+import {IOuterNode} from '../interfaces/IOuterNode';
 
 export interface DropConfig {
-  dropAllowedCssClass?: string
+  dropAllowedCssClass?: string;
+  dropZone?: string[] | null;
 }
 
 
@@ -11,7 +12,7 @@ export interface DropConfig {
   selector: '[ri-droppable]'
 })
 export class Droppable implements OnInit {
-  @Input() node: NodeModel;
+  @Input() node: IOuterNode;
   @Input() dropConfig: DropConfig = {};
 
   public constructor(protected el: ElementRef, private renderer: Renderer, protected dragAndDrop: DragAndDrop) {
@@ -30,7 +31,7 @@ export class Droppable implements OnInit {
 
     renderer.listen(el.nativeElement, 'drop', () => {
       this.toggleDropClass(false);
-      this.dragAndDrop.dragEnd(this.node);
+      this.dragAndDrop.dragEnd({zones: this.dropConfig.dropZone, node: this.node});
     });
   }
 
@@ -51,11 +52,18 @@ export class Droppable implements OnInit {
   }
 
   private isDropAllowed = function () {
-    let source = this.dragAndDrop.getLastDragElement();
-    let target = this.node;
+    const lastDragElement = this.dragAndDrop.getLastDragElement();
+    const source = lastDragElement.node;
+    const target = this.node;
+    const dropZone = this.dropConfig.dropZone;
 
-    return !(source === target || target === source.parentNode || target.getParentsList().indexOf(source) > -1);
-  }
+    if (dropZone && dropZone.length > 0) {
+      return dropZone.indexOf(lastDragElement.zoneId) > -1;
+    }
+
+    // todo: check drag and drop zones
+    return !(source === target || target.id === source.parentId || target.parents.indexOf(source.id) > -1);
+  };
 
   /**
    * Change drag event cursor
@@ -77,7 +85,7 @@ export class Droppable implements OnInit {
       dropAllowedCssClass: 'drop-allowed'
     };
 
-    for (let key in defaultConfig) {
+    for (const key in defaultConfig) {
       this.dropConfig[key] = this.dropConfig[key] || defaultConfig[key];
     }
   }

@@ -1,8 +1,18 @@
 {
-  "/api": {
+  "/api/nodes": {
     "target": "http://localhost:3000/",
     "pathRewrite": {
       "^/api/nodes": "/nodes"
+    },
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+
+  "/api/tree": {
+    "target": "http://localhost:3000/",
+    "pathRewrite": {
+      "^/api/tree": "/nodes"
     },
     "secure": false,
     "changeOrigin": true,

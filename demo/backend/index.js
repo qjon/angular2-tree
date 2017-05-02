@@ -30,6 +30,7 @@ app.get('/nodes', function (req, res) {
     if (stat && stat.isDirectory()) {
       var dir = {
         id: subNode + '/' + name,
+        parentId: subNode || null,
         name: name,
         children: []
       };
@@ -91,6 +92,7 @@ app.put('/nodes/move', function (req, res) {
     var dir = {
       id: newNodeName,
       name: dirName,
+      parentId: data.target,
       children: []
     };
 
@@ -116,6 +118,7 @@ app.post('/nodes', function (req, res) {
       res.json({
         id: newNodeId,
         name: node.name,
+        parentId: parentFolderId || null,
         children: []
       });
     } else {

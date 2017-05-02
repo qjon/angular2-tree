@@ -1,6 +1,7 @@
 import {Component, Input} from '@angular/core';
-import {DragAndDrop} from "../dragAndDrop.service";
-import {TreeModel} from "../../models/TreeModel";
+import {TreeModel} from '../../models/TreeModel';
+import {DragAndDrop} from '../dragAndDrop.service';
+import {IDragElement} from '../../interfaces/IDragAndDrop';
 
 @Component({
   selector: 'ri-dropzone',
@@ -8,14 +9,19 @@ import {TreeModel} from "../../models/TreeModel";
   styleUrls: ['./dropzone.component.less']
 })
 export class DropzoneComponent {
-  @Input() tree: TreeModel;
+  @Input() treeModel: TreeModel;
+  @Input() dropZone: string[] = [];
 
   public isOpen = false;
 
   constructor(public dragAndDrop: DragAndDrop) {
     this.dragAndDrop.getDragStream()
-      .subscribe((node: any) => {
-        this.isOpen = !!node && node.tree === this.tree && node.parentNode;
+      .subscribe((dragElement: IDragElement) => {
+        const isDragElement = !!dragElement && !!dragElement.node;
+        const isNotRootElement = isDragElement && dragElement.node.parentId;
+        const isFromCurrentTree = isDragElement && dragElement.node.treeId === this.treeModel.treeId;
+
+        this.isOpen = (isNotRootElement && isFromCurrentTree) ? true : false;
       });
   }
 

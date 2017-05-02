@@ -1,14 +1,15 @@
-import {Directive, ElementRef, Input, OnChanges, OnInit, Renderer} from "@angular/core";
-import {DragAndDrop} from "./dragAndDrop.service";
-import {NodeModel} from "../models/NodeModel";
+import {Directive, ElementRef, Input, OnChanges, OnInit, Renderer} from '@angular/core';
+import {DragAndDrop} from './dragAndDrop.service';
+import {IOuterNode} from '../interfaces/IOuterNode';
 
 @Directive({
   selector: '[ri-draggable]'
 })
 export class Draggable implements OnChanges, OnInit {
-  @Input() node: NodeModel;
+  @Input() node: IOuterNode;
+  @Input() dragZone: string | null = null;
 
-  public dragEnabled: boolean = true;
+  public dragEnabled = true;
 
   public constructor(protected el: ElementRef, private renderer: Renderer, protected dragAndDrop: DragAndDrop) {
     renderer.listen(el.nativeElement, 'dragstart', ($event) => {
@@ -25,14 +26,14 @@ export class Draggable implements OnChanges, OnInit {
 
   private onDragStart($event) {
     $event.dataTransfer.setData('node', this.node.id.toString());
-    this.dragAndDrop.dragStart(this.node);
+    this.dragAndDrop.dragStart({zoneId: this.dragZone, node: this.node});
 
     $event.dataTransfer.effectAllowed = 'copy';
     $event.dataTransfer.dropEffect = 'copy';
   }
 
   public ngOnChanges() {
-    this.dragEnabled = !this.node.tree.configuration.disableMoveNodes;
+    // this.dragEnabled = !this.node.tree.configuration.disableMoveNodes;
     this.el.nativeElement.draggable = this.dragEnabled;
   }
 
