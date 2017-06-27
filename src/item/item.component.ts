@@ -66,7 +66,7 @@ export class ItemComponent implements OnInit, AfterViewInit {
     this.actions$
       .ofType(TreeActionsService.TREE_EXPAND_NODE)
       .filter((action: Action): boolean => {
-        return !this.isExpanded && this.node.id === action.payload.node.id;
+        return !this.isExpanded && action.payload.node && this.node.id === action.payload.node.id;
       })
       .subscribe(() => {
         this.expand();

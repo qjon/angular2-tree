@@ -11,6 +11,7 @@ import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs/Observable';
 import {ITreeData} from '../../../../src/store/ITreeState';
 import {NodeService} from '../../../../src/service/node.service';
+import {TreeOneNodeService} from './treeOneNode.service';
 
 @Component({
   selector: 'app-tree-three',
@@ -34,7 +35,7 @@ export class TreeThreeComponent implements OnInit {
   public constructor(private store: Store<ITreeState>,
                      private treeActions: TreeActionsService,
                      private nodeDispatcherService: NodeDispatcherService,
-                     private nodeService: NodeService) {
+                     private nodeService: TreeOneNodeService) {
   }
 
   public ngOnInit() {

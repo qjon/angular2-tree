@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+ssh://git@github.com/qjon/angular2-tree.git"
   },
-  "main": "main.ts",
+  "main": "main",
   "author": "Rafal Ignaszewski <rafal@ignaszewski.pl> http://ignaszewski.pl",
   "dependencies": {
     "@angular/common": "^2.4.0",
@@ -26,6 +26,7 @@
     "@ngrx/effects": "^2.0.3",
     "@ngrx/store": "^2.2.2",
     "angular2-contextmenu": "^0.7.7",
+    "angular2-uuid": "^1.1.1",
     "bootstrap": "^3.3.7",
     "core-js": "^2.4.1",
     "font-awesome": "^4.6.3",
