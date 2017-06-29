@@ -6,7 +6,6 @@ import {IAppConfig} from './src/interfaces/IAppConfig';
 import {IConfiguration} from './src/interfaces/IConfiguration';
 import {IContextMenu} from './src/interfaces/IContextMenu';
 import {IOuterNode} from './src/interfaces/IOuterNode';
-import {TREE_EVENTS} from './src/constants/events';
 import {NodeService} from './src/service/node.service';
 import {IApiConfig} from './src/IApiConfig.service';
 import {TreeActionsService} from './src/store/treeActions.service';
@@ -31,6 +30,5 @@ export {
   ITreeAction,
   TreeActionsService,
   TreeEffectsService,
-  TREE_EVENTS,
   treeReducer
 }
