@@ -1,12 +1,11 @@
-language:
-  - node_js
+language: node_js
+node_js: "6.11.0"
 
-node_js:
-  - "6.11.0"
 cache:
   directories:
     - node_modules
 
 install:
+  - npm i -g angular-cli
   - npm i
-  - npm test
+  - ng test
