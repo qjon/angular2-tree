@@ -1,50 +1,13 @@
 # angular2-tree
 
+## Demo
+
+Working demo with _local storage_ you can find [here](https://qjon.github.io/angular2-tree/).
+
 ## Installation
 
     npm i @rign/angular2-tree
-    
-## Changes
-
-### v1.0.0
-
-* use ngrx/store
-* remove events ITreeItemEvents - use Actions and Effects
-* remove NodeModel
-* simplify using tree
-
-### v0.8.1
-
-* fix package.json
-
-### v0.8.0
-
-* allow to create own template for tree item (if not specify it use default) - look in demo
-* input option _disableContextMenu_ to disable context menu (default: false)
-* update Demo - add alternative view of tree
-
-### v0.7.0
-
-* remove API config service (see section _Usage_)
-
-### v0.6.2
-
-* change name FolderService to NodeService
-* change params names from _dirId_ to _nodeId_
-* now you can use in your API paths parameter _{nodeId}_ which will be replaced on _nodeId_
-
-### v0.6.1
-
-* expose _ConfigService_ - it allow override urls for create, edit, and delete folder
-
-### v0.6.0
-
-* upgrade angular/cli to version _beta.32.3_
-* fix demo
-
-### v0.5.0
-
-* primary version with all features described below.
+   
 
 ## Usage
     
@@ -79,9 +42,10 @@ Create your own loader service as it is done in example
       }
     }
 
-and use it to load data.
+and use it to load data. Or you can extend and rewrite all methods of that service to store your data wherever you want. See example _localStorage.service.ts_
 
-In component where you create tree you should register _tree store_, create _TreeModel_ and load root tree
+
+In component where you create tree, you should register _tree store_, create _TreeModel_ and load root tree
 
     export class MyTreeComponent implements OnInit {
       public folders: Observable<ITreeData>;
@@ -177,16 +141,71 @@ Then when you create tree component in your application use such construction
     
 and that is all. Please see Demo where is such example.
 
-## Demo
+## Events(Actions)
 
-In folder _demo_ you can find application which use _TreeModule_
+Using _ngrx/store_ you can listen on below actions and do whatever you want:
 
-To run this example run in console:
-    
-* frontend
-    
-        npm start
-        
-* backend (be sure that directory _demo/backend/data_ has permissions to write)
+    TreeActionsService.TREE_SAVE_NODE
+    TreeActionsService.TREE_SAVE_NODE_SUCCESS
+    TreeActionsService.TREE_SAVE_NODE_ERROR
+    TreeActionsService.TREE_DELETE_NODE
+    TreeActionsService.TREE_DELETE_NODE_SUCCESS
+    TreeActionsService.TREE_DELETE_NODE_ERROR
+    TreeActionsService.TREE_EDIT_NODE_START
+    TreeActionsService.TREE_EXPAND_NODE
+    TreeActionsService.TREE_LOAD
+    TreeActionsService.TREE_LOAD_SUCCESS
+    TreeActionsService.TREE_LOAD_ERROR
+    TreeActionsService.TREE_MOVE_NODE
+    TreeActionsService.TREE_MOVE_NODE_SUCCESS
+    TreeActionsService.TREE_MOVE_NODE_ERROR
+    TreeActionsService.TREE_REGISTER
 
-        npm run backend
+ 
+## Changes
+
+### v2.0.0
+* use ngrx/store to store data
+* use actions and effects instead of events
+* add TravisCI configuration
+* remove backend example, move all functionality of demo to local storage
+
+### v1.0.0
+
+* use ngrx/store
+* remove events ITreeItemEvents - use Actions and Effects
+* remove NodeModel
+* simplify using tree
+
+### v0.8.1
+
+* fix package.json
+
+### v0.8.0
+
+* allow to create own template for tree item (if not specify it use default) - look in demo
+* input option _disableContextMenu_ to disable context menu (default: false)
+* update Demo - add alternative view of tree
+
+### v0.7.0
+
+* remove API config service (see section _Usage_)
+
+### v0.6.2
+
+* change name FolderService to NodeService
+* change params names from _dirId_ to _nodeId_
+* now you can use in your API paths parameter _{nodeId}_ which will be replaced on _nodeId_
+
+### v0.6.1
+
+* expose _ConfigService_ - it allow override urls for create, edit, and delete folder
+
+### v0.6.0
+
+* upgrade angular/cli to version _beta.32.3_
+* fix demo
+
+### v0.5.0
+
+* primary version with all features described below.

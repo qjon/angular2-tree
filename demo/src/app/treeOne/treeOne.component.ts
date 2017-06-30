@@ -1,23 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {
-  IConfiguration,
-  IContextMenu,
-  ITreeState,
-  TreeActionsService,
-  TreeModel,
-  NodeDispatcherService
-} from '../../../../main';
+import {IConfiguration, IContextMenu, ITreeState, ITreeData, TreeActionsService, TreeModel, NodeDispatcherService} from '../../../../main';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs/Observable';
-import {ITreeData} from '../../../../src/store/ITreeState';
-import {NodeService} from '../../../../src/service/node.service';
 import {TreeOneNodeService} from './treeOneNode.service';
 
 @Component({
-  selector: 'app-tree-three',
+  selector: 'app-tree-one',
   templateUrl: './treeOne.component.html'
 })
-export class TreeThreeComponent implements OnInit {
+export class TreeOneComponent implements OnInit {
   public folders: Observable<ITreeData>;
 
   public contextMenu: IContextMenu[] = [];

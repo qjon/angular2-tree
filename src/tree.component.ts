@@ -12,14 +12,13 @@ import {ITreeState} from './store/ITreeState';
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'rign-tree',
-  templateUrl: 'tree.component.html',
-  styleUrls: ['tree.component.less']
+  templateUrl: './tree.component.html',
+  styleUrls: ['./tree.component.less']
 })
 export class TreeComponent implements OnInit, OnChanges {
   @Input() treeModel: TreeModel;
 
-  @ViewChild('contextMenu')
-  public contextMenu: ContextMenuComponent;
+  @ViewChild('contextMenu') contextMenu: ContextMenuComponent;
 
   /**
    * List of default options for context menu
@@ -46,8 +45,8 @@ export class TreeComponent implements OnInit, OnChanges {
    */
   public menuList: IContextMenu[] = [];
 
-  public constructor(private store: Store<ITreeState>,
-                     private treeActions: TreeActionsService,
+  public constructor(protected store: Store<ITreeState>,
+                     protected treeActions: TreeActionsService,
                      protected dragAndDrop: DragAndDrop) {
 
   }
@@ -93,7 +92,7 @@ export class TreeComponent implements OnInit, OnChanges {
   /**
    * Register node "move event"
    */
-  private registerMove(): void {
+  protected registerMove(): void {
     if (this.treeModel.configuration.disableMoveNodes) {
       return;
     }

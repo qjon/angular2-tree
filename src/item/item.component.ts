@@ -45,7 +45,7 @@ export class ItemComponent implements OnInit, AfterViewInit {
   public children$: Observable<IOuterNode[]>;
 
 
-  private insert$: Observable<Action> = this.actions$
+  protected insert$: Observable<Action> = this.actions$
     .ofType(TreeActionsService.TREE_INSERT_NODE)
     .filter((action: Action) => {
       return action.payload && action.payload === this.node.id;
