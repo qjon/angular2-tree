@@ -35,7 +35,7 @@ describe('TreeModel', () => {
 
   describe('getRootNodes', () => {
     it('should return what getChildren return', () => {
-      const expectedValue = [];
+      const expectedValue = Observable.of([]);
 
       spyOn(treeModel, 'getChildren').and.returnValue(expectedValue)
 

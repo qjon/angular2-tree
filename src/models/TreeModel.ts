@@ -1,7 +1,7 @@
 import {IOuterNode} from '../interfaces/IOuterNode';
 import {Observable} from 'rxjs/Observable';
 import {IConfiguration} from '../interfaces/IConfiguration';
-import {ITreeData, ITreeState} from '../store/ITreeState';
+import {ITreeData} from '../store/ITreeState';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 export class TreeModel {
@@ -22,7 +22,7 @@ export class TreeModel {
 
   public getChildren(nodeId: string | null) {
     return this.nodes$
-      .map((state: ITreeData) => this.getNodesByParentId(state, nodeId))
+      .map((state: ITreeData): IOuterNode[] => this.getNodesByParentId(state, nodeId))
       .map((nodes: IOuterNode[]) => {
         return nodes.sort(this.sortNodes);
       });

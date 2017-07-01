@@ -82,7 +82,7 @@ function insertNode(state: ITreeState, action: Action): ITreeState {
     parents: []
   };
 
-  newState[action.payload.treeId][null] = newNode;
+  newState[action.payload.treeId][0] = newNode;
 
   return newState;
 }
@@ -94,8 +94,8 @@ function saveNode(state: ITreeState, action: ITreeAction): ITreeState {
   const treeId = action.payload.treeId;
   const treeState = newState[treeId];
 
-  if (treeState[null]) {
-    delete treeState[null];
+  if (treeState[0]) {
+    delete treeState[0];
   } else {
     delete treeState[old.id];
   }
