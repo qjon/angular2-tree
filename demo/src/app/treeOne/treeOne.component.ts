@@ -1,87 +1,46 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {IOuterNode, ITreeItemEvent, TreeComponent, IContextMenu} from '../../../../main';
-import {TreeOneNodeService} from "./treeOneNode.service";
+import {Component, OnInit} from '@angular/core';
+import {IConfiguration, IContextMenu, ITreeState, ITreeData, TreeActionsService, TreeModel, NodeDispatcherService} from '../../../../main';
+import {Store} from '@ngrx/store';
+import {Observable} from 'rxjs/Observable';
+import {TreeOneNodeService} from './treeOneNode.service';
 
 @Component({
   selector: 'app-tree-one',
   templateUrl: './treeOne.component.html'
 })
 export class TreeOneComponent implements OnInit {
-  @ViewChild(TreeComponent)
-  public treeComponent: TreeComponent;
-
-  public folders: IOuterNode[] = [];
+  public folders: Observable<ITreeData>;
 
   public contextMenu: IContextMenu[] = [];
 
-  public constructor(protected folderService: TreeOneNodeService) {
+  public treeConfiguration: IConfiguration = {
+    showAddButton: true,
+    disableMoveNodes: false,
+    treeId: 'tree3',
+    dragZone: 'tree3',
+    dropZone: ['tree3']
+  };
 
+  public treeModel: TreeModel;
+
+  public constructor(private store: Store<ITreeState>,
+                     private treeActions: TreeActionsService,
+                     private nodeDispatcherService: NodeDispatcherService,
+                     private nodeService: TreeOneNodeService) {
   }
 
   public ngOnInit() {
-    this.folderService.load()
-      .subscribe((folders: IOuterNode[]) => this.folders = folders);
-  }
+    const treeId = this.treeConfiguration.treeId;
+    this.nodeDispatcherService.register(treeId, this.nodeService);
 
-  public addNode() {
-    this.treeComponent.addNode('Nowy element');
-  }
+    this.store.dispatch(this.treeActions.registerTree(treeId));
 
-  public onAdd(event: ITreeItemEvent) {
-    console.log('onAdd', event);
-    let node = event.node;
-    let parentNode = node.parentNode;
-    let parentNodeId = parentNode ? parentNode.id : null;
-
-    this.folderService.save(event.node.data, parentNodeId)
-      .subscribe(
-        (folder: IOuterNode) => {
-          node.refresh(folder);
-        },
-        () => {
-          node.remove();
-        }
-      );
-  }
-
-  public onRemove(event: ITreeItemEvent) {
-    console.log('onRemove', event);
-    let node = event.node;
-
-    this.folderService.remove(node.id)
-      .subscribe(() => {
-        node.remove();
-      });
-  }
-
-  public onChange(event: ITreeItemEvent) {
-    console.log('onChange', event);
-    let node = event.node;
-
-    this.folderService.update(node.toJSON())
-      .subscribe((folder: IOuterNode) => {
-        node.refresh(folder);
-        node.collapse();
-        node.expand();
-      });
-  }
-
-  public onToggle(event: ITreeItemEvent) {
-    console.log('onToggle', event);
-    if (event.status) {
-      this.folderService.load(event.node.id)
-        .subscribe((folders: IOuterNode[]) => {
-          for (let folder of folders) {
-            event.node.addChild(folder);
-          }
-        });
-    } else {
-      event.node.resetChildren();
-    }
-
-  }
-
-  public onSelect(event: ITreeItemEvent) {
-    console.log('onSelect', event);
+    this.folders = this.store.select('trees')
+      .map((data: ITreeState) => {
+        return data[treeId];
+      })
+      .filter((data: ITreeData) => !!data)
+    ;
+    this.treeModel = new TreeModel(this.folders, this.treeConfiguration);
   }
 }

@@ -1,5 +1,8 @@
 export interface IOuterNode {
   id: string;
+  treeId?: string;
   name: string;
-  children?: Array<IOuterNode>;
+  parentId?: string | null;
+  children?: Array<string>;
+  parents?: Array<string>;
 }

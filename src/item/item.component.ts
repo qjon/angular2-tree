@@ -1,15 +1,23 @@
-import {Component, ViewChild, Input, ViewEncapsulation} from '@angular/core';
-import {NodeModel} from '../models/NodeModel';
+import {
+  Component, ViewChild, Input, ViewEncapsulation, OnInit, AfterViewInit
+} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {ContextMenuService} from 'angular2-contextmenu';
+import {ContextMenuComponent, ContextMenuService} from 'angular2-contextmenu';
+import {IOuterNode} from '../interfaces/IOuterNode';
+import {TreeActionsService} from '../store/treeActions.service';
+import {Action, Store} from '@ngrx/store';
+import {ITreeState} from '../store/ITreeState';
+import {Observable} from 'rxjs/Observable';
+import {TreeModel} from '../models/TreeModel';
+import {Actions} from '@ngrx/effects';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'rign-tree-item',
-  templateUrl: 'item.component.html',
-  styleUrls: ['item.component.css']
+  templateUrl: './item.component.html',
+  styleUrls: ['./item.component.less']
 })
-export class ItemComponent {
+export class ItemComponent implements OnInit, AfterViewInit {
   /**
    * Input field where we can change node name
    */
@@ -18,7 +26,11 @@ export class ItemComponent {
   /**
    * Node instance
    */
-  @Input() node: NodeModel;
+  @Input() node: IOuterNode;
+
+  @Input() treeModel: TreeModel;
+
+  @Input() contextMenu: ContextMenuComponent;
 
   /**
    * Form field to change node name
@@ -26,58 +38,143 @@ export class ItemComponent {
    */
   public nameField = new FormControl();
 
+  public isEditMode = false;
+  public isSelected = false;
+  public isExpanded = false;
+
+  public children$: Observable<IOuterNode[]>;
+
+
+  protected insert$: Observable<Action> = this.actions$
+    .ofType(TreeActionsService.TREE_INSERT_NODE)
+    .filter((action: Action) => {
+      return action.payload && action.payload === this.node.id;
+    });
+
+  protected isStartSave = false;
+
+
   /**
    * @param contextMenuService
    */
-  public constructor(private contextMenuService: ContextMenuService) {
-    this.nameField.registerOnChange(() => {
+  public constructor(protected store: Store<ITreeState>,
+                     protected treeActionsService: TreeActionsService,
+                     protected contextMenuService: ContextMenuService,
+                     protected actions$: Actions) {
+
+
+    this.actions$
+      .ofType(TreeActionsService.TREE_EXPAND_NODE)
+      .filter((action: Action): boolean => {
+        return !this.isExpanded && action.payload.node && this.node.id === action.payload.node.id;
+      })
+      .subscribe(() => {
+        this.expand();
+      });
+  }
+
+  public ngAfterViewInit() {
+    if (this.isEditMode) {
       this.setFocus();
-    });
+    }
+  }
+
+  public ngOnInit() {
+    this.isEditMode = this.node.id === null;
+
+    this.children$ = this.treeModel.getChildren(this.node.id);
+
+    this.insert$
+      .subscribe(() => {
+        this.expand();
+      });
+
+    this.treeModel.currentSelectedNode$
+      .subscribe((node: IOuterNode) => {
+        this.isSelected = node && node.id === this.node.id;
+      });
+
+    this.actions$
+      .ofType(TreeActionsService.TREE_EDIT_NODE_START)
+      .filter((action: Action) => action.payload === this.node)
+      .subscribe(() => {
+        this.nameField.setValue(this.node.name);
+        this.isEditMode = true;
+        this.setFocus();
+      });
+
+  }
+
+  public collapse() {
+    this.isExpanded = false;
+  }
+
+  public expand() {
+    this.isExpanded = true;
+
+    this.store.dispatch(this.treeActionsService.loadTree(this.treeModel.treeId, this.node.id));
+  }
+
+  public onBlur() {
+    if (this.isStartSave) {
+      this.isStartSave = false;
+      return;
+    }
+
+    this.undoChanges();
   }
 
   public onChange(event: KeyboardEvent) {
     event.stopPropagation();
 
     if (event.keyCode === 27) {
-      this.onBlur();
+      this.undoChanges();
     } else if (event.keyCode === 13) {
+      this.isStartSave = true;
+      const node: IOuterNode = {
+        id: this.node.id,
+        treeId: this.node.treeId,
+        name: this.nameField.value,
+        parentId: this.node.parentId,
+        children: this.node.children,
+        parents: this.node.parents
+      };
 
-      if (this.node.isNew) {
-        this.node.isNew = false;
-        this.node.onAdd();
-      } else {
-        this.node.onChangeName();
-      }
-
-      this.node.setEditMode(false);
+      this.store.dispatch(this.treeActionsService.saveNode(this.treeModel.treeId, node));
+      this.isEditMode = false;
     }
   }
 
-  public onBlur() {
-    // TODO: onBlur is fired after onChange
-    this.node
-      .setEditMode(false)
-      .revertName();
-
-    if (this.node.isNew) {
-      // Remove not saved item
-      this.node.remove();
+  public onContextMenu($event: MouseEvent) {
+    if (!this.treeModel.configuration.disableContextMenu) {
+      this.contextMenuService.show.next({
+        contextMenu: this.contextMenu,
+        event: $event,
+        item: this.node
+      });
     }
-  }
-
-  /**
-   * On open context menu
-   * @param $event
-   * @param node
-   */
-  public onContextMenu($event: MouseEvent, node: NodeModel) {
-    node.tree.onOpenContextMenu($event, node);
 
     $event.preventDefault();
     $event.stopPropagation();
   }
 
+  public onSelect() {
+    this.treeModel.currentSelectedNode$.next(this.isSelected ? null : this.node);
+  }
+
+  protected isNewNode() {
+    return this.node.id === null;
+  }
+
   protected setFocus() {
     setTimeout(() => this.input.nativeElement.focus());
+  }
+
+  protected undoChanges() {
+    this.isEditMode = false;
+
+    if (this.isNewNode()) {
+      this.store.dispatch(this.treeActionsService.deleteNode(this.treeModel.treeId, this.node));
+    }
   }
 }

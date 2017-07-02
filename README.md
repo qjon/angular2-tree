@@ -1,10 +1,181 @@
 # angular2-tree
 
+## Demo
+
+Working demo with _local storage_ you can find [here](https://qjon.github.io/angular2-tree/).
+
 ## Installation
 
     npm i @rign/angular2-tree
+   
+
+## Usage
     
+Include _TreeModule_ in your application module and create Store
+
+    import {TreeModule} from '@rign/angular2-tree/main';
+    
+    @NgModule({
+      declarations: [
+        ...
+      ],
+      imports: [
+        ...
+        TreeModule,
+        StoreModule.provideStore({trees: treeReducer})
+      ]
+    })
+    
+In any html file put 
+
+    <rign-tree [treeModel]="treeModel"></rign-tree>
+    
+Create your own loader service as it is done in example        
+
+    @Injectable()
+    export class AppNodeService extends NodeService {
+      protected apiConfig = {
+        addUrl: '/api/nodes',
+        getUrl: '/api/nodes',
+        updateUrl: '/api/nodes',
+        removeUrl: '/api/nodes',
+      }
+    }
+
+and use it to load data. Or you can extend and rewrite all methods of that service to store your data wherever you want. See example _localStorage.service.ts_
+
+
+In component where you create tree, you should register _tree store_, create _TreeModel_ and load root tree
+
+    export class MyTreeComponent implements OnInit {
+      public folders: Observable<ITreeData>;
+    
+      public contextMenu: IContextMenu[] = [];
+    
+      public treeConfiguration: IConfiguration = {
+        showAddButton: true,
+        disableMoveNodes: false,
+        treeId: 'tree3',
+        dragZone: 'tree3',
+        dropZone: ['tree3']
+      };
+    
+      public treeModel: TreeModel;
+    
+      public constructor(private store: Store<ITreeState>,
+                         private treeActions: TreeActionsService,
+                         private nodeDispatcherService: NodeDispatcherService,
+                         private appNodeService: AppNodeService) {
+      }
+    
+      public ngOnInit() {
+        const treeId = this.treeConfiguration.treeId;
+        this.nodeDispatcherService.register(treeId, this.appNodeService);
+    
+        this.store.dispatch(this.treeActions.registerTree(treeId));
+    
+        this.folders = this.store.select('trees')
+          .map((data: ITreeState) => {
+            return data[treeId];
+          })
+          .filter((data: ITreeData) => !!data)
+        ;
+        this.treeModel = new TreeModel(this.folders, this.treeConfiguration);
+      }
+    }
+
+
+### Create own item template
+
+Also you can use your own template to display items. You can do that when you extend _ItemComponent_
+
+    @Component({
+      selector: 'new-tree-item',
+      templateUrl: './newItem.component.html',
+      styleUrls: ['./newItem.component.less']
+    })
+    export class NewItemComponent extends ItemComponent {
+    
+    }
+    
+and _newItem.component.html_
+
+    <div class="tree-item row"
+         [ngClass]="{'tree-item-selected': isSelected}"
+         ri-droppable
+         ri-draggable
+         [dragZone]="treeModel.configuration.dragZone"
+         [dropConfig]="{dropAllowedCssClass: 'drop-enabled', dropZone: treeModel.configuration.dropZone}"
+         [node]="node"
+    >
+      <div class="col-sm-8">
+        <i *ngIf="!isExpanded" (click)="expand()" class="fa fa-plus pointer"></i>
+        <i *ngIf="isExpanded" (click)="collapse()" class="fa fa-minus pointer"></i>
+        <span *ngIf="!isEditMode" class="tree-item-name" (click)="onSelect()">{{node.name}}</span>
+        <form name="form">
+          <input #inputElement type="text" class="form-control" *ngIf="isEditMode" [formControl]="nameField"
+                 name="name" (keydown)="onChange($event)" (blur)="onBlur($event)"/>
+        </form>
+      </div>
+      <div class="col-sm-4 text-right">
+          <span class="btn-group btn-group-sm">
+            <button class="btn btn-primary" (click)="onEdit($event)" [disabled]="isEditMode">
+              <i class="fa fa-edit"></i>
+            </button>
+            <button class="btn btn-danger" (click)="onDelete()" [disabled]="isEditMode">
+              <i class="fa fa-trash"></i>
+            </button>
+          </span>
+      </div>
+    </div>
+    <div class="tree" *ngIf="isExpanded">
+      <new-tree-item  *ngFor="let child of children$ | async" [node]="child" [treeModel]="treeModel" [contextMenu]="contextMenu"></new-tree-item>
+    </div>
+
+    
+Then when you create tree component in your application use such construction
+
+    <rign-tree [treeModel]="treeModel">
+      <new-tree-item *ngFor="let node of treeModel.getRootNodes() | async" [node]="node" [treeModel]="treeModel" [contextMenu]="contextMenu"></new-tree-item>
+    </rign-tree>
+    
+and that is all. Please see Demo where is such example.
+
+## Events(Actions)
+
+Using _ngrx/store_ you can listen on below actions and do whatever you want:
+
+    TreeActionsService.TREE_SAVE_NODE
+    TreeActionsService.TREE_SAVE_NODE_SUCCESS
+    TreeActionsService.TREE_SAVE_NODE_ERROR
+    TreeActionsService.TREE_DELETE_NODE
+    TreeActionsService.TREE_DELETE_NODE_SUCCESS
+    TreeActionsService.TREE_DELETE_NODE_ERROR
+    TreeActionsService.TREE_EDIT_NODE_START
+    TreeActionsService.TREE_EXPAND_NODE
+    TreeActionsService.TREE_LOAD
+    TreeActionsService.TREE_LOAD_SUCCESS
+    TreeActionsService.TREE_LOAD_ERROR
+    TreeActionsService.TREE_MOVE_NODE
+    TreeActionsService.TREE_MOVE_NODE_SUCCESS
+    TreeActionsService.TREE_MOVE_NODE_ERROR
+    TreeActionsService.TREE_REGISTER
+
+ 
 ## Changes
+
+### v2.0.0
+* use ngrx/store to store data
+* use actions and effects instead of events
+* add TravisCI configuration
+* remove backend example, move all functionality of demo to local storage
+
+### v1.0.0
+
+* use ngrx/store
+* remove events ITreeItemEvents - use Actions and Effects
+* remove NodeModel
+* simplify using tree
 
 ### v0.8.1
 
@@ -38,132 +209,3 @@
 ### v0.5.0
 
 * primary version with all features described below.
-
-## Usage
-    
-Include _TreeModule_ in your application module;
-
-    import {TreeModule} from '@rign/angular2-tree/main';
-    
-    @NgModule({
-      declarations: [
-        ...
-      ],
-      imports: [
-        ...
-        TreeModule
-      ]
-    })
-    
-In any html file put 
-
-    <rign-tree
-      [showAddButton]="true"
-      [nodes]="folders"
-      [menu]="contextMenu"
-      (onAdd)="onAdd($event)"
-      (onChange)="onChange($event)"
-      (onRemove)="onRemove($event)"
-      (onToggle)="onToggle($event)"
-      (onSelect)="onSelect($event)"
-    ></rign-tree>
-    
-Create your own loader service as it is done in example        
-
-    @Injectable()
-    export class AppNodeService extends NodeService {
-      protected apiConfig = {
-        addUrl: '/api/nodes',
-        getUrl: '/api/nodes',
-        updateUrl: '/api/nodes',
-        removeUrl: '/api/nodes',
-      }
-    }
-
-and use it to load data.
-
-### Create own item template
-
-Also you can use your own template to display items. You can do that when you extend _ItemComponent_
-
-
-    @Component({
-      selector: 'new-tree-item',
-      templateUrl: './newItem.component.html',
-      styleUrls: ['./newItem.component.less']
-    })
-    export class NewItemComponent extends ItemComponent {
-    
-    }
-    
-and _newItem.component.html_
-
-    <div class="tree-item row" (contextmenu)="onContextMenu($event, node)" [ngClass]="{'tree-item-selected': node.isSelected}">
-        <div class="col-sm-8">
-          <i *ngIf="!node.isExpanded()" (click)="node.expand()" class="fa fa-plus pointer"></i>
-          <i *ngIf="node.isExpanded()" (click)="node.collapse()" class="fa fa-minus pointer"></i>
-          <span *ngIf="!node.editMode" class="tree-item-name" (click)="node.onSelect()">{{node.name}}</span>
-          <form name="form">
-              <input #inputElement type="text" class="form-control" *ngIf="node.editMode" [formControl]="nameField"
-                     [(ngModel)]="node.name" name="name" (keydown)="onChange($event)" (blur)="onBlur($event)"/>
-          </form>
-        </div>
-        <div class="col-sm-4 text-right">
-          <span class="btn-group btn-group-sm">
-            <button class="btn btn-primary" (click)="node.setEditMode(true)" [disabled]="node.editMode">
-              <i class="fa fa-edit"></i>
-            </button>
-            <button class="btn btn-danger" (click)="node.onRemove()" [disabled]="node.editMode">
-              <i class="fa fa-trash"></i>
-            </button>
-          </span>
-        </div>
-    </div>
-    <div class="tree" *ngIf="node.isExpanded() && node.hasChildren()">
-        <new-tree-item *ngFor="let child of node.children" [node]="child"></new-tree-item>
-    </div>
-    
-Then when you create tree component in your application use such construction
-
-    <rign-tree
-      ...
-    >
-        <new-tree-item *ngFor="let node of treeComponent.tree.nodes" [node]="node"></new-tree-item>
-    </rign-tree>
-    
-and that is all. Please see Demo where is such example.
-
-
-## Parameters
-
-* __showAddButton__ - show/hide add button at the top
-* __nodes__ - list of nodes in root directory (_NodeModels[]_)
-* __menu__ - context menu items (_IContextMenu[]_)
-
-## Events
-
-* __onAdd($event)__ - fired after add new node to tree
-* __onChange($event)__ - fired after change name
-* __onSelect($event)__ - fired after selection
-* __onRemove($event)__ - fired after remove node
-* __onToggle($event)__ - fired after expand or collapse
-
-Each of above _$event_ parameter is _ITreeItemEvent_ which contains:
-
-* _eventName_: string - event name
-* _node_: NodeModel - current node on which the event is fired
-* _status_: boolean - optional parameter (used in _onToggle_ event: _true_ - expand , _false_ - collapse)
-    
-## Demo
-
-In folder _demo_ you can find application which use _TreeModule_
-
-To run this example run in console:
-    
-* frontend
-    
-        npm start
-        
-* backend (be sure that directory _demo/backend/data_ has permissions to write)
-
-        npm run backend

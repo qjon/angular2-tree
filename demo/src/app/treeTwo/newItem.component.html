@@ -1,24 +1,31 @@
-<div class="tree-item row" (contextmenu)="onContextMenu($event, node)" [ngClass]="{'tree-item-selected': node.isSelected}">
-    <div class="col-sm-8">
-      <i *ngIf="!node.isExpanded()" (click)="node.expand()" class="fa fa-plus pointer"></i>
-      <i *ngIf="node.isExpanded()" (click)="node.collapse()" class="fa fa-minus pointer"></i>
-      <span *ngIf="!node.editMode" class="tree-item-name" (click)="node.onSelect()">{{node.name}}</span>
-      <form name="form">
-          <input #inputElement type="text" class="form-control" *ngIf="node.editMode" [formControl]="nameField"
-                 [(ngModel)]="node.name" name="name" (keydown)="onChange($event)" (blur)="onBlur($event)"/>
-      </form>
-    </div>
-    <div class="col-sm-4 text-right">
+<div class="tree-item row"
+     [ngClass]="{'tree-item-selected': isSelected}"
+     ri-droppable
+     ri-draggable
+     [dragZone]="treeModel.configuration.dragZone"
+     [dropConfig]="{dropAllowedCssClass: 'drop-enabled', dropZone: treeModel.configuration.dropZone}"
+     [node]="node"
+>
+  <div class="col-sm-8">
+    <i *ngIf="!isExpanded" (click)="expand()" class="fa fa-plus pointer"></i>
+    <i *ngIf="isExpanded" (click)="collapse()" class="fa fa-minus pointer"></i>
+    <span *ngIf="!isEditMode" class="tree-item-name" (click)="onSelect()">{{node.name}}</span>
+    <form name="form">
+      <input #inputElement type="text" class="form-control" *ngIf="isEditMode" [formControl]="nameField"
+             name="name" (keydown)="onChange($event)" (blur)="onBlur($event)"/>
+    </form>
+  </div>
+  <div class="col-sm-4 text-right">
       <span class="btn-group btn-group-sm">
-        <button class="btn btn-primary" (click)="node.setEditMode(true)" [disabled]="node.editMode">
+        <button class="btn btn-primary" (click)="onEdit($event)" [disabled]="isEditMode">
           <i class="fa fa-edit"></i>
         </button>
-        <button class="btn btn-danger" (click)="node.onRemove()" [disabled]="node.editMode">
+        <button class="btn btn-danger" (click)="onDelete()" [disabled]="isEditMode">
           <i class="fa fa-trash"></i>
         </button>
       </span>
-    </div>
+  </div>
 </div>
-<div class="tree" *ngIf="node.isExpanded() && node.hasChildren()">
-    <new-tree-item *ngFor="let child of node.children" [node]="child"></new-tree-item>
+<div class="tree" *ngIf="isExpanded">
+  <new-tree-item  *ngFor="let child of children$ | async" [node]="child" [treeModel]="treeModel" [contextMenu]="contextMenu"></new-tree-item>
 </div>

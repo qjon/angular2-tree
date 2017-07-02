@@ -1,12 +1,7 @@
-import {Injectable} from "@angular/core";
-import {NodeService, IApiConfig} from "../../../../main";
+import {Injectable} from '@angular/core';
+import {TreeLocalStorageNodeService} from '../localStorage/treeLocalStorage.service';
 
 @Injectable()
-export class TreeTwoNodeService extends NodeService {
-  protected apiConfig: IApiConfig = {
-    addUrl: '/api/nodes',
-    getUrl: '/api/nodes',
-    updateUrl: '/api/nodes',
-    removeUrl: '/api/nodes',
-  };
+export class TreeTwoNodeService extends TreeLocalStorageNodeService {
+  protected treeName = 'treeTwo';
 }

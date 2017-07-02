@@ -3,13 +3,11 @@ import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 import {TreeModule} from '../../../../main';
-import {TreeOneComponent} from "./treeOne.component";
-import {TreeOneNodeService} from "./treeOneNode.service";
+import {TreeOneNodeService} from './treeOneNode.service';
+import {TreeOneComponent} from './treeOne.component';
 
 @NgModule({
-  declarations: [
-    TreeOneComponent
-  ],
+  declarations: [TreeOneComponent],
   exports: [TreeOneComponent],
   imports: [
     BrowserModule,

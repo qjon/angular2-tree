@@ -1,59 +1,24 @@
-import {
-  Component,
-  OnChanges,
-  Input,
-  Output,
-  EventEmitter,
-  ViewEncapsulation, ViewChild
-} from '@angular/core';
+import {Component, OnChanges, Input, ViewEncapsulation, ViewChild, OnInit} from '@angular/core';
 import {IOuterNode} from './interfaces/IOuterNode';
 import {IContextMenu} from './interfaces/IContextMenu';
 import {TreeModel} from './models/TreeModel';
-import {TREE_EVENTS} from './constants/events';
-import {NodeModel} from './models/NodeModel';
-import {ContextMenuComponent} from "angular2-contextmenu";
+import {ContextMenuComponent} from 'angular2-contextmenu';
+import {DragAndDrop} from './dragAndDrop/dragAndDrop.service';
+import {IDragAndDrop} from './interfaces/IDragAndDrop';
+import {TreeActionsService} from './store/treeActions.service';
+import {Store} from '@ngrx/store';
+import {ITreeState} from './store/ITreeState';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'rign-tree',
-  templateUrl: 'tree.component.html',
-  styleUrls: ['tree.component.less']
+  templateUrl: './tree.component.html',
+  styleUrls: ['./tree.component.less']
 })
-export class TreeComponent implements OnChanges {
-  /**
-   * list of nodes on which is build the tree
-   */
-  @Input() nodes: Array<IOuterNode>;
+export class TreeComponent implements OnInit, OnChanges {
+  @Input() treeModel: TreeModel;
 
-  /**
-   * Is "Add button" enabled
-   * @type {boolean}
-   */
-  @Input() showAddButton = false;
-
-  /**
-   * Context menu
-   * @type {Array}
-   */
-  @Input() menu: IContextMenu[] = [];
-
-  /**
-   * If context menu should be disabled
-   * @type {boolean}
-   */
-  @Input() disableContextMenu: boolean = false;
-
-  @Output() onSelect: any;
-  @Output() onToggle: any;
-  @Output() onChange: any;
-  @Output() onAdd: any;
-  @Output() onRemove: any;
-  @Output() onContextMenuItemClick: any;
-
-  private onContextMenuOpen = new EventEmitter();
-
-  @ViewChild('contextMenu')
-  public contextMenu: ContextMenuComponent;
+  @ViewChild('contextMenu') contextMenu: ContextMenuComponent;
 
   /**
    * List of default options for context menu
@@ -74,47 +39,33 @@ export class TreeComponent implements OnChanges {
   ];
 
   /**
-   * Tree model
-   */
-  public tree: TreeModel;
-
-  /**
    * List of context menu items
    *
    * @type {Array}
    */
   public menuList: IContextMenu[] = [];
 
-  public constructor() {
-    this.createTreeModel();
-    this.registerTreeEvents();
-    this.subscribeToOnOpenContextMenu();
+  public constructor(protected store: Store<ITreeState>,
+                     protected treeActions: TreeActionsService,
+                     protected dragAndDrop: DragAndDrop) {
+
   }
 
-  /**
-   * Add new node
-   * @param name
-   * @returns {NodeModel}
-   */
-  public addNode(name = 'New node'): NodeModel {
-    let node = this.tree.addNode({id: null, name: name, children: []});
-    node.setEditMode(true);
-    if (node.parentNode && !node.parentNode.isExpanded()) {
-      node.parentNode.expand();
-    }
-
-    return node;
+  public ngOnInit() {
+    this.registerMove();
   }
 
   public ngOnChanges(data: any) {
-    this.tree.nodes = this.nodes;
-
     this.menuList = [];
     this.defaultOptions.forEach((item) => this.menuList.push(item));
+  }
 
-    if (this.menu.length > 0) {
-      this.menu.forEach((item) => this.menuList.push(item));
-    }
+  public onAdd() {
+    const parent = this.treeModel.currentSelectedNode$.getValue();
+    const parentId = parent ? parent.id : null;
+
+    this.store.dispatch(this.treeActions.expandNode(this.treeModel.treeId, parent));
+    this.store.dispatch(this.treeActions.insertNode(this.treeModel.treeId, parentId));
   }
 
   /**
@@ -123,42 +74,44 @@ export class TreeComponent implements OnChanges {
    * @param name - name of the event
    * @param node - node item
    */
-  public onContextMenuClick(name: string, node: NodeModel) {
+  public onContextMenuClick(name: string, node: IOuterNode) {
+
     switch (name) {
       case 'onEdit':
         event.stopPropagation();
-        node.setEditMode(true);
+        this.store.dispatch(this.treeActions.editNodeStart(node));
         break;
       case 'onDelete':
-        node.onRemove();
+        this.store.dispatch(this.treeActions.deleteNode(this.treeModel.treeId, node));
         break;
       default:
-        this.onContextMenuItemClick({eventName: name, node: node});
+        console.warn('Unknown context menu action: ' + name);
     }
   }
 
   /**
-   * Create tree model
+   * Register node "move event"
    */
-  private createTreeModel() {
-    this.tree = new TreeModel();
-  }
+  protected registerMove(): void {
+    if (this.treeModel.configuration.disableMoveNodes) {
+      return;
+    }
 
-  private registerTreeEvents() {
-    Object.keys(TREE_EVENTS)
-      .forEach((eventName: string) => {
-        this.tree.registerEvent(eventName, this[eventName] = new EventEmitter());
-      });
-
-    this.tree.registerEvent('onOpenContextMenu', this.onContextMenuOpen);
-  }
-
-  private subscribeToOnOpenContextMenu() {
-    this.onContextMenuOpen
-      .subscribe((data: any) => {
-        if (!this.disableContextMenu) {
-          this.contextMenu.onMenuEvent(data);
+    this.dragAndDrop.drop
+      .filter((data: IDragAndDrop) => {
+        if (data.dropNode) {
+          return data.dropNode.node.treeId === this.treeModel.treeId;
+        } else {
+          return data.dragNode.node.treeId === this.treeModel.treeId;
         }
+      })
+      .subscribe((data: IDragAndDrop) => {
+        if (data.dropNode && data.dropNode.zones && data.dropNode.zones.indexOf(data.dragNode.zoneId) === -1) {
+          return;
+        }
+
+        const dropNode = data.dropNode ? data.dropNode.node : null;
+        this.store.dispatch(this.treeActions.moveNode(this.treeModel.treeId, data.dragNode.node, dropNode));
       });
   }
 }
