@@ -1,9 +1,5 @@
 # angular2-tree
 
-## Demo
-
-Working demo with _local storage_ you can find [here](https://qjon.github.io/angular2-tree/).
-
 ## Installation
 
     npm i @rign/angular2-tree
@@ -164,6 +160,9 @@ Using _ngrx/store_ you can listen on below actions and do whatever you want:
  
 ## Changes
 
+### v2.0.1
+* add [MIT LICENSE](https://github.com/qjon/angular2-tree/blob/master/LICENSE)
+
 ### v2.0.0
 * use ngrx/store to store data
 * use actions and effects instead of events
@@ -209,3 +208,17 @@ Using _ngrx/store_ you can listen on below actions and do whatever you want:
 ### v0.5.0
 
 * primary version with all features described below.
+
+
+## Demo
+
+Working demo with _local storage_ you can find [here](https://qjon.github.io/angular2-tree/).
+
+
+## Demo
+
+Working demo with _local storage_ you can find [here](https://qjon.github.io/angular2-tree/).
+
+## License
+
+Licensed under [MIT](https://github.com/qjon/angular2-tree/blob/master/LICENSE).
