@@ -195,6 +195,7 @@ To change language to polish you have to add these lines to your app module:
 
 ### v2.1.0
 * add translation module
+* update and lock of some npm package versions
 
 ### v2.0.1
 * add [MIT LICENSE](https://github.com/qjon/angular2-tree/blob/master/LICENSE)
