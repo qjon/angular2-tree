@@ -28,12 +28,12 @@ export class TreeComponent implements OnInit, OnChanges {
   private defaultOptions: IContextMenu[] = [
     {
       name: 'onEdit',
-      text: 'Edit name',
+      text: 'RI_TREE_LBL_EDIT_NODE',
       iconCls: 'fa fa-edit'
     },
     {
       name: 'onDelete',
-      text: 'Remove',
+      text: 'RI_TREE_LBL_REMOVE_NODE',
       iconCls: 'fa fa-trash'
     }
   ];

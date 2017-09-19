@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "test": "./node_modules/.bin/karma --config karma.conf.js start",
-    "gh-pages" : "ng build --env=prod --base-href \"https://qjon.github.io/angular2-tree/\" &&  ./node_modules/.bin/angular-cli-ghpages -b gh-pages  --name=\"Rafał Ignaszewski\" --email=\"rafal@ignaszewski.pl\" --no-silent"
+    "gh-pages": "ng build --env=prod --base-href \"https://qjon.github.io/angular2-tree/\" &&  ./node_modules/.bin/angular-cli-ghpages -b gh-pages  --name=\"Rafał Ignaszewski\" --email=\"rafal@ignaszewski.pl\" --no-silent"
   },
   "repository": {
     "type": "git",
@@ -27,17 +27,18 @@
     "@angular/platform-browser": "^4.0.0",
     "@angular/platform-browser-dynamic": "^4.0.0",
     "@angular/router": "^4.0.0",
-    "zone.js": "^0.8.4",
     "@ngrx/core": "^1.2.0",
     "@ngrx/effects": "^2.0.3",
-    "core-js": "^2.4.1",
     "@ngrx/store": "^2.2.2",
+    "@ngx-translate/core": "^8.0.0",
     "angular2-contextmenu": "^0.7.7",
     "angular2-uuid": "^1.1.1",
     "bootstrap": "^3.3.7",
+    "core-js": "^2.4.1",
     "font-awesome": "^4.6.3",
     "ng2-dnd": "^2.2.2",
-    "rxjs": "^5.1.0"
+    "rxjs": "^5.1.0",
+    "zone.js": "^0.8.4"
   },
   "devDependencies": {
     "@angular/cli": "1.2.0",

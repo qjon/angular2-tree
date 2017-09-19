@@ -7,7 +7,7 @@
 
 ## Usage
     
-Include _TreeModule_ in your application module and create Store
+Include _TreeModule_  in your application module and create Store
 
     import {TreeModule} from '@rign/angular2-tree/main';
     
@@ -21,6 +21,22 @@ Include _TreeModule_ in your application module and create Store
         StoreModule.provideStore({trees: treeReducer})
       ]
     })
+    
+You need also init translations module, because Tree needs it to translate all labels. 
+
+    @NgModule({
+      declarations: [
+        ...
+      ],
+      imports: [
+        ...
+        TranslationModule.forRoot(),
+        TreeModule,
+        StoreModule.provideStore({trees: treeReducer})
+      ]
+    })
+    
+More information about translations you can find below in section _Translation_.
     
 In any html file put 
 
@@ -157,8 +173,28 @@ Using _ngrx/store_ you can listen on below actions and do whatever you want:
     TreeActionsService.TREE_MOVE_NODE_ERROR
     TreeActionsService.TREE_REGISTER
 
+## Translation
+
+Tree module has configured translation for english (default language) and polish. You can add translations for other languages as it is described in [Translate Module](https://github.com/ngx-translate/core/blob/master/README.md) documentation.
+In _Tree Module_ you are able to set following labels:
+
+* RI_TREE_LBL_ADD_NODE - Add node
+* RI_TREE_LBL_EDIT_NODE - Edit node
+* RI_TREE_LBL_REMOVE_NODE - Delete node
+* RI_TREE_LBL_DROP_ZONE - Drop here to move node to root level
+
+To change language to polish you have to add these lines to your app module:
+
+    export class AppModule {
+      public constructor(translate: TranslateService) {
+        translate.use('pl');
+      }
+    }
  
 ## Changes
+
+### v2.1.0
+* add translation module
 
 ### v2.0.1
 * add [MIT LICENSE](https://github.com/qjon/angular2-tree/blob/master/LICENSE)

@@ -31,7 +31,10 @@ export class Droppable implements OnInit {
 
     renderer.listen(el.nativeElement, 'drop', () => {
       this.toggleDropClass(false);
-      this.dragAndDrop.dragEnd({zones: this.dropConfig.dropZone, node: this.node});
+
+      if (this.isDropAllowed()) {
+        this.dragAndDrop.dragEnd({zones: this.dropConfig.dropZone, node: this.node});
+      }
     });
   }
 
@@ -57,8 +60,8 @@ export class Droppable implements OnInit {
     const target = this.node;
     const dropZone = this.dropConfig.dropZone;
 
-    if (dropZone && dropZone.length > 0) {
-      return dropZone.indexOf(lastDragElement.zoneId) > -1;
+    if (dropZone && dropZone.length > 0 && dropZone.indexOf(lastDragElement.zoneId) === -1) {
+      return false;
     }
 
     // todo: check drag and drop zones

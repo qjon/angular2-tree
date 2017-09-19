@@ -16,6 +16,7 @@ import {StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
 import {TreeEffectsService} from './store/treeEffects.service';
 import {NodeDispatcherService} from './service/nodesDispatcher.service';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -26,6 +27,7 @@ import {NodeDispatcherService} from './service/nodesDispatcher.service';
     HttpModule,
     FormsModule,
     ReactiveFormsModule,
+    TranslateModule,
     StoreModule
   ],
   declarations: [TreeComponent, ItemComponent, Draggable, Droppable, DropzoneComponent],
@@ -34,5 +36,27 @@ import {NodeDispatcherService} from './service/nodesDispatcher.service';
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TreeModule {
+  public constructor(private translate: TranslateService) {
+    this.setTranslationForEN();
+    this.setTranslationForPL();
+    this.translate.use('en');
+  }
 
+  private setTranslationForPL(): void {
+    this.translate.setTranslation('pl', {
+      RI_TREE_LBL_ADD_NODE: 'Dodaj',
+      RI_TREE_LBL_EDIT_NODE: 'Edytuj',
+      RI_TREE_LBL_REMOVE_NODE: 'Usuń',
+      RI_TREE_LBL_DROP_ZONE: 'Upuść tutaj'
+    });
+  }
+
+  private setTranslationForEN(): void {
+    this.translate.setTranslation('en', {
+      RI_TREE_LBL_ADD_NODE: 'Add node',
+      RI_TREE_LBL_EDIT_NODE: 'Edit node',
+      RI_TREE_LBL_REMOVE_NODE: 'Delete node',
+      RI_TREE_LBL_DROP_ZONE: 'Drop here to move node to root level'
+    });
+  }
 }
