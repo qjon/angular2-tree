@@ -6,8 +6,9 @@ import {IOuterNode} from '../interfaces/IOuterNode';
   selector: '[ri-draggable]'
 })
 export class Draggable implements OnChanges, OnInit {
-  @Input() node: IOuterNode;
+  @Input() data: any;
   @Input() dragZone: string | null = null;
+  @Input() sourceType: string = DragAndDrop.DROP_DATA_TYPE;
 
   public dragEnabled = true;
 
@@ -25,8 +26,7 @@ export class Draggable implements OnChanges, OnInit {
   }
 
   private onDragStart($event) {
-    $event.dataTransfer.setData('node', this.node.id.toString());
-    this.dragAndDrop.dragStart({zoneId: this.dragZone, node: this.node});
+    this.dragAndDrop.dragStart({zoneId: this.dragZone, data: this.data, type: this.sourceType});
 
     $event.dataTransfer.effectAllowed = 'copy';
     $event.dataTransfer.dropEffect = 'copy';
@@ -38,7 +38,7 @@ export class Draggable implements OnChanges, OnInit {
   }
 
   public ngOnInit() {
-    if (!this.node) {
+    if (!this.data) {
       throw 'Draggable needs node';
     }
   }

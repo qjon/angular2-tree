@@ -4,6 +4,8 @@ import {IDragAndDrop, IDragElement, IDropElement} from '../interfaces/IDragAndDr
 
 @Injectable()
 export class DragAndDrop {
+  public static DROP_DATA_TYPE = 'TREE_NODE';
+
   protected dropStream: Subject<IDropElement | null> = new Subject();
   protected dragStream: BehaviorSubject<IDragElement | null> = new BehaviorSubject(null);
 
@@ -11,7 +13,7 @@ export class DragAndDrop {
 
   public constructor() {
     this.drop = this.dropStream.withLatestFrom(this.dragStream, (dropNode: IDropElement, dragNode: IDragElement): IDragAndDrop => {
-      return {dragNode: dragNode, dropNode: dropNode};
+      return {dragNode: dragNode, dropNode: dropNode, type: dragNode.type};
     });
   }
 

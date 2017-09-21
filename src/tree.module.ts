@@ -6,7 +6,7 @@ import {HttpModule} from '@angular/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ContextMenuModule} from 'angular2-contextmenu';
 import {TreeComponent} from './tree.component';
-import {DndModule} from 'ng2-dnd';
+import {DndModule, DraggableComponent} from 'ng2-dnd';
 import {DragAndDrop} from './dragAndDrop/dragAndDrop.service';
 import {Draggable} from './dragAndDrop/draggable.directive';
 import {Droppable} from './dragAndDrop/droppable.directive';
@@ -31,7 +31,7 @@ import {TranslateModule, TranslateService} from '@ngx-translate/core';
     StoreModule
   ],
   declarations: [TreeComponent, ItemComponent, Draggable, Droppable, DropzoneComponent],
-  exports: [TreeComponent, ItemComponent, Draggable, Droppable, DropzoneComponent, StoreModule, EffectsModule],
+  exports: [TreeComponent, ItemComponent, Draggable, Droppable, DropzoneComponent, DraggableComponent, StoreModule, EffectsModule],
   providers: [DragAndDrop, NodeService, TreeActionsService, TreeEffectsService, NodeDispatcherService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

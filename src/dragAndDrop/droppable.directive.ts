@@ -12,7 +12,7 @@ export interface DropConfig {
   selector: '[ri-droppable]'
 })
 export class Droppable implements OnInit {
-  @Input() node: IOuterNode;
+  @Input() data: IOuterNode;
   @Input() dropConfig: DropConfig = {};
 
   public constructor(protected el: ElementRef, private renderer: Renderer, protected dragAndDrop: DragAndDrop) {
@@ -33,7 +33,7 @@ export class Droppable implements OnInit {
       this.toggleDropClass(false);
 
       if (this.isDropAllowed()) {
-        this.dragAndDrop.dragEnd({zones: this.dropConfig.dropZone, node: this.node});
+        this.dragAndDrop.dragEnd({zones: this.dropConfig.dropZone, node: this.data});
       }
     });
   }
@@ -41,7 +41,7 @@ export class Droppable implements OnInit {
   public ngOnInit() {
     this.initConfig();
 
-    if (!this.node) {
+    if (!this.data) {
       throw 'Droppable needs node';
     }
   }
@@ -56,8 +56,8 @@ export class Droppable implements OnInit {
 
   private isDropAllowed = function () {
     const lastDragElement = this.dragAndDrop.getLastDragElement();
-    const source = lastDragElement.node;
-    const target = this.node;
+    const source = lastDragElement.data;
+    const target = this.data;
     const dropZone = this.dropConfig.dropZone;
 
     if (dropZone && dropZone.length > 0 && dropZone.indexOf(lastDragElement.zoneId) === -1) {

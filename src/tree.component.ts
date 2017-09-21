@@ -99,19 +99,24 @@ export class TreeComponent implements OnInit, OnChanges {
 
     this.dragAndDrop.drop
       .filter((data: IDragAndDrop) => {
-        if (data.dropNode) {
-          return data.dropNode.node.treeId === this.treeModel.treeId;
+        if(data.type === DragAndDrop.DROP_DATA_TYPE) {
+          if (data.dropNode) {
+            return data.dropNode.node.treeId === this.treeModel.treeId;
+          } else {
+            return data.dragNode.data.treeId === this.treeModel.treeId;
+          }
         } else {
-          return data.dragNode.node.treeId === this.treeModel.treeId;
+          if (data.dropNode && data.dropNode.zones && data.dropNode.zones.indexOf(data.dragNode.zoneId) === -1) {
+            return false;
+          }
+
+          return true;
         }
       })
       .subscribe((data: IDragAndDrop) => {
-        if (data.dropNode && data.dropNode.zones && data.dropNode.zones.indexOf(data.dragNode.zoneId) === -1) {
-          return;
-        }
 
         const dropNode = data.dropNode ? data.dropNode.node : null;
-        this.store.dispatch(this.treeActions.moveNode(this.treeModel.treeId, data.dragNode.node, dropNode));
+        this.store.dispatch(this.treeActions.moveNode(data.type, this.treeModel.treeId, data.dragNode.data, dropNode));
       });
   }
 }

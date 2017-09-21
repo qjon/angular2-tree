@@ -5,7 +5,7 @@
      ri-draggable
      [dragZone]="treeModel.configuration.dragZone"
      [dropConfig]="{dropAllowedCssClass: 'drop-allowed', dropZone: treeModel.configuration.dropZone}"
-     [node]="node"
+     [data]="node"
 >
   <i *ngIf="!isExpanded" (click)="expand()" class="fa fa-caret-right pointer"></i>
   <i *ngIf="isExpanded" (click)="collapse()" class="fa fa-caret-down pointer"></i>

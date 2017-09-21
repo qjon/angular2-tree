@@ -5,6 +5,7 @@ import {IOuterNode} from '../interfaces/IOuterNode';
 import {Observable} from 'rxjs/Observable';
 import {ITreeAction, ITreeActionPayload} from './ITreeState';
 import {NodeDispatcherService} from '../service/nodesDispatcher.service';
+import {DragAndDrop} from '../dragAndDrop/dragAndDrop.service';
 
 @Injectable()
 export class TreeEffectsService {
@@ -38,6 +39,9 @@ export class TreeEffectsService {
 
   @Effect() move$ = this.actions$
     .ofType(TreeActionsService.TREE_MOVE_NODE)
+    .filter((action: ITreeAction) => {
+      return action.payload.sourceOfDroppedData === DragAndDrop.DROP_DATA_TYPE;
+    })
     .switchMap((action: ITreeAction) => this.moveNode(action.payload.treeId, action.payload.oldNode, action.payload.node)
       .map((node: IOuterNode): ITreeActionPayload => {
         return {

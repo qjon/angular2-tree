@@ -190,11 +190,41 @@ To change language to polish you have to add these lines to your app module:
         translate.use('pl');
       }
     }
+    
+## Drop elements on tree node
+
+Now you have new possibilities to move different elements to the tree (files or other data). To do that, you have to use _ri-draggable_ directive in following way
+
+    <div ri-draggable [dragZone]="treeModel.configuration.dragZone" [data]="your_data" [sourceType]="'YOUR_SOURCE_TYPE'">Drag element</div>  
+    
+where:
+* _your_data_ - is any object
+* _YOUR_SOURCE_TYPE_ - is any type of string which allow you to filter drop effect
+
+Then you have to create _@Effects_ similar to that one in _[treeEffects.service](src/store/treeEffects.service.ts)_or create only Observable and subscribe to it.
+
+    @Effect() move$ = this.actions$
+      .ofType(TreeActionsService.TREE_MOVE_NODE)
+      .filter((action: ITreeAction) => {
+        return action.payload.sourceOfDroppedData === DragAndDrop.DROP_DATA_TYPE;
+      }) 
+      ...
+      
+but you have to replace 
+
+    .ofType(TreeActionsService.TREE_MOVE_NODE)
+
+to 
+
+    .ofType('YOUR_SOURCE_TYPE')
+      
+At the end do not forget to add this effects to your app.
  
 ## Changes
 
 ### v2.1.0
 * add translation module
+* drop elements on tree nodes 
 * update and lock of some npm package versions
 
 ### v2.0.1

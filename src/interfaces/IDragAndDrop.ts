@@ -1,16 +1,16 @@
-import {IOuterNode} from './IOuterNode';
-
 export interface IDragElement {
   zoneId: string | null;
-  node: IOuterNode | null;
+  data: any | null;
+  type: string;
 }
 
 export interface IDropElement {
   zones: string[] | null;
-  node: IOuterNode | null;
+  node: any | null;
 }
 
 export interface IDragAndDrop {
   dragNode: IDragElement;
   dropNode: IDropElement;
+  type: string;
 }

@@ -30,6 +30,6 @@ import {TranslateModule, TranslateService} from '@ngx-translate/core';
 export class AppModule {
 
   public constructor(translate: TranslateService) {
-    translate.use('pl');
+    translate.use('en');
   }
 }

@@ -1,7 +1,8 @@
 import {Component, Input} from '@angular/core';
 import {TreeModel} from '../../models/TreeModel';
 import {DragAndDrop} from '../dragAndDrop.service';
-import {IDragElement} from '../../interfaces/IDragAndDrop';
+import {IDragAndDrop, IDragElement} from '../../interfaces/IDragAndDrop';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   selector: 'ri-dropzone',
@@ -12,17 +13,34 @@ export class DropzoneComponent {
   @Input() treeModel: TreeModel;
   @Input() dropZone: string[] = [];
 
-  public isOpen = false;
+  public isOpen: Observable<boolean>;
 
   constructor(public dragAndDrop: DragAndDrop) {
-    this.dragAndDrop.getDragStream()
-      .subscribe((dragElement: IDragElement) => {
-        const isDragElement = !!dragElement && !!dragElement.node;
-        const isNotRootElement = isDragElement && dragElement.node.parentId;
-        const isFromCurrentTree = isDragElement && dragElement.node.treeId === this.treeModel.treeId;
 
-        this.isOpen = (isNotRootElement && isFromCurrentTree) ? true : false;
+    const isDragStart$ = this.dragAndDrop.getDragStream()
+      .map((dragElement: IDragElement): boolean => {
+        const isDragElement = !!dragElement && !!dragElement.data;
+
+        if (isDragElement) {
+          if (dragElement.type === DragAndDrop.DROP_DATA_TYPE) {
+            const isNotRootElement = dragElement.data.parentId;
+            const isFromCurrentTree = dragElement.data.treeId === this.treeModel.treeId;
+
+            return (isNotRootElement && isFromCurrentTree) ? true : false;
+          } else {
+            return true;
+          }
+        }
+
+        return false;
       });
+
+    const isDragEnd$ = this.dragAndDrop.drop
+      .map((data: IDragAndDrop): boolean => {
+        return false;
+      });
+
+    this.isOpen = Observable.merge(isDragStart$, isDragEnd$);
   }
 
   public onDrop() {

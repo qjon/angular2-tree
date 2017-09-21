@@ -151,10 +151,11 @@ export class TreeActionsService {
     };
   }
 
-  public moveNode(treeId: string, source: IOuterNode, target: IOuterNode | null): ITreeAction {
+  public moveNode(type: string, treeId: string, source: any, target: IOuterNode | null): ITreeAction {
     return {
       type: TreeActionsService.TREE_MOVE_NODE,
       payload: {
+        sourceOfDroppedData: type,
         treeId: treeId,
         oldNode: source,
         node: target
