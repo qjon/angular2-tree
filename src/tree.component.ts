@@ -97,9 +97,9 @@ export class TreeComponent implements OnInit, OnChanges {
       return;
     }
 
-    this.dragAndDrop.drop
+    this.dragAndDrop.drop$
       .filter((data: IDragAndDrop) => {
-        if(data.type === DragAndDrop.DROP_DATA_TYPE) {
+        if (data.type === DragAndDrop.DROP_DATA_TYPE) {
           if (data.dropNode) {
             return data.dropNode.node.treeId === this.treeModel.treeId;
           } else {

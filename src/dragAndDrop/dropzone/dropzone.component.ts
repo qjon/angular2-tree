@@ -13,7 +13,7 @@ export class DropzoneComponent {
   @Input() treeModel: TreeModel;
   @Input() dropZone: string[] = [];
 
-  public isOpen: Observable<boolean>;
+  public isOpen$: Observable<boolean>;
 
   constructor(public dragAndDrop: DragAndDrop) {
 
@@ -35,12 +35,12 @@ export class DropzoneComponent {
         return false;
       });
 
-    const isDragEnd$ = this.dragAndDrop.drop
+    const isDragEnd$ = this.dragAndDrop.drop$
       .map((data: IDragAndDrop): boolean => {
         return false;
       });
 
-    this.isOpen = Observable.merge(isDragStart$, isDragEnd$);
+    this.isOpen$ = Observable.merge(isDragStart$, isDragEnd$);
   }
 
   public onDrop() {
