@@ -5,4 +5,5 @@ export interface IConfiguration {
   treeId?: string;
   dragZone?: string | null;
   dropZone?: string[] | null;
+  isAnimation?: boolean;
 }

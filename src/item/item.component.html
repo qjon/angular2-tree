@@ -15,6 +15,8 @@
            name="name" (keydown)="onChange($event)" (blur)="onBlur($event)"/>
   </form>
 </div>
-<div class="tree" *ngIf="isExpanded">
-  <rign-tree-item *ngFor="let child of children$ | async" [node]="child" [treeModel]="treeModel" [contextMenu]="contextMenu"></rign-tree-item>
+<div class="tree" [@isExpanded]="animationState" (@isExpanded.done)="onAnimationDone($event)">
+  <div *ngIf="isExpanded" >
+    <rign-tree-item *ngFor="let child of children$ | async" [node]="child" [treeModel]="treeModel" [contextMenu]="contextMenu"></rign-tree-item>
+  </div>
 </div>
