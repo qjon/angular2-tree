@@ -35,7 +35,10 @@ export class TreeActionsService {
   public editNodeStart(node: IOuterNode): Action {
     return {
       type: TreeActionsService.TREE_EDIT_NODE_START,
-      payload: node
+      payload: {
+        node,
+        treeId: node.treeId
+      }
     };
   }
 
