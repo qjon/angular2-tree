@@ -150,10 +150,9 @@ export class ItemComponent implements OnInit, AfterViewInit {
   public onBlur() {
     if (this.isStartSave) {
       this.isStartSave = false;
-      return;
+    } else {
+      this.undoChanges();
     }
-
-    this.undoChanges();
   }
 
   public onChange(event: KeyboardEvent) {
