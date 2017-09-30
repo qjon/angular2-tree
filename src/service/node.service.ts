@@ -6,9 +6,13 @@ import {IApiConfig} from '../IApiConfig.service';
 
 export interface INodeService {
   load(nodeId: string): Observable<IOuterNode[]>;
+
   add(node: IOuterNode, parentNodeId: string | null): Observable<IOuterNode>;
+
   move(srcNode: IOuterNode, targetNode: IOuterNode | null): Observable<IOuterNode>;
+
   update(node: IOuterNode): Observable<IOuterNode>;
+
   remove(nodeId: string): Observable<IOuterNode>;
 }
 

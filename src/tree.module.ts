@@ -8,8 +8,8 @@ import {ContextMenuModule} from 'angular2-contextmenu';
 import {TreeComponent} from './tree.component';
 import {DndModule, DraggableComponent} from 'ng2-dnd';
 import {DragAndDrop} from './dragAndDrop/dragAndDrop.service';
-import {Draggable} from './dragAndDrop/draggable.directive';
-import {Droppable} from './dragAndDrop/droppable.directive';
+import {DraggableDirective} from './dragAndDrop/draggable.directive';
+import {DroppableDirective} from './dragAndDrop/droppable.directive';
 import {DropzoneComponent} from './dragAndDrop/dropzone/dropzone.component';
 import {TreeActionsService} from './store/treeActions.service';
 import {StoreModule} from '@ngrx/store';
@@ -34,8 +34,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     TranslateModule,
     StoreModule
   ],
-  declarations: [TreeComponent, ItemComponent, Draggable, Droppable, DropzoneComponent],
-  exports: [TreeComponent, ItemComponent, Draggable, Droppable, DropzoneComponent, DraggableComponent, StoreModule, EffectsModule],
+  declarations: [TreeComponent, ItemComponent, DraggableDirective, DroppableDirective, DropzoneComponent],
+  exports: [TreeComponent, ItemComponent, DraggableDirective, DroppableDirective, DropzoneComponent, DraggableComponent, StoreModule, EffectsModule],
   providers: [DragAndDrop, NodeService, TreeActionsService, TreeEffectsService, NodeDispatcherService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
@@ -57,10 +57,10 @@ export class TreeModule {
 
   private setTranslationForEN(): void {
     this.translate.setTranslation('en', {
-      RI_TREE_LBL_ADD_NODE: 'Add node',
-      RI_TREE_LBL_EDIT_NODE: 'Edit node',
-      RI_TREE_LBL_REMOVE_NODE: 'Delete node',
-      RI_TREE_LBL_DROP_ZONE: 'Drop here to move node to root level'
+      RI_TREE_LBL_ADD_NODE: 'Add data',
+      RI_TREE_LBL_EDIT_NODE: 'Edit data',
+      RI_TREE_LBL_REMOVE_NODE: 'Delete data',
+      RI_TREE_LBL_DROP_ZONE: 'Drop here to move data to root level'
     });
   }
 }

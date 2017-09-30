@@ -34,7 +34,7 @@ import {animate, AnimationEvent, state, style, transition, trigger} from '@angul
 })
 export class ItemComponent implements OnInit, AfterViewInit {
   /**
-   * Input field where we can change node name
+   * Input field where we can change data name
    */
   @ViewChild('inputElement') input: any;
 
@@ -48,7 +48,7 @@ export class ItemComponent implements OnInit, AfterViewInit {
   @Input() contextMenu: ContextMenuComponent;
 
   /**
-   * Form field to change node name
+   * Form field to change data name
    * @type {FormControl}
    */
   public nameField = new FormControl();

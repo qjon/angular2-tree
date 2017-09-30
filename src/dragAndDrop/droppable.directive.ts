@@ -11,7 +11,7 @@ export interface DropConfig {
 @Directive({
   selector: '[ri-droppable]'
 })
-export class Droppable implements OnInit {
+export class DroppableDirective implements OnInit {
   @Input() data: IOuterNode;
   @Input() dropConfig: DropConfig = {};
 
@@ -33,7 +33,7 @@ export class Droppable implements OnInit {
       this.toggleDropClass(false);
 
       if (this.isDropAllowed()) {
-        this.dragAndDrop.dragEnd({zones: this.dropConfig.dropZone, node: this.data});
+        this.dragAndDrop.dragEnd({zones: this.dropConfig.dropZone, data: this.data});
       }
     });
   }
@@ -42,7 +42,7 @@ export class Droppable implements OnInit {
     this.initConfig();
 
     if (!this.data) {
-      throw 'Droppable needs node';
+      throw 'DroppableDirective needs data';
     }
   }
 

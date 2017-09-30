@@ -6,7 +6,7 @@ export interface IDragElement {
 
 export interface IDropElement {
   zones: string[] | null;
-  node: any | null;
+  data: any | null;
 }
 
 export interface IDragAndDrop {

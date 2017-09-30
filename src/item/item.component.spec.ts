@@ -2,13 +2,13 @@ import {ItemComponent} from './item.component';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {TreeModel} from '../models/TreeModel';
 import {IOuterNode} from '../interfaces/IOuterNode';
-import {Draggable} from '../dragAndDrop/draggable.directive';
-import {Droppable} from '../dragAndDrop/droppable.directive';
+import {DraggableDirective} from '../dragAndDrop/draggable.directive';
+import {DroppableDirective} from '../dragAndDrop/droppable.directive';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ITreeAction, ITreeData, ITreeState} from '../store/ITreeState';
 import {Store} from '@ngrx/store';
 import {TreeActionsService} from '../store/treeActions.service';
-import {ContextMenuService} from 'angular2-contextmenu';
+import {ContextMenuService, IContextMenuClickEvent} from 'angular2-contextmenu';
 import {Actions} from '@ngrx/effects';
 import {Observable} from 'rxjs/Observable';
 import {DragAndDrop} from '../dragAndDrop/dragAndDrop.service';
@@ -33,7 +33,9 @@ describe('ItemComponent', () => {
     actions$ = new Subject<ITreeAction>();
 
     actionsMock = <Actions>jasmine.createSpyObj('actions', ['ofType']);
-    contextMenuServiceMock = <ContextMenuService>{};
+    contextMenuServiceMock = <ContextMenuService>{
+      show: new Subject<IContextMenuClickEvent>()
+    };
     storeMock = <Store<ITreeState>>jasmine.createSpyObj('Store', ['dispatch']);
     treeActionServiceMock = <TreeActionsService>jasmine.createSpyObj('TreeActionsService', ['deleteNode', 'loadTree', 'saveNode']);
 
@@ -49,7 +51,7 @@ describe('ItemComponent', () => {
       children: []
     };
 
-    treeModelMock = new TreeModel(Observable.of(<ITreeData>{}), {isAnimation: false});
+    treeModelMock = new TreeModel(Observable.of(<ITreeData>{}), {disableContextMenu: true, isAnimation: false});
 
     TestBed.configureTestingModule({
       imports: [
@@ -66,8 +68,8 @@ describe('ItemComponent', () => {
       ],
       declarations: [
         ItemComponent,
-        Draggable,
-        Droppable,
+        DraggableDirective,
+        DroppableDirective,
       ]
     })
       .compileComponents();
@@ -327,7 +329,20 @@ describe('ItemComponent', () => {
     });
 
     describe('if ESC key is pressed', () => {
+      it('should change editMode to false', () => {
+        const event = <KeyboardEvent>{
+          keyCode: 27,
+          altKey: false,
+          char: 'ESC',
+          stopPropagation: () => {
+          }
+        };
+        component.isEditMode = true;
 
+        component.onChange(event);
+
+        expect(component.isEditMode).toBe(false);
+      });
     });
 
     describe('if any other key is pressed', () => {
@@ -347,7 +362,78 @@ describe('ItemComponent', () => {
         expect(component.isEditMode).toBe(true);
       });
     });
-
   });
+
+  describe('onContextMenu', () => {
+    let event: MouseEvent;
+
+    beforeEach(() => {
+      event = <MouseEvent>jasmine.createSpyObj('event', ['stopPropagation', 'preventDefault']);
+    });
+
+    it('should call event.stopPropagation', () => {
+      component.onContextMenu(event);
+
+      expect(event.stopPropagation).toHaveBeenCalled();
+    });
+
+    it('should call event.preventDefault', () => {
+      component.onContextMenu(event);
+
+      expect(event.preventDefault).toHaveBeenCalled();
+    });
+
+    it('should emit new show value', () => {
+      const expectedValue = {
+        contextMenu: component.contextMenu,
+        event: event,
+        item: node
+      };
+
+      const handler = jasmine.createSpy('handler');
+
+      component.treeModel.configuration.disableContextMenu = false;
+
+      contextMenuServiceMock.show
+        .subscribe(handler);
+
+
+      component.onContextMenu(event);
+
+      expect(handler).toHaveBeenCalledWith(expectedValue);
+    });
+  });
+
+  describe('onSelect', () => {
+    it('should emit new selection node', () => {
+      const handler = jasmine.createSpy('handler');
+
+      component.isSelected = false;
+
+      component.onSelect();
+
+      component.treeModel.currentSelectedNode$
+        .subscribe(handler);
+
+
+      expect(handler).toHaveBeenCalledWith(node);
+    });
+
+
+    it('should emit new selection - null', () => {
+      const handler = jasmine.createSpy('handler');
+
+      component.isSelected = true;
+
+      component.onSelect();
+
+      component.treeModel.currentSelectedNode$
+        .subscribe(handler);
+
+
+      expect(handler).toHaveBeenCalledWith(null);
+    });
+  });
+
 
 });

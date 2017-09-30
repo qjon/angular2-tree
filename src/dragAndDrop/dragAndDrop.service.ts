@@ -17,12 +17,12 @@ export class DragAndDrop {
     });
   }
 
-  public dragStart(node: IDragElement) {
-    this.dragStream$.next(node);
+  public dragStart(dragE: IDragElement) {
+    this.dragStream$.next(dragE);
   }
 
-  public dragEnd(node: IDropElement | null) {
-    this.dropStream$.next(node);
+  public dragEnd(dropElement: IDropElement | null) {
+    this.dropStream$.next(dropElement);
   }
 
   public getDragStream(): BehaviorSubject<IDragElement | null> {

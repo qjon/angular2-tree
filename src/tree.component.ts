@@ -72,7 +72,7 @@ export class TreeComponent implements OnInit, OnChanges {
    * On select item from context menu
    *
    * @param name - name of the event
-   * @param node - node item
+   * @param node - data item
    */
   public onContextMenuClick(name: string, node: IOuterNode) {
 
@@ -90,7 +90,7 @@ export class TreeComponent implements OnInit, OnChanges {
   }
 
   /**
-   * Register node "move event"
+   * Register data "move event"
    */
   protected registerMove(): void {
     if (this.treeModel.configuration.disableMoveNodes) {
@@ -101,7 +101,7 @@ export class TreeComponent implements OnInit, OnChanges {
       .filter((data: IDragAndDrop) => {
         if (data.type === DragAndDrop.DROP_DATA_TYPE) {
           if (data.dropNode) {
-            return data.dropNode.node.treeId === this.treeModel.treeId;
+            return data.dropNode.data.treeId === this.treeModel.treeId;
           } else {
             return data.dragNode.data.treeId === this.treeModel.treeId;
           }
@@ -115,7 +115,7 @@ export class TreeComponent implements OnInit, OnChanges {
       })
       .subscribe((data: IDragAndDrop) => {
 
-        const dropNode = data.dropNode ? data.dropNode.node : null;
+        const dropNode = data.dropNode ? data.dropNode.data : null;
         this.store.dispatch(this.treeActions.moveNode(data.type, this.treeModel.treeId, data.dragNode.data, dropNode));
       });
   }
