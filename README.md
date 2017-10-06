@@ -69,7 +69,8 @@ In component where you create tree, you should register _tree store_, create _Tr
         disableMoveNodes: false,
         treeId: 'tree3',
         dragZone: 'tree3',
-        dropZone: ['tree3']
+        dropZone: ['tree3'],
+        isAnimation: true     // add animation to action "expand" and "collapse"
       };
     
       public treeModel: TreeModel;
@@ -140,8 +141,10 @@ and _newItem.component.html_
           </span>
       </div>
     </div>
-    <div class="tree" *ngIf="isExpanded">
-      <new-tree-item  *ngFor="let child of children$ | async" [node]="child" [treeModel]="treeModel" [contextMenu]="contextMenu"></new-tree-item>
+    <div class="tree" [@isExpanded]="animationState" (@isExpanded.done)="onAnimationDone($event)">
+      <div *ngIf="isExpanded">
+        <new-tree-item  *ngFor="let child of children$ | async" [node]="child" [treeModel]="treeModel" [contextMenu]="contextMenu"></new-tree-item>
+      </div>
     </div>
 
     
@@ -226,6 +229,7 @@ At the end do not forget to add this effects to your app.
 * add translation module
 * drop elements on tree nodes 
 * update and lock of some npm package versions
+* add possibility to animate action _collapse_ and _expand_ nodes of tree, using in configuration property _isAnimation: true_
 
 ### v2.0.1
 * add [MIT LICENSE](https://github.com/qjon/angular2-tree/blob/master/LICENSE)
@@ -275,11 +279,6 @@ At the end do not forget to add this effects to your app.
 ### v0.5.0
 
 * primary version with all features described below.
-
-
-## Demo
-
-Working demo with _local storage_ you can find [here](https://qjon.github.io/angular2-tree/).
 
 
 ## Demo
