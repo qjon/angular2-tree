@@ -7,7 +7,7 @@
 
 ## Usage
     
-Include _TreeModule_ in your application module and create Store
+Include _TreeModule_  in your application module and create Store
 
     import {TreeModule} from '@rign/angular2-tree/main';
     
@@ -21,6 +21,22 @@ Include _TreeModule_ in your application module and create Store
         StoreModule.provideStore({trees: treeReducer})
       ]
     })
+    
+You need also init translations module, because Tree needs it to translate all labels. 
+
+    @NgModule({
+      declarations: [
+        ...
+      ],
+      imports: [
+        ...
+        TranslationModule.forRoot(),
+        TreeModule,
+        StoreModule.provideStore({trees: treeReducer})
+      ]
+    })
+    
+More information about translations you can find below in section _Translation_.
     
 In any html file put 
 
@@ -53,7 +69,8 @@ In component where you create tree, you should register _tree store_, create _Tr
         disableMoveNodes: false,
         treeId: 'tree3',
         dragZone: 'tree3',
-        dropZone: ['tree3']
+        dropZone: ['tree3'],
+        isAnimation: true     // add animation to action "expand" and "collapse"
       };
     
       public treeModel: TreeModel;
@@ -102,7 +119,7 @@ and _newItem.component.html_
          ri-draggable
          [dragZone]="treeModel.configuration.dragZone"
          [dropConfig]="{dropAllowedCssClass: 'drop-enabled', dropZone: treeModel.configuration.dropZone}"
-         [node]="node"
+         [data]="node"
     >
       <div class="col-sm-8">
         <i *ngIf="!isExpanded" (click)="expand()" class="fa fa-plus pointer"></i>
@@ -124,8 +141,10 @@ and _newItem.component.html_
           </span>
       </div>
     </div>
-    <div class="tree" *ngIf="isExpanded">
-      <new-tree-item  *ngFor="let child of children$ | async" [node]="child" [treeModel]="treeModel" [contextMenu]="contextMenu"></new-tree-item>
+    <div class="tree" [@isExpanded]="animationState" (@isExpanded.done)="onAnimationDone($event)">
+      <div *ngIf="isExpanded">
+        <new-tree-item  *ngFor="let child of children$ | async" [node]="child" [treeModel]="treeModel" [contextMenu]="contextMenu"></new-tree-item>
+      </div>
     </div>
 
     
@@ -157,8 +176,60 @@ Using _ngrx/store_ you can listen on below actions and do whatever you want:
     TreeActionsService.TREE_MOVE_NODE_ERROR
     TreeActionsService.TREE_REGISTER
 
+## Translation
+
+Tree module has configured translation for english (default language) and polish. You can add translations for other languages as it is described in [Translate Module](https://github.com/ngx-translate/core/blob/master/README.md) documentation.
+In _Tree Module_ you are able to set following labels:
+
+* RI_TREE_LBL_ADD_NODE - Add node
+* RI_TREE_LBL_EDIT_NODE - Edit node
+* RI_TREE_LBL_REMOVE_NODE - Delete node
+* RI_TREE_LBL_DROP_ZONE - Drop here to move node to root level
+
+To change language to polish you have to add these lines to your app module:
+
+    export class AppModule {
+      public constructor(translate: TranslateService) {
+        translate.use('pl');
+      }
+    }
+    
+## Drop elements on tree node
+
+Now you have new possibilities to move different elements to the tree (files or other data). To do that, you have to use _ri-draggable_ directive in following way
+
+    <div ri-draggable [dragZone]="treeModel.configuration.dragZone" [data]="your_data" [sourceType]="'YOUR_SOURCE_TYPE'">Drag element</div>  
+    
+where:
+* _your_data_ - is any object
+* _YOUR_SOURCE_TYPE_ - is any type of string which allow you to filter drop effect
+
+Then you have to create _@Effects_ similar to that one in _[treeEffects.service](src/store/treeEffects.service.ts)_or create only Observable and subscribe to it.
+
+    @Effect() move$ = this.actions$
+      .ofType(TreeActionsService.TREE_MOVE_NODE)
+      .filter((action: ITreeAction) => {
+        return action.payload.sourceOfDroppedData === DragAndDrop.DROP_DATA_TYPE;
+      }) 
+      ...
+      
+but you have to replace 
+
+    .ofType(TreeActionsService.TREE_MOVE_NODE)
+
+to 
+
+    .ofType('YOUR_SOURCE_TYPE')
+      
+At the end do not forget to add this effects to your app.
  
 ## Changes
+
+### v2.1.0
+* add translation module
+* drop elements on tree nodes 
+* update and lock of some npm package versions
+* add possibility to animate action _collapse_ and _expand_ nodes of tree, using in configuration property _isAnimation: true_
 
 ### v2.0.1
 * add [MIT LICENSE](https://github.com/qjon/angular2-tree/blob/master/LICENSE)
@@ -208,11 +279,6 @@ Using _ngrx/store_ you can listen on below actions and do whatever you want:
 ### v0.5.0
 
 * primary version with all features described below.
-
-
-## Demo
-
-Working demo with _local storage_ you can find [here](https://qjon.github.io/angular2-tree/).
 
 
 ## Demo

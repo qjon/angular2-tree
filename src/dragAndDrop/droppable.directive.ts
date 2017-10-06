@@ -11,8 +11,8 @@ export interface DropConfig {
 @Directive({
   selector: '[ri-droppable]'
 })
-export class Droppable implements OnInit {
-  @Input() node: IOuterNode;
+export class DroppableDirective implements OnInit {
+  @Input() data: IOuterNode;
   @Input() dropConfig: DropConfig = {};
 
   public constructor(protected el: ElementRef, private renderer: Renderer, protected dragAndDrop: DragAndDrop) {
@@ -31,15 +31,18 @@ export class Droppable implements OnInit {
 
     renderer.listen(el.nativeElement, 'drop', () => {
       this.toggleDropClass(false);
-      this.dragAndDrop.dragEnd({zones: this.dropConfig.dropZone, node: this.node});
+
+      if (this.isDropAllowed()) {
+        this.dragAndDrop.dragEnd({zones: this.dropConfig.dropZone, data: this.data});
+      }
     });
   }
 
   public ngOnInit() {
     this.initConfig();
 
-    if (!this.node) {
-      throw 'Droppable needs node';
+    if (!this.data) {
+      throw 'DroppableDirective needs data';
     }
   }
 
@@ -53,12 +56,12 @@ export class Droppable implements OnInit {
 
   private isDropAllowed = function () {
     const lastDragElement = this.dragAndDrop.getLastDragElement();
-    const source = lastDragElement.node;
-    const target = this.node;
+    const source = lastDragElement.data;
+    const target = this.data;
     const dropZone = this.dropConfig.dropZone;
 
-    if (dropZone && dropZone.length > 0) {
-      return dropZone.indexOf(lastDragElement.zoneId) > -1;
+    if (dropZone && dropZone.length > 0 && dropZone.indexOf(lastDragElement.zoneId) === -1) {
+      return false;
     }
 
     // todo: check drag and drop zones

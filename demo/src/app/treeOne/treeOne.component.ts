@@ -18,7 +18,8 @@ export class TreeOneComponent implements OnInit {
     disableMoveNodes: false,
     treeId: 'tree3',
     dragZone: 'tree3',
-    dropZone: ['tree3']
+    dropZone: ['tree3'],
+    isAnimation: true
   };
 
   public treeModel: TreeModel;

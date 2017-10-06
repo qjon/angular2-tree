@@ -10,16 +10,31 @@ import {ITreeState} from '../store/ITreeState';
 import {Observable} from 'rxjs/Observable';
 import {TreeModel} from '../models/TreeModel';
 import {Actions} from '@ngrx/effects';
+import {animate, AnimationEvent, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'rign-tree-item',
   templateUrl: './item.component.html',
-  styleUrls: ['./item.component.less']
+  styleUrls: ['./item.component.less'],
+  animations: [
+    trigger('isExpanded', [
+      state('inactive', style({
+        height: 0,
+        opacity: 0,
+        transform: 'scaleY(0)'
+      })),
+      state('active', style({
+        transform: 'scaleY(1)'
+      })),
+      transition('inactive => active', animate('300ms')),
+      transition('active => inactive', animate('300ms'))
+    ])
+  ]
 })
 export class ItemComponent implements OnInit, AfterViewInit {
   /**
-   * Input field where we can change node name
+   * Input field where we can change data name
    */
   @ViewChild('inputElement') input: any;
 
@@ -33,7 +48,7 @@ export class ItemComponent implements OnInit, AfterViewInit {
   @Input() contextMenu: ContextMenuComponent;
 
   /**
-   * Form field to change node name
+   * Form field to change data name
    * @type {FormControl}
    */
   public nameField = new FormControl();
@@ -41,6 +56,7 @@ export class ItemComponent implements OnInit, AfterViewInit {
   public isEditMode = false;
   public isSelected = false;
   public isExpanded = false;
+  public animationState = null;
 
   public children$: Observable<IOuterNode[]>;
 
@@ -48,7 +64,7 @@ export class ItemComponent implements OnInit, AfterViewInit {
   protected insert$: Observable<Action> = this.actions$
     .ofType(TreeActionsService.TREE_INSERT_NODE)
     .filter((action: Action) => {
-      return action.payload && action.payload === this.node.id;
+      return action.payload && action.payload.id === this.node.id;
     });
 
   protected isStartSave = false;
@@ -61,7 +77,6 @@ export class ItemComponent implements OnInit, AfterViewInit {
                      protected treeActionsService: TreeActionsService,
                      protected contextMenuService: ContextMenuService,
                      protected actions$: Actions) {
-
 
     this.actions$
       .ofType(TreeActionsService.TREE_EXPAND_NODE)
@@ -80,6 +95,10 @@ export class ItemComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit() {
+    if (this.treeModel.configuration.isAnimation) {
+      this.animationState = 'inactive';
+    }
+
     this.isEditMode = this.node.id === null;
 
     this.children$ = this.treeModel.getChildren(this.node.id);
@@ -91,13 +110,13 @@ export class ItemComponent implements OnInit, AfterViewInit {
 
     this.treeModel.currentSelectedNode$
       .subscribe((node: IOuterNode) => {
-        this.isSelected = node && node.id === this.node.id;
+        this.isSelected = (node && node.id === this.node.id) ? true : false;
       });
 
     this.actions$
       .ofType(TreeActionsService.TREE_EDIT_NODE_START)
-      .filter((action: Action) => action.payload === this.node)
-      .subscribe(() => {
+      .filter((action: Action) => action.payload.node === this.node)
+      .subscribe((action: Action) => {
         this.nameField.setValue(this.node.name);
         this.isEditMode = true;
         this.setFocus();
@@ -106,22 +125,34 @@ export class ItemComponent implements OnInit, AfterViewInit {
   }
 
   public collapse() {
-    this.isExpanded = false;
+    if (this.treeModel.configuration.isAnimation) {
+      this.animationState = 'inactive';
+    } else {
+      this.isExpanded = false;
+    }
   }
 
   public expand() {
-    this.isExpanded = true;
+    if (this.treeModel.configuration.isAnimation) {
+      this.animationState = 'active';
+    }
 
+    this.isExpanded = true;
     this.store.dispatch(this.treeActionsService.loadTree(this.treeModel.treeId, this.node.id));
+  }
+
+  public onAnimationDone($event: AnimationEvent): void {
+    if ($event.toState === 'inactive') {
+      this.isExpanded = false;
+    }
   }
 
   public onBlur() {
     if (this.isStartSave) {
       this.isStartSave = false;
-      return;
+    } else {
+      this.undoChanges();
     }
-
-    this.undoChanges();
   }
 
   public onChange(event: KeyboardEvent) {

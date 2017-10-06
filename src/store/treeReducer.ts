@@ -76,7 +76,7 @@ function insertNode(state: ITreeState, action: Action): ITreeState {
   const newNode: IOuterNode = {
     id: null,
     treeId: action.payload.treeId,
-    name: 'New node',
+    name: 'New data',
     parentId: action.payload.id,
     children: [],
     parents: []
@@ -137,7 +137,7 @@ function moveNode(state: ITreeState, action: Action) {
     parent.children.splice(parent.children.indexOf(oldNode.id), 1);
   }
 
-  // add node
+  // add data
   treeState[newNode.id] = newNode;
 
   if (newNode.parentId) {
