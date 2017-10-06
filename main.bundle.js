@@ -1,15 +1,19 @@
-webpackJsonp([1],{
+webpackJsonp(["main"],{
 
-/***/ "../../../../../demo/src async recursive":
+/***/ "../../../../../demo/src/$$_gendir lazy recursive":
 /***/ (function(module, exports) {
 
-function webpackEmptyContext(req) {
-	throw new Error("Cannot find module '" + req + "'.");
+function webpackEmptyAsyncContext(req) {
+	// Here Promise.resolve().then() is used instead of new Promise() to prevent
+	// uncatched exception popping up in devtools
+	return Promise.resolve().then(function() {
+		throw new Error("Cannot find module '" + req + "'.");
+	});
 }
-webpackEmptyContext.keys = function() { return []; };
-webpackEmptyContext.resolve = webpackEmptyContext;
-module.exports = webpackEmptyContext;
-webpackEmptyContext.id = "../../../../../demo/src async recursive";
+webpackEmptyAsyncContext.keys = function() { return []; };
+webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
+module.exports = webpackEmptyAsyncContext;
+webpackEmptyAsyncContext.id = "../../../../../demo/src/$$_gendir lazy recursive";
 
 /***/ }),
 
@@ -24,8 +28,8 @@ module.exports = "<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <h2>Basic
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -33,17 +37,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 
-var AppComponent = (function () {
+var AppComponent = /** @class */ (function () {
     function AppComponent() {
     }
+    AppComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-root',
+            template: __webpack_require__("../../../../../demo/src/app/app.component.html")
+        })
+    ], AppComponent);
     return AppComponent;
 }());
-AppComponent = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-        selector: 'app-root',
-        template: __webpack_require__("../../../../../demo/src/app/app.component.html")
-    })
-], AppComponent);
 
 //# sourceMappingURL=/home/www/projects/angular2-tree/demo/src/app.component.js.map
 
@@ -53,6 +57,7 @@ AppComponent = __decorate([
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__("../../../platform-browser/@angular/platform-browser.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
@@ -63,12 +68,15 @@ AppComponent = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ngrx_store__ = __webpack_require__("../../../../@ngrx/store/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__main__ = __webpack_require__("../../../../../main.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ngrx_store_devtools__ = __webpack_require__("../../../../@ngrx/store-devtools/index.js");
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__ngx_translate_core__ = __webpack_require__("../../../../@ngx-translate/core/index.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
 
@@ -80,29 +88,34 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var AppModule = (function () {
-    function AppModule() {
+
+var AppModule = /** @class */ (function () {
+    function AppModule(translate) {
+        translate.use('en');
     }
+    AppModule = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModule"])({
+            declarations: [
+                __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */]
+            ],
+            imports: [
+                __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
+                __WEBPACK_IMPORTED_MODULE_2__angular_forms__["b" /* FormsModule */],
+                __WEBPACK_IMPORTED_MODULE_3__angular_http__["b" /* HttpModule */],
+                __WEBPACK_IMPORTED_MODULE_6__treeTwo_treeTwo_module__["a" /* TreeTwoModule */],
+                __WEBPACK_IMPORTED_MODULE_5__treeOne_treeOne_module__["a" /* TreeOneModule */],
+                __WEBPACK_IMPORTED_MODULE_10__ngx_translate_core__["a" /* TranslateModule */].forRoot(),
+                __WEBPACK_IMPORTED_MODULE_7__ngrx_store__["g" /* StoreModule */].provideStore({ trees: __WEBPACK_IMPORTED_MODULE_8__main__["g" /* treeReducer */] }),
+                __WEBPACK_IMPORTED_MODULE_9__ngrx_store_devtools__["a" /* StoreDevtoolsModule */].instrumentOnlyWithExtension({})
+            ],
+            providers: [],
+            bootstrap: [__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */]]
+        }),
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_10__ngx_translate_core__["b" /* TranslateService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_10__ngx_translate_core__["b" /* TranslateService */]) === "function" && _a || Object])
+    ], AppModule);
     return AppModule;
+    var _a;
 }());
-AppModule = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModule"])({
-        declarations: [
-            __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */]
-        ],
-        imports: [
-            __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
-            __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormsModule */],
-            __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* HttpModule */],
-            __WEBPACK_IMPORTED_MODULE_6__treeTwo_treeTwo_module__["a" /* TreeTwoModule */],
-            __WEBPACK_IMPORTED_MODULE_5__treeOne_treeOne_module__["a" /* TreeOneModule */],
-            __WEBPACK_IMPORTED_MODULE_7__ngrx_store__["a" /* StoreModule */].provideStore({ trees: __WEBPACK_IMPORTED_MODULE_8__main__["a" /* treeReducer */] }),
-            __WEBPACK_IMPORTED_MODULE_9__ngrx_store_devtools__["a" /* StoreDevtoolsModule */].instrumentOnlyWithExtension({})
-        ],
-        providers: [],
-        bootstrap: [__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */]]
-    })
-], AppModule);
 
 //# sourceMappingURL=/home/www/projects/angular2-tree/demo/src/app.module.js.map
 
@@ -112,12 +125,12 @@ AppModule = __decorate([
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeLocalStorageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__("../../../platform-browser/@angular/platform-browser.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__main__ = __webpack_require__("../../../../../main.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__treeLocalStorage_service__ = __webpack_require__("../../../../../demo/src/app/localStorage/treeLocalStorage.service.ts");
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeLocalStorageModule; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -129,23 +142,23 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var TreeLocalStorageModule = (function () {
+var TreeLocalStorageModule = /** @class */ (function () {
     function TreeLocalStorageModule() {
     }
+    TreeLocalStorageModule = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModule"])({
+            declarations: [],
+            exports: [],
+            imports: [
+                __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
+                __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* HttpModule */],
+                __WEBPACK_IMPORTED_MODULE_3__main__["f" /* TreeModule */]
+            ],
+            providers: [__WEBPACK_IMPORTED_MODULE_4__treeLocalStorage_service__["a" /* TreeLocalStorageNodeService */]]
+        })
+    ], TreeLocalStorageModule);
     return TreeLocalStorageModule;
 }());
-TreeLocalStorageModule = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModule"])({
-        declarations: [],
-        exports: [],
-        imports: [
-            __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
-            __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* HttpModule */],
-            __WEBPACK_IMPORTED_MODULE_3__main__["b" /* TreeModule */]
-        ],
-        providers: [__WEBPACK_IMPORTED_MODULE_4__treeLocalStorage_service__["a" /* TreeLocalStorageNodeService */]]
-    })
-], TreeLocalStorageModule);
 
 //# sourceMappingURL=/home/www/projects/angular2-tree/demo/src/treeLocalStorage.module.js.map
 
@@ -155,13 +168,13 @@ TreeLocalStorageModule = __decorate([
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeLocalStorageNodeService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__main__ = __webpack_require__("../../../../../main.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__ = __webpack_require__("../../../../rxjs/Observable.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angular2_uuid__ = __webpack_require__("../../../../angular2-uuid/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angular2_uuid___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_angular2_uuid__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeLocalStorageNodeService; });
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -182,7 +195,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var TreeLocalStorageNodeService = (function (_super) {
+var TreeLocalStorageNodeService = /** @class */ (function (_super) {
     __extends(TreeLocalStorageNodeService, _super);
     function TreeLocalStorageNodeService() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -260,11 +273,11 @@ var TreeLocalStorageNodeService = (function (_super) {
             console.warn('State not save');
         }
     };
+    TreeLocalStorageNodeService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])()
+    ], TreeLocalStorageNodeService);
     return TreeLocalStorageNodeService;
 }(__WEBPACK_IMPORTED_MODULE_1__main__["c" /* NodeService */]));
-TreeLocalStorageNodeService = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])()
-], TreeLocalStorageNodeService);
 
 //# sourceMappingURL=/home/www/projects/angular2-tree/demo/src/treeLocalStorage.service.js.map
 
@@ -281,11 +294,11 @@ module.exports = "<rign-tree\n  [treeModel]=\"treeModel\"\n></rign-tree>\n"
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeOneComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__main__ = __webpack_require__("../../../../../main.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ngrx_store__ = __webpack_require__("../../../../@ngrx/store/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__treeOneNode_service__ = __webpack_require__("../../../../../demo/src/app/treeOne/treeOneNode.service.ts");
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeOneComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -299,7 +312,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-var TreeOneComponent = (function () {
+var TreeOneComponent = /** @class */ (function () {
     function TreeOneComponent(store, treeActions, nodeDispatcherService, nodeService) {
         this.store = store;
         this.treeActions = treeActions;
@@ -311,7 +324,8 @@ var TreeOneComponent = (function () {
             disableMoveNodes: false,
             treeId: 'tree3',
             dragZone: 'tree3',
-            dropZone: ['tree3']
+            dropZone: ['tree3'],
+            isAnimation: true
         };
     }
     TreeOneComponent.prototype.ngOnInit = function () {
@@ -323,19 +337,19 @@ var TreeOneComponent = (function () {
             return data[treeId];
         })
             .filter(function (data) { return !!data; });
-        this.treeModel = new __WEBPACK_IMPORTED_MODULE_1__main__["d" /* TreeModel */](this.folders, this.treeConfiguration);
+        this.treeModel = new __WEBPACK_IMPORTED_MODULE_1__main__["e" /* TreeModel */](this.folders, this.treeConfiguration);
     };
+    TreeOneComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-tree-one',
+            template: __webpack_require__("../../../../../demo/src/app/treeOne/treeOne.component.html")
+        }),
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["f" /* Store */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["f" /* Store */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__main__["d" /* TreeActionsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__main__["d" /* TreeActionsService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__main__["b" /* NodeDispatcherService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__main__["b" /* NodeDispatcherService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__treeOneNode_service__["a" /* TreeOneNodeService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__treeOneNode_service__["a" /* TreeOneNodeService */]) === "function" && _d || Object])
+    ], TreeOneComponent);
     return TreeOneComponent;
+    var _a, _b, _c, _d;
 }());
-TreeOneComponent = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-        selector: 'app-tree-one',
-        template: __webpack_require__("../../../../../demo/src/app/treeOne/treeOne.component.html")
-    }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["g" /* Store */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["g" /* Store */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__main__["e" /* TreeActionsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__main__["e" /* TreeActionsService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__main__["f" /* NodeDispatcherService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__main__["f" /* NodeDispatcherService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__treeOneNode_service__["a" /* TreeOneNodeService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__treeOneNode_service__["a" /* TreeOneNodeService */]) === "function" && _d || Object])
-], TreeOneComponent);
 
-var _a, _b, _c, _d;
 //# sourceMappingURL=/home/www/projects/angular2-tree/demo/src/treeOne.component.js.map
 
 /***/ }),
@@ -344,6 +358,7 @@ var _a, _b, _c, _d;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeOneModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__("../../../platform-browser/@angular/platform-browser.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
@@ -351,7 +366,6 @@ var _a, _b, _c, _d;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__main__ = __webpack_require__("../../../../../main.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__treeOneNode_service__ = __webpack_require__("../../../../../demo/src/app/treeOne/treeOneNode.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__treeOne_component__ = __webpack_require__("../../../../../demo/src/app/treeOne/treeOne.component.ts");
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeOneModule; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -365,24 +379,24 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var TreeOneModule = (function () {
+var TreeOneModule = /** @class */ (function () {
     function TreeOneModule() {
     }
+    TreeOneModule = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModule"])({
+            declarations: [__WEBPACK_IMPORTED_MODULE_6__treeOne_component__["a" /* TreeOneComponent */]],
+            exports: [__WEBPACK_IMPORTED_MODULE_6__treeOne_component__["a" /* TreeOneComponent */]],
+            imports: [
+                __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
+                __WEBPACK_IMPORTED_MODULE_2__angular_forms__["b" /* FormsModule */],
+                __WEBPACK_IMPORTED_MODULE_3__angular_http__["b" /* HttpModule */],
+                __WEBPACK_IMPORTED_MODULE_4__main__["f" /* TreeModule */]
+            ],
+            providers: [__WEBPACK_IMPORTED_MODULE_5__treeOneNode_service__["a" /* TreeOneNodeService */]]
+        })
+    ], TreeOneModule);
     return TreeOneModule;
 }());
-TreeOneModule = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModule"])({
-        declarations: [__WEBPACK_IMPORTED_MODULE_6__treeOne_component__["a" /* TreeOneComponent */]],
-        exports: [__WEBPACK_IMPORTED_MODULE_6__treeOne_component__["a" /* TreeOneComponent */]],
-        imports: [
-            __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
-            __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormsModule */],
-            __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* HttpModule */],
-            __WEBPACK_IMPORTED_MODULE_4__main__["b" /* TreeModule */]
-        ],
-        providers: [__WEBPACK_IMPORTED_MODULE_5__treeOneNode_service__["a" /* TreeOneNodeService */]]
-    })
-], TreeOneModule);
 
 //# sourceMappingURL=/home/www/projects/angular2-tree/demo/src/treeOne.module.js.map
 
@@ -392,9 +406,9 @@ TreeOneModule = __decorate([
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeOneNodeService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__localStorage_treeLocalStorage_service__ = __webpack_require__("../../../../../demo/src/app/localStorage/treeLocalStorage.service.ts");
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeOneNodeService; });
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -413,18 +427,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 
 
-var TreeOneNodeService = (function (_super) {
+var TreeOneNodeService = /** @class */ (function (_super) {
     __extends(TreeOneNodeService, _super);
     function TreeOneNodeService() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.treeName = 'treeOne';
         return _this;
     }
+    TreeOneNodeService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])()
+    ], TreeOneNodeService);
     return TreeOneNodeService;
 }(__WEBPACK_IMPORTED_MODULE_1__localStorage_treeLocalStorage_service__["a" /* TreeLocalStorageNodeService */]));
-TreeOneNodeService = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])()
-], TreeOneNodeService);
 
 //# sourceMappingURL=/home/www/projects/angular2-tree/demo/src/treeOneNode.service.js.map
 
@@ -433,7 +447,7 @@ TreeOneNodeService = __decorate([
 /***/ "../../../../../demo/src/app/treeTwo/newItem.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"tree-item row\"\n     [ngClass]=\"{'tree-item-selected': isSelected}\"\n     ri-droppable\n     ri-draggable\n     [dragZone]=\"treeModel.configuration.dragZone\"\n     [dropConfig]=\"{dropAllowedCssClass: 'drop-enabled', dropZone: treeModel.configuration.dropZone}\"\n     [node]=\"node\"\n>\n  <div class=\"col-sm-8\">\n    <i *ngIf=\"!isExpanded\" (click)=\"expand()\" class=\"fa fa-plus pointer\"></i>\n    <i *ngIf=\"isExpanded\" (click)=\"collapse()\" class=\"fa fa-minus pointer\"></i>\n    <span *ngIf=\"!isEditMode\" class=\"tree-item-name\" (click)=\"onSelect()\">{{node.name}}</span>\n    <form name=\"form\">\n      <input #inputElement type=\"text\" class=\"form-control\" *ngIf=\"isEditMode\" [formControl]=\"nameField\"\n             name=\"name\" (keydown)=\"onChange($event)\" (blur)=\"onBlur($event)\"/>\n    </form>\n  </div>\n  <div class=\"col-sm-4 text-right\">\n      <span class=\"btn-group btn-group-sm\">\n        <button class=\"btn btn-primary\" (click)=\"onEdit($event)\" [disabled]=\"isEditMode\">\n          <i class=\"fa fa-edit\"></i>\n        </button>\n        <button class=\"btn btn-danger\" (click)=\"onDelete()\" [disabled]=\"isEditMode\">\n          <i class=\"fa fa-trash\"></i>\n        </button>\n      </span>\n  </div>\n</div>\n<div class=\"tree\" *ngIf=\"isExpanded\">\n  <new-tree-item  *ngFor=\"let child of children$ | async\" [node]=\"child\" [treeModel]=\"treeModel\" [contextMenu]=\"contextMenu\"></new-tree-item>\n</div>\n"
+module.exports = "<div class=\"tree-item row\"\n     [ngClass]=\"{'tree-item-selected': isSelected}\"\n     ri-droppable\n     ri-draggable\n     [dragZone]=\"treeModel.configuration.dragZone\"\n     [dropConfig]=\"{dropAllowedCssClass: 'drop-enabled', dropZone: treeModel.configuration.dropZone}\"\n     [data]=\"node\"\n>\n  <div class=\"col-sm-8\">\n    <i *ngIf=\"!isExpanded\" (click)=\"expand()\" class=\"fa fa-plus pointer\"></i>\n    <i *ngIf=\"isExpanded\" (click)=\"collapse()\" class=\"fa fa-minus pointer\"></i>\n    <span *ngIf=\"!isEditMode\" class=\"tree-item-name\" (click)=\"onSelect()\">{{node.name}}</span>\n    <form name=\"form\">\n      <input #inputElement type=\"text\" class=\"form-control\" *ngIf=\"isEditMode\" [formControl]=\"nameField\"\n             name=\"name\" (keydown)=\"onChange($event)\" (blur)=\"onBlur($event)\"/>\n    </form>\n  </div>\n  <div class=\"col-sm-4 text-right\">\n      <span class=\"btn-group btn-group-sm\">\n        <button class=\"btn btn-primary\" (click)=\"onEdit($event)\" [disabled]=\"isEditMode\">\n          <i class=\"fa fa-edit\"></i>\n        </button>\n        <button class=\"btn btn-danger\" (click)=\"onDelete()\" [disabled]=\"isEditMode\">\n          <i class=\"fa fa-trash\"></i>\n        </button>\n      </span>\n  </div>\n</div>\n<div class=\"tree\" *ngIf=\"isExpanded\">\n  <new-tree-item  *ngFor=\"let child of children$ | async\" [node]=\"child\" [treeModel]=\"treeModel\" [contextMenu]=\"contextMenu\"></new-tree-item>\n</div>\n"
 
 /***/ }),
 
@@ -459,9 +473,9 @@ module.exports = module.exports.toString();
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NewItemComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__main__ = __webpack_require__("../../../../../main.ts");
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NewItemComponent; });
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -480,7 +494,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 
 
-var NewItemComponent = (function (_super) {
+var NewItemComponent = /** @class */ (function (_super) {
     __extends(NewItemComponent, _super);
     function NewItemComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -491,15 +505,15 @@ var NewItemComponent = (function (_super) {
     NewItemComponent.prototype.onEdit = function ($event) {
         this.store.dispatch(this.treeActionsService.editNodeStart(this.node));
     };
+    NewItemComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'new-tree-item',
+            template: __webpack_require__("../../../../../demo/src/app/treeTwo/newItem.component.html"),
+            styles: [__webpack_require__("../../../../../demo/src/app/treeTwo/newItem.component.less")]
+        })
+    ], NewItemComponent);
     return NewItemComponent;
-}(__WEBPACK_IMPORTED_MODULE_1__main__["g" /* ItemComponent */]));
-NewItemComponent = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-        selector: 'new-tree-item',
-        template: __webpack_require__("../../../../../demo/src/app/treeTwo/newItem.component.html"),
-        styles: [__webpack_require__("../../../../../demo/src/app/treeTwo/newItem.component.less")]
-    })
-], NewItemComponent);
+}(__WEBPACK_IMPORTED_MODULE_1__main__["a" /* ItemComponent */]));
 
 //# sourceMappingURL=/home/www/projects/angular2-tree/demo/src/newItem.component.js.map
 
@@ -516,11 +530,11 @@ module.exports = "<rign-tree [treeModel]=\"treeModel\">\n  <new-tree-item *ngFor
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeTwoComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__main__ = __webpack_require__("../../../../../main.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ngrx_store__ = __webpack_require__("../../../../@ngrx/store/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__treeTwoNode_service__ = __webpack_require__("../../../../../demo/src/app/treeTwo/treeTwoNode.service.ts");
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeTwoComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -534,7 +548,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-var TreeTwoComponent = (function () {
+var TreeTwoComponent = /** @class */ (function () {
     function TreeTwoComponent(store, treeActions, nodeDispatcherService, treeTwoNodeService) {
         this.store = store;
         this.treeActions = treeActions;
@@ -558,19 +572,19 @@ var TreeTwoComponent = (function () {
             return data[treeId];
         })
             .filter(function (data) { return !!data; });
-        this.treeModel = new __WEBPACK_IMPORTED_MODULE_1__main__["d" /* TreeModel */](this.folders, this.treeConfiguration);
+        this.treeModel = new __WEBPACK_IMPORTED_MODULE_1__main__["e" /* TreeModel */](this.folders, this.treeConfiguration);
     };
+    TreeTwoComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-tree-two',
+            template: __webpack_require__("../../../../../demo/src/app/treeTwo/treeTwo.component.html")
+        }),
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["f" /* Store */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["f" /* Store */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__main__["d" /* TreeActionsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__main__["d" /* TreeActionsService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__main__["b" /* NodeDispatcherService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__main__["b" /* NodeDispatcherService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__treeTwoNode_service__["a" /* TreeTwoNodeService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__treeTwoNode_service__["a" /* TreeTwoNodeService */]) === "function" && _d || Object])
+    ], TreeTwoComponent);
     return TreeTwoComponent;
+    var _a, _b, _c, _d;
 }());
-TreeTwoComponent = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-        selector: 'app-tree-two',
-        template: __webpack_require__("../../../../../demo/src/app/treeTwo/treeTwo.component.html")
-    }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["g" /* Store */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["g" /* Store */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__main__["e" /* TreeActionsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__main__["e" /* TreeActionsService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__main__["f" /* NodeDispatcherService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__main__["f" /* NodeDispatcherService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__treeTwoNode_service__["a" /* TreeTwoNodeService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__treeTwoNode_service__["a" /* TreeTwoNodeService */]) === "function" && _d || Object])
-], TreeTwoComponent);
 
-var _a, _b, _c, _d;
 //# sourceMappingURL=/home/www/projects/angular2-tree/demo/src/treeTwo.component.js.map
 
 /***/ }),
@@ -579,6 +593,7 @@ var _a, _b, _c, _d;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeTwoModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__("../../../platform-browser/@angular/platform-browser.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
@@ -588,7 +603,6 @@ var _a, _b, _c, _d;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__newItem_component__ = __webpack_require__("../../../../../demo/src/app/treeTwo/newItem.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__treeTwoNode_service__ = __webpack_require__("../../../../../demo/src/app/treeTwo/treeTwoNode.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__localStorage_treeLocalStorage_module__ = __webpack_require__("../../../../../demo/src/app/localStorage/treeLocalStorage.module.ts");
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeTwoModule; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -604,29 +618,29 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var TreeTwoModule = (function () {
+var TreeTwoModule = /** @class */ (function () {
     function TreeTwoModule() {
     }
+    TreeTwoModule = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModule"])({
+            declarations: [
+                __WEBPACK_IMPORTED_MODULE_5__treeTwo_component__["a" /* TreeTwoComponent */],
+                __WEBPACK_IMPORTED_MODULE_6__newItem_component__["a" /* NewItemComponent */]
+            ],
+            exports: [__WEBPACK_IMPORTED_MODULE_5__treeTwo_component__["a" /* TreeTwoComponent */]],
+            imports: [
+                __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
+                __WEBPACK_IMPORTED_MODULE_2__angular_forms__["b" /* FormsModule */],
+                __WEBPACK_IMPORTED_MODULE_3__angular_http__["b" /* HttpModule */],
+                __WEBPACK_IMPORTED_MODULE_8__localStorage_treeLocalStorage_module__["a" /* TreeLocalStorageModule */],
+                __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* ReactiveFormsModule */],
+                __WEBPACK_IMPORTED_MODULE_4__main__["f" /* TreeModule */]
+            ],
+            providers: [__WEBPACK_IMPORTED_MODULE_7__treeTwoNode_service__["a" /* TreeTwoNodeService */]]
+        })
+    ], TreeTwoModule);
     return TreeTwoModule;
 }());
-TreeTwoModule = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModule"])({
-        declarations: [
-            __WEBPACK_IMPORTED_MODULE_5__treeTwo_component__["a" /* TreeTwoComponent */],
-            __WEBPACK_IMPORTED_MODULE_6__newItem_component__["a" /* NewItemComponent */]
-        ],
-        exports: [__WEBPACK_IMPORTED_MODULE_5__treeTwo_component__["a" /* TreeTwoComponent */]],
-        imports: [
-            __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
-            __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormsModule */],
-            __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* HttpModule */],
-            __WEBPACK_IMPORTED_MODULE_8__localStorage_treeLocalStorage_module__["a" /* TreeLocalStorageModule */],
-            __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* ReactiveFormsModule */],
-            __WEBPACK_IMPORTED_MODULE_4__main__["b" /* TreeModule */]
-        ],
-        providers: [__WEBPACK_IMPORTED_MODULE_7__treeTwoNode_service__["a" /* TreeTwoNodeService */]]
-    })
-], TreeTwoModule);
 
 //# sourceMappingURL=/home/www/projects/angular2-tree/demo/src/treeTwo.module.js.map
 
@@ -636,9 +650,9 @@ TreeTwoModule = __decorate([
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeTwoNodeService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__localStorage_treeLocalStorage_service__ = __webpack_require__("../../../../../demo/src/app/localStorage/treeLocalStorage.service.ts");
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeTwoNodeService; });
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -657,18 +671,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 
 
-var TreeTwoNodeService = (function (_super) {
+var TreeTwoNodeService = /** @class */ (function (_super) {
     __extends(TreeTwoNodeService, _super);
     function TreeTwoNodeService() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.treeName = 'treeTwo';
         return _this;
     }
+    TreeTwoNodeService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])()
+    ], TreeTwoNodeService);
     return TreeTwoNodeService;
 }(__WEBPACK_IMPORTED_MODULE_1__localStorage_treeLocalStorage_service__["a" /* TreeLocalStorageNodeService */]));
-TreeTwoNodeService = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])()
-], TreeTwoNodeService);
 
 //# sourceMappingURL=/home/www/projects/angular2-tree/demo/src/treeTwoNode.service.js.map
 
@@ -688,9 +702,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 if (__WEBPACK_IMPORTED_MODULE_3__environments_environment__["a" /* environment */].production) {
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["enableProdMode"])();
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["enableProdMode"])();
 }
-__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_2__app_app_module__["a" /* AppModule */]);
+Object(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_2__app_app_module__["a" /* AppModule */]);
 //# sourceMappingURL=/home/www/projects/angular2-tree/demo/src/main.js.map
 
 /***/ }),
@@ -704,7 +718,6 @@ __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dyna
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
-// The file contents for the current environment will overwrite these during build.
 var environment = {
     production: false
 };
@@ -738,22 +751,22 @@ var environment = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__src_store_ITreeState___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_13__src_store_ITreeState__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__src_store_treeReducer__ = __webpack_require__("../../../../../src/store/treeReducer.ts");
 /* unused harmony reexport IApiConfig */
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_0__src_tree_module__["a"]; });
-/* unused harmony reexport TreeComponent */
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_2__src_item_item_component__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_8__src_service_node_service__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_11__src_service_nodesDispatcher_service__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_3__src_models_TreeModel__["a"]; });
 /* unused harmony reexport IAppConfig */
 /* unused harmony reexport IConfiguration */
 /* unused harmony reexport IContextMenu */
 /* unused harmony reexport IOuterNode */
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_2__src_item_item_component__["a"]; });
+/* unused harmony reexport ITreeAction */
 /* unused harmony reexport ITreeData */
 /* unused harmony reexport ITreeState */
-/* unused harmony reexport ITreeAction */
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_10__src_store_treeActions_service__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_8__src_service_node_service__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_11__src_service_nodesDispatcher_service__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_10__src_store_treeActions_service__["a"]; });
+/* unused harmony reexport TreeComponent */
 /* unused harmony reexport TreeEffectsService */
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_14__src_store_treeReducer__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_14__src_store_treeReducer__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_3__src_models_TreeModel__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_0__src_tree_module__["a"]; });
 
 
 
@@ -785,10 +798,10 @@ var environment = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DragAndDrop; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs__ = __webpack_require__("../../../../rxjs/Rx.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DragAndDrop; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -800,33 +813,34 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
-var DragAndDrop = (function () {
+var DragAndDrop = /** @class */ (function () {
     function DragAndDrop() {
-        this.dropStream = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
-        this.dragStream = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["BehaviorSubject"](null);
-        this.drop = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Observable"]();
-        this.drop = this.dropStream.withLatestFrom(this.dragStream, function (dropNode, dragNode) {
-            return { dragNode: dragNode, dropNode: dropNode };
+        this.dropStream$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
+        this.dragStream$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["BehaviorSubject"](null);
+        this.drop$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Observable"]();
+        this.drop$ = this.dropStream$.withLatestFrom(this.dragStream$, function (dropNode, dragNode) {
+            return { dragNode: dragNode, dropNode: dropNode, type: dragNode.type };
         });
     }
-    DragAndDrop.prototype.dragStart = function (node) {
-        this.dragStream.next(node);
+    DragAndDrop.prototype.dragStart = function (dragElement) {
+        this.dragStream$.next(dragElement);
     };
-    DragAndDrop.prototype.dragEnd = function (node) {
-        this.dropStream.next(node);
+    DragAndDrop.prototype.dragEnd = function (dropElement) {
+        this.dropStream$.next(dropElement);
     };
     DragAndDrop.prototype.getDragStream = function () {
-        return this.dragStream;
+        return this.dragStream$;
     };
     DragAndDrop.prototype.getLastDragElement = function () {
-        return this.dragStream.getValue();
+        return this.dragStream$.getValue();
     };
+    DragAndDrop.DROP_DATA_TYPE = 'TREE_NODE';
+    DragAndDrop = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [])
+    ], DragAndDrop);
     return DragAndDrop;
 }());
-DragAndDrop = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-    __metadata("design:paramtypes", [])
-], DragAndDrop);
 
 //# sourceMappingURL=/home/www/projects/angular2-tree/demo/src/dragAndDrop.service.js.map
 
@@ -836,11 +850,9 @@ DragAndDrop = __decorate([
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DraggableDirective; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dragAndDrop_service__ = __webpack_require__("../../../../../src/dragAndDrop/dragAndDrop.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_IOuterNode__ = __webpack_require__("../../../../../src/interfaces/IOuterNode.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_IOuterNode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_IOuterNode__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Draggable; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -852,14 +864,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
-
-var Draggable = (function () {
-    function Draggable(el, renderer, dragAndDrop) {
+var DraggableDirective = /** @class */ (function () {
+    function DraggableDirective(el, renderer, dragAndDrop) {
         var _this = this;
         this.el = el;
         this.renderer = renderer;
         this.dragAndDrop = dragAndDrop;
         this.dragZone = null;
+        this.sourceType = __WEBPACK_IMPORTED_MODULE_1__dragAndDrop_service__["a" /* DragAndDrop */].DROP_DATA_TYPE;
         this.dragEnabled = true;
         renderer.listen(el.nativeElement, 'dragstart', function ($event) {
             if (_this.dragEnabled) {
@@ -871,39 +883,39 @@ var Draggable = (function () {
             _this.dragAndDrop.dragStart(null);
         });
     }
-    Draggable.prototype.onDragStart = function ($event) {
-        $event.dataTransfer.setData('node', this.node.id.toString());
-        this.dragAndDrop.dragStart({ zoneId: this.dragZone, node: this.node });
+    DraggableDirective.prototype.onDragStart = function ($event) {
+        this.dragAndDrop.dragStart({ zoneId: this.dragZone, data: this.data, type: this.sourceType });
         $event.dataTransfer.effectAllowed = 'copy';
         $event.dataTransfer.dropEffect = 'copy';
     };
-    Draggable.prototype.ngOnChanges = function () {
-        // this.dragEnabled = !this.node.tree.configuration.disableMoveNodes;
+    DraggableDirective.prototype.ngOnInit = function () {
         this.el.nativeElement.draggable = this.dragEnabled;
-    };
-    Draggable.prototype.ngOnInit = function () {
-        if (!this.node) {
-            throw 'Draggable needs node';
+        if (!this.data) {
+            throw 'DraggableDirective needs data';
         }
     };
-    return Draggable;
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Object)
+    ], DraggableDirective.prototype, "data", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Object)
+    ], DraggableDirective.prototype, "dragZone", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", String)
+    ], DraggableDirective.prototype, "sourceType", void 0);
+    DraggableDirective = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Directive"])({
+            selector: '[ri-draggable]'
+        }),
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["Renderer"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["Renderer"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__dragAndDrop_service__["a" /* DragAndDrop */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__dragAndDrop_service__["a" /* DragAndDrop */]) === "function" && _c || Object])
+    ], DraggableDirective);
+    return DraggableDirective;
+    var _a, _b, _c;
 }());
-__decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__interfaces_IOuterNode__["IOuterNode"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__interfaces_IOuterNode__["IOuterNode"]) === "function" && _a || Object)
-], Draggable.prototype, "node", void 0);
-__decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-    __metadata("design:type", String)
-], Draggable.prototype, "dragZone", void 0);
-Draggable = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Directive"])({
-        selector: '[ri-draggable]'
-    }),
-    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["Renderer"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["Renderer"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1__dragAndDrop_service__["a" /* DragAndDrop */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__dragAndDrop_service__["a" /* DragAndDrop */]) === "function" && _d || Object])
-], Draggable);
 
-var _a, _b, _c, _d;
 //# sourceMappingURL=/home/www/projects/angular2-tree/demo/src/draggable.directive.js.map
 
 /***/ }),
@@ -912,11 +924,11 @@ var _a, _b, _c, _d;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DroppableDirective; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dragAndDrop_service__ = __webpack_require__("../../../../../src/dragAndDrop/dragAndDrop.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_IOuterNode__ = __webpack_require__("../../../../../src/interfaces/IOuterNode.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_IOuterNode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_IOuterNode__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Droppable; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -929,8 +941,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-var Droppable = (function () {
-    function Droppable(el, renderer, dragAndDrop) {
+var DroppableDirective = /** @class */ (function () {
+    function DroppableDirective(el, renderer, dragAndDrop) {
         var _this = this;
         this.el = el;
         this.renderer = renderer;
@@ -938,11 +950,11 @@ var Droppable = (function () {
         this.dropConfig = {};
         this.isDropAllowed = function () {
             var lastDragElement = this.dragAndDrop.getLastDragElement();
-            var source = lastDragElement.node;
-            var target = this.node;
+            var source = lastDragElement.data;
+            var target = this.data;
             var dropZone = this.dropConfig.dropZone;
-            if (dropZone && dropZone.length > 0) {
-                return dropZone.indexOf(lastDragElement.zoneId) > -1;
+            if (dropZone && dropZone.length > 0 && dropZone.indexOf(lastDragElement.zoneId) === -1) {
+                return false;
             }
             // todo: check drag and drop zones
             return !(source === target || target.id === source.parentId || target.parents.indexOf(source.id) > -1);
@@ -959,20 +971,22 @@ var Droppable = (function () {
         });
         renderer.listen(el.nativeElement, 'drop', function () {
             _this.toggleDropClass(false);
-            _this.dragAndDrop.dragEnd({ zones: _this.dropConfig.dropZone, node: _this.node });
+            if (_this.isDropAllowed()) {
+                _this.dragAndDrop.dragEnd({ zones: _this.dropConfig.dropZone, data: _this.data });
+            }
         });
     }
-    Droppable.prototype.ngOnInit = function () {
+    DroppableDirective.prototype.ngOnInit = function () {
         this.initConfig();
-        if (!this.node) {
-            throw 'Droppable needs node';
+        if (!this.data) {
+            throw 'DroppableDirective needs data';
         }
     };
     /**
      * Add or remove additional class when drop allowed
      * @param dropAllowed
      */
-    Droppable.prototype.toggleDropClass = function (dropAllowed) {
+    DroppableDirective.prototype.toggleDropClass = function (dropAllowed) {
         if (dropAllowed === void 0) { dropAllowed = false; }
         this.renderer.setElementClass(this.el.nativeElement, this.dropConfig.dropAllowedCssClass, dropAllowed);
     };
@@ -981,7 +995,7 @@ var Droppable = (function () {
      * @param $event
      * @param add
      */
-    Droppable.prototype.changeTargetCursor = function ($event, add) {
+    DroppableDirective.prototype.changeTargetCursor = function ($event, add) {
         if (add === void 0) { add = false; }
         var cursorType = add ? 'copy' : 'none';
         $event.dataTransfer.effectAllowed = cursorType;
@@ -990,7 +1004,7 @@ var Droppable = (function () {
     /**
      * initialize configuration options, use default or passed
      */
-    Droppable.prototype.initConfig = function () {
+    DroppableDirective.prototype.initConfig = function () {
         var defaultConfig = {
             dropAllowedCssClass: 'drop-allowed'
         };
@@ -998,24 +1012,24 @@ var Droppable = (function () {
             this.dropConfig[key] = this.dropConfig[key] || defaultConfig[key];
         }
     };
-    return Droppable;
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__interfaces_IOuterNode__["IOuterNode"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__interfaces_IOuterNode__["IOuterNode"]) === "function" && _a || Object)
+    ], DroppableDirective.prototype, "data", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Object)
+    ], DroppableDirective.prototype, "dropConfig", void 0);
+    DroppableDirective = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Directive"])({
+            selector: '[ri-droppable]'
+        }),
+        __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["Renderer"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["Renderer"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1__dragAndDrop_service__["a" /* DragAndDrop */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__dragAndDrop_service__["a" /* DragAndDrop */]) === "function" && _d || Object])
+    ], DroppableDirective);
+    return DroppableDirective;
+    var _a, _b, _c, _d;
 }());
-__decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__interfaces_IOuterNode__["IOuterNode"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__interfaces_IOuterNode__["IOuterNode"]) === "function" && _a || Object)
-], Droppable.prototype, "node", void 0);
-__decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-    __metadata("design:type", Object)
-], Droppable.prototype, "dropConfig", void 0);
-Droppable = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Directive"])({
-        selector: '[ri-droppable]'
-    }),
-    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["Renderer"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["Renderer"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1__dragAndDrop_service__["a" /* DragAndDrop */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__dragAndDrop_service__["a" /* DragAndDrop */]) === "function" && _d || Object])
-], Droppable);
 
-var _a, _b, _c, _d;
 //# sourceMappingURL=/home/www/projects/angular2-tree/demo/src/droppable.directive.js.map
 
 /***/ }),
@@ -1023,7 +1037,7 @@ var _a, _b, _c, _d;
 /***/ "../../../../../src/dragAndDrop/dropzone/dropzone.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"isOpen\" (drop)=\"onDrop($event)\" (dragover)=\"onDragOver($event)\" class=\"dropzone\">\n  Drop here to move node to root level\n</div>\n"
+module.exports = "<div *ngIf=\"isOpen$ | async\" (drop)=\"onDrop($event)\" (dragover)=\"onDragOver($event)\" class=\"dropzone\">\n  {{'RI_TREE_LBL_DROP_ZONE' | translate}}\n</div>\n"
 
 /***/ }),
 
@@ -1049,10 +1063,12 @@ module.exports = module.exports.toString();
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DropzoneComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_TreeModel__ = __webpack_require__("../../../../../src/models/TreeModel.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dragAndDrop_service__ = __webpack_require__("../../../../../src/dragAndDrop/dragAndDrop.service.ts");
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DropzoneComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__ = __webpack_require__("../../../../rxjs/Observable.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1065,19 +1081,32 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-var DropzoneComponent = (function () {
+
+var DropzoneComponent = /** @class */ (function () {
     function DropzoneComponent(dragAndDrop) {
         var _this = this;
         this.dragAndDrop = dragAndDrop;
         this.dropZone = [];
-        this.isOpen = false;
-        this.dragAndDrop.getDragStream()
-            .subscribe(function (dragElement) {
-            var isDragElement = !!dragElement && !!dragElement.node;
-            var isNotRootElement = isDragElement && dragElement.node.parentId;
-            var isFromCurrentTree = isDragElement && dragElement.node.treeId === _this.treeModel.treeId;
-            _this.isOpen = (isNotRootElement && isFromCurrentTree) ? true : false;
+        var isDragStart$ = this.dragAndDrop.getDragStream()
+            .map(function (dragElement) {
+            var isDragElement = !!dragElement && !!dragElement.data;
+            if (isDragElement) {
+                if (dragElement.type === __WEBPACK_IMPORTED_MODULE_2__dragAndDrop_service__["a" /* DragAndDrop */].DROP_DATA_TYPE) {
+                    var isNotRootElement = dragElement.data.parentId;
+                    var isFromCurrentTree = dragElement.data.treeId === _this.treeModel.treeId;
+                    return (isNotRootElement && isFromCurrentTree) ? true : false;
+                }
+                else {
+                    return true;
+                }
+            }
+            return false;
         });
+        var isDragEnd$ = this.dragAndDrop.drop$
+            .map(function (data) {
+            return false;
+        });
+        this.isOpen$ = __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__["Observable"].merge(isDragStart$, isDragEnd$);
     }
     DropzoneComponent.prototype.onDrop = function () {
         this.dragAndDrop.dragEnd(null);
@@ -1085,26 +1114,26 @@ var DropzoneComponent = (function () {
     DropzoneComponent.prototype.onDragOver = function ($event) {
         $event.preventDefault();
     };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__models_TreeModel__["a" /* TreeModel */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__models_TreeModel__["a" /* TreeModel */]) === "function" && _a || Object)
+    ], DropzoneComponent.prototype, "treeModel", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Array)
+    ], DropzoneComponent.prototype, "dropZone", void 0);
+    DropzoneComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'ri-dropzone',
+            template: __webpack_require__("../../../../../src/dragAndDrop/dropzone/dropzone.component.html"),
+            styles: [__webpack_require__("../../../../../src/dragAndDrop/dropzone/dropzone.component.less")]
+        }),
+        __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__dragAndDrop_service__["a" /* DragAndDrop */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__dragAndDrop_service__["a" /* DragAndDrop */]) === "function" && _b || Object])
+    ], DropzoneComponent);
     return DropzoneComponent;
+    var _a, _b;
 }());
-__decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__models_TreeModel__["a" /* TreeModel */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__models_TreeModel__["a" /* TreeModel */]) === "function" && _a || Object)
-], DropzoneComponent.prototype, "treeModel", void 0);
-__decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-    __metadata("design:type", Array)
-], DropzoneComponent.prototype, "dropZone", void 0);
-DropzoneComponent = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-        selector: 'ri-dropzone',
-        template: __webpack_require__("../../../../../src/dragAndDrop/dropzone/dropzone.component.html"),
-        styles: [__webpack_require__("../../../../../src/dragAndDrop/dropzone/dropzone.component.less")]
-    }),
-    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__dragAndDrop_service__["a" /* DragAndDrop */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__dragAndDrop_service__["a" /* DragAndDrop */]) === "function" && _b || Object])
-], DropzoneComponent);
 
-var _a, _b;
 //# sourceMappingURL=/home/www/projects/angular2-tree/demo/src/dropzone.component.js.map
 
 /***/ }),
@@ -1140,7 +1169,7 @@ var _a, _b;
 /***/ "../../../../../src/item/item.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"tree-item\"\n     [ngClass]=\"{'tree-item-selected': isSelected}\"\n     (contextmenu)=\"onContextMenu($event)\"\n     ri-droppable\n     ri-draggable\n     [dragZone]=\"treeModel.configuration.dragZone\"\n     [dropConfig]=\"{dropAllowedCssClass: 'drop-allowed', dropZone: treeModel.configuration.dropZone}\"\n     [node]=\"node\"\n>\n  <i *ngIf=\"!isExpanded\" (click)=\"expand()\" class=\"fa fa-caret-right pointer\"></i>\n  <i *ngIf=\"isExpanded\" (click)=\"collapse()\" class=\"fa fa-caret-down pointer\"></i>\n  <span *ngIf=\"!isEditMode\" class=\"tree-item-name\" (click)=\"onSelect()\">{{node.name}}</span>\n  <form name=\"form\">\n    <input #inputElement type=\"text\" class=\"form-control\" *ngIf=\"isEditMode\" [formControl]=\"nameField\"\n           name=\"name\" (keydown)=\"onChange($event)\" (blur)=\"onBlur($event)\"/>\n  </form>\n</div>\n<div class=\"tree\" *ngIf=\"isExpanded\">\n  <rign-tree-item *ngFor=\"let child of children$ | async\" [node]=\"child\" [treeModel]=\"treeModel\" [contextMenu]=\"contextMenu\"></rign-tree-item>\n</div>\n"
+module.exports = "<div class=\"tree-item\"\n     [ngClass]=\"{'tree-item-selected': isSelected}\"\n     (contextmenu)=\"onContextMenu($event)\"\n     ri-droppable\n     ri-draggable\n     [dragZone]=\"treeModel.configuration.dragZone\"\n     [dropConfig]=\"{dropAllowedCssClass: 'drop-allowed', dropZone: treeModel.configuration.dropZone}\"\n     [data]=\"node\"\n>\n  <i *ngIf=\"!isExpanded\" (click)=\"expand()\" class=\"fa fa-caret-right pointer\"></i>\n  <i *ngIf=\"isExpanded\" (click)=\"collapse()\" class=\"fa fa-caret-down pointer\"></i>\n  <span *ngIf=\"!isEditMode\" class=\"tree-item-name\" (click)=\"onSelect()\">{{node.name}}</span>\n  <form name=\"form\">\n    <input #inputElement type=\"text\" class=\"form-control\" *ngIf=\"isEditMode\" [formControl]=\"nameField\"\n           name=\"name\" (keydown)=\"onChange($event)\" (blur)=\"onBlur($event)\"/>\n  </form>\n</div>\n<div class=\"tree\" [@isExpanded]=\"animationState\" (@isExpanded.done)=\"onAnimationDone($event)\">\n  <div *ngIf=\"isExpanded\">\n    <rign-tree-item *ngFor=\"let child of children$ | async\" [node]=\"child\" [treeModel]=\"treeModel\"\n                    [contextMenu]=\"contextMenu\"></rign-tree-item>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -1166,6 +1195,7 @@ module.exports = module.exports.toString();
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ItemComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angular2_contextmenu__ = __webpack_require__("../../../../angular2-contextmenu/angular2-contextmenu.js");
@@ -1176,7 +1206,7 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ngrx_store__ = __webpack_require__("../../../../@ngrx/store/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__models_TreeModel__ = __webpack_require__("../../../../../src/models/TreeModel.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ngrx_effects__ = __webpack_require__("../../../../@ngrx/effects/index.js");
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ItemComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__angular_animations__ = __webpack_require__("../../../animations/@angular/animations.es5.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1194,7 +1224,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-var ItemComponent = (function () {
+
+var ItemComponent = /** @class */ (function () {
     /**
      * @param contextMenuService
      */
@@ -1205,17 +1236,18 @@ var ItemComponent = (function () {
         this.contextMenuService = contextMenuService;
         this.actions$ = actions$;
         /**
-         * Form field to change node name
+         * Form field to change data name
          * @type {FormControl}
          */
-        this.nameField = new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */]();
+        this.nameField = new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["a" /* FormControl */]();
         this.isEditMode = false;
         this.isSelected = false;
         this.isExpanded = false;
+        this.animationState = null;
         this.insert$ = this.actions$
             .ofType(__WEBPACK_IMPORTED_MODULE_4__store_treeActions_service__["a" /* TreeActionsService */].TREE_INSERT_NODE)
             .filter(function (action) {
-            return action.payload && action.payload === _this.node.id;
+            return action.payload && action.payload.id === _this.node.id;
         });
         this.isStartSave = false;
         this.actions$
@@ -1234,6 +1266,9 @@ var ItemComponent = (function () {
     };
     ItemComponent.prototype.ngOnInit = function () {
         var _this = this;
+        if (this.treeModel.configuration.isAnimation) {
+            this.animationState = 'inactive';
+        }
         this.isEditMode = this.node.id === null;
         this.children$ = this.treeModel.getChildren(this.node.id);
         this.insert$
@@ -1242,30 +1277,44 @@ var ItemComponent = (function () {
         });
         this.treeModel.currentSelectedNode$
             .subscribe(function (node) {
-            _this.isSelected = node && node.id === _this.node.id;
+            _this.isSelected = (node && node.id === _this.node.id) ? true : false;
         });
         this.actions$
             .ofType(__WEBPACK_IMPORTED_MODULE_4__store_treeActions_service__["a" /* TreeActionsService */].TREE_EDIT_NODE_START)
-            .filter(function (action) { return action.payload === _this.node; })
-            .subscribe(function () {
+            .filter(function (action) { return action.payload.node === _this.node; })
+            .subscribe(function (action) {
             _this.nameField.setValue(_this.node.name);
             _this.isEditMode = true;
             _this.setFocus();
         });
     };
     ItemComponent.prototype.collapse = function () {
-        this.isExpanded = false;
+        if (this.treeModel.configuration.isAnimation) {
+            this.animationState = 'inactive';
+        }
+        else {
+            this.isExpanded = false;
+        }
     };
     ItemComponent.prototype.expand = function () {
+        if (this.treeModel.configuration.isAnimation) {
+            this.animationState = 'active';
+        }
         this.isExpanded = true;
         this.store.dispatch(this.treeActionsService.loadTree(this.treeModel.treeId, this.node.id));
+    };
+    ItemComponent.prototype.onAnimationDone = function ($event) {
+        if ($event.toState === 'inactive') {
+            this.isExpanded = false;
+        }
     };
     ItemComponent.prototype.onBlur = function () {
         if (this.isStartSave) {
             this.isStartSave = false;
-            return;
         }
-        this.undoChanges();
+        else {
+            this.undoChanges();
+        }
     };
     ItemComponent.prototype.onChange = function (event) {
         event.stopPropagation();
@@ -1313,35 +1362,49 @@ var ItemComponent = (function () {
             this.store.dispatch(this.treeActionsService.deleteNode(this.treeModel.treeId, this.node));
         }
     };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('inputElement'),
+        __metadata("design:type", Object)
+    ], ItemComponent.prototype, "input", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__interfaces_IOuterNode__["IOuterNode"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__interfaces_IOuterNode__["IOuterNode"]) === "function" && _a || Object)
+    ], ItemComponent.prototype, "node", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_6__models_TreeModel__["a" /* TreeModel */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__models_TreeModel__["a" /* TreeModel */]) === "function" && _b || Object)
+    ], ItemComponent.prototype, "treeModel", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2_angular2_contextmenu__["ContextMenuComponent"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_angular2_contextmenu__["ContextMenuComponent"]) === "function" && _c || Object)
+    ], ItemComponent.prototype, "contextMenu", void 0);
+    ItemComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            encapsulation: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewEncapsulation"].None,
+            selector: 'rign-tree-item',
+            template: __webpack_require__("../../../../../src/item/item.component.html"),
+            styles: [__webpack_require__("../../../../../src/item/item.component.less")],
+            animations: [
+                Object(__WEBPACK_IMPORTED_MODULE_8__angular_animations__["j" /* trigger */])('isExpanded', [
+                    Object(__WEBPACK_IMPORTED_MODULE_8__angular_animations__["g" /* state */])('inactive', Object(__WEBPACK_IMPORTED_MODULE_8__angular_animations__["h" /* style */])({
+                        height: 0,
+                        opacity: 0,
+                        transform: 'scaleY(0)'
+                    })),
+                    Object(__WEBPACK_IMPORTED_MODULE_8__angular_animations__["g" /* state */])('active', Object(__WEBPACK_IMPORTED_MODULE_8__angular_animations__["h" /* style */])({
+                        transform: 'scaleY(1)'
+                    })),
+                    Object(__WEBPACK_IMPORTED_MODULE_8__angular_animations__["i" /* transition */])('inactive => active', Object(__WEBPACK_IMPORTED_MODULE_8__angular_animations__["e" /* animate */])('300ms')),
+                    Object(__WEBPACK_IMPORTED_MODULE_8__angular_animations__["i" /* transition */])('active => inactive', Object(__WEBPACK_IMPORTED_MODULE_8__angular_animations__["e" /* animate */])('300ms'))
+                ])
+            ]
+        }),
+        __metadata("design:paramtypes", [typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_5__ngrx_store__["f" /* Store */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__ngrx_store__["f" /* Store */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__store_treeActions_service__["a" /* TreeActionsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__store_treeActions_service__["a" /* TreeActionsService */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_2_angular2_contextmenu__["ContextMenuService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_angular2_contextmenu__["ContextMenuService"]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_7__ngrx_effects__["a" /* Actions */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_7__ngrx_effects__["a" /* Actions */]) === "function" && _g || Object])
+    ], ItemComponent);
     return ItemComponent;
+    var _a, _b, _c, _d, _e, _f, _g;
 }());
-__decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('inputElement'),
-    __metadata("design:type", Object)
-], ItemComponent.prototype, "input", void 0);
-__decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__interfaces_IOuterNode__["IOuterNode"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__interfaces_IOuterNode__["IOuterNode"]) === "function" && _a || Object)
-], ItemComponent.prototype, "node", void 0);
-__decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-    __metadata("design:type", typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_6__models_TreeModel__["a" /* TreeModel */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__models_TreeModel__["a" /* TreeModel */]) === "function" && _b || Object)
-], ItemComponent.prototype, "treeModel", void 0);
-__decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-    __metadata("design:type", typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2_angular2_contextmenu__["ContextMenuComponent"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_angular2_contextmenu__["ContextMenuComponent"]) === "function" && _c || Object)
-], ItemComponent.prototype, "contextMenu", void 0);
-ItemComponent = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-        encapsulation: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewEncapsulation"].None,
-        selector: 'rign-tree-item',
-        template: __webpack_require__("../../../../../src/item/item.component.html"),
-        styles: [__webpack_require__("../../../../../src/item/item.component.less")]
-    }),
-    __metadata("design:paramtypes", [typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_5__ngrx_store__["g" /* Store */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__ngrx_store__["g" /* Store */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__store_treeActions_service__["a" /* TreeActionsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__store_treeActions_service__["a" /* TreeActionsService */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_2_angular2_contextmenu__["ContextMenuService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_angular2_contextmenu__["ContextMenuService"]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_7__ngrx_effects__["b" /* Actions */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_7__ngrx_effects__["b" /* Actions */]) === "function" && _g || Object])
-], ItemComponent);
 
-var _a, _b, _c, _d, _e, _f, _g;
 //# sourceMappingURL=/home/www/projects/angular2-tree/demo/src/item.component.js.map
 
 /***/ }),
@@ -1350,11 +1413,11 @@ var _a, _b, _c, _d, _e, _f, _g;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeModel; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_BehaviorSubject__ = __webpack_require__("../../../../rxjs/BehaviorSubject.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_BehaviorSubject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_rxjs_BehaviorSubject__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeModel; });
 
-var TreeModel = (function () {
+var TreeModel = /** @class */ (function () {
     function TreeModel(nodes$, configuration) {
         this.nodes$ = nodes$;
         this.configuration = configuration;
@@ -1386,6 +1449,7 @@ var TreeModel = (function () {
             dropZone: null,
             treeId: 'tree',
             showAddButton: true,
+            isAnimation: false,
         };
         for (var key in defaultConfiguration) {
             if (this.configuration[key] === undefined) {
@@ -1415,9 +1479,9 @@ var TreeModel = (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NodeService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NodeService; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1429,7 +1493,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
-var NodeService = (function () {
+var NodeService = /** @class */ (function () {
     function NodeService(http) {
         this.http = http;
         this.apiConfig = {
@@ -1442,7 +1506,7 @@ var NodeService = (function () {
     }
     NodeService.prototype.load = function (nodeId) {
         if (nodeId === void 0) { nodeId = ''; }
-        var params = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* URLSearchParams */]();
+        var params = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* URLSearchParams */]();
         params.set('nodeId', nodeId);
         var options = {
             search: params
@@ -1521,14 +1585,14 @@ var NodeService = (function () {
     NodeService.prototype.replaceDestNodeId = function (url, nodeId) {
         return url.replace('{destNodeId}', nodeId);
     };
+    NodeService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */]) === "function" && _a || Object])
+    ], NodeService);
     return NodeService;
+    var _a;
 }());
-NodeService = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* Http */]) === "function" && _a || Object])
-], NodeService);
 
-var _a;
 //# sourceMappingURL=/home/www/projects/angular2-tree/demo/src/node.service.js.map
 
 /***/ }),
@@ -1537,9 +1601,9 @@ var _a;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NodeDispatcherService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_service__ = __webpack_require__("../../../../../src/service/node.service.ts");
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NodeDispatcherService; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1551,7 +1615,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
-var NodeDispatcherService = (function () {
+var NodeDispatcherService = /** @class */ (function () {
     function NodeDispatcherService(nodeService) {
         this.nodeService = nodeService;
         this.services = {};
@@ -1578,14 +1642,14 @@ var NodeDispatcherService = (function () {
             throw '[NodeDispatcherService] No service for key ' + key;
         }
     };
+    NodeDispatcherService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__node_service__["a" /* NodeService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__node_service__["a" /* NodeService */]) === "function" && _a || Object])
+    ], NodeDispatcherService);
     return NodeDispatcherService;
+    var _a;
 }());
-NodeDispatcherService = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__node_service__["a" /* NodeService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__node_service__["a" /* NodeService */]) === "function" && _a || Object])
-], NodeDispatcherService);
 
-var _a;
 //# sourceMappingURL=/home/www/projects/angular2-tree/demo/src/nodesDispatcher.service.js.map
 
 /***/ }),
@@ -1601,8 +1665,8 @@ var _a;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeActionsService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1610,9 +1674,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 
-var TreeActionsService = TreeActionsService_1 = (function () {
+var TreeActionsService = /** @class */ (function () {
     function TreeActionsService() {
     }
+    TreeActionsService_1 = TreeActionsService;
     TreeActionsService.prototype.registerTree = function (treeId) {
         return {
             type: TreeActionsService_1.TREE_REGISTER,
@@ -1624,7 +1689,10 @@ var TreeActionsService = TreeActionsService_1 = (function () {
     TreeActionsService.prototype.editNodeStart = function (node) {
         return {
             type: TreeActionsService_1.TREE_EDIT_NODE_START,
-            payload: node
+            payload: {
+                node: node,
+                treeId: node.treeId
+            }
         };
     };
     TreeActionsService.prototype.saveNode = function (treeId, node) {
@@ -1728,10 +1796,11 @@ var TreeActionsService = TreeActionsService_1 = (function () {
             }
         };
     };
-    TreeActionsService.prototype.moveNode = function (treeId, source, target) {
+    TreeActionsService.prototype.moveNode = function (type, treeId, source, target) {
         return {
             type: TreeActionsService_1.TREE_MOVE_NODE,
             payload: {
+                sourceOfDroppedData: type,
                 treeId: treeId,
                 oldNode: source,
                 node: target
@@ -1758,29 +1827,29 @@ var TreeActionsService = TreeActionsService_1 = (function () {
             }
         };
     };
+    TreeActionsService.TREE_SAVE_NODE = 'TREE_SAVE_NODE';
+    TreeActionsService.TREE_SAVE_NODE_SUCCESS = 'TREE_SAVE_NODE_SUCCESS';
+    TreeActionsService.TREE_SAVE_NODE_ERROR = 'TREE_SAVE_NODE_ERROR';
+    TreeActionsService.TREE_DELETE_NODE = 'TREE_DELETE_NODE';
+    TreeActionsService.TREE_DELETE_NODE_SUCCESS = 'TREE_DELETE_NODE_SUCCESS';
+    TreeActionsService.TREE_DELETE_NODE_ERROR = 'TREE_DELETE_NODE_ERROR';
+    TreeActionsService.TREE_EDIT_NODE_START = 'TREE_EDIT_NODE_START';
+    TreeActionsService.TREE_EXPAND_NODE = 'TREE_EXPAND_NODE';
+    TreeActionsService.TREE_INSERT_NODE = 'TREE_INSERT_NODE';
+    TreeActionsService.TREE_LOAD = 'TREE_LOAD';
+    TreeActionsService.TREE_LOAD_SUCCESS = 'TREE_LOAD_SUCCESS';
+    TreeActionsService.TREE_LOAD_ERROR = 'TREE_LOAD_ERROR';
+    TreeActionsService.TREE_MOVE_NODE = 'TREE_MOVE_NODE';
+    TreeActionsService.TREE_MOVE_NODE_SUCCESS = 'TREE_MOVE_NODE_SUCCESS';
+    TreeActionsService.TREE_MOVE_NODE_ERROR = 'TREE_MOVE_NODE_ERROR';
+    TreeActionsService.TREE_REGISTER = 'TREE_REGISTER';
+    TreeActionsService = TreeActionsService_1 = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])()
+    ], TreeActionsService);
     return TreeActionsService;
+    var TreeActionsService_1;
 }());
-TreeActionsService.TREE_SAVE_NODE = 'TREE_SAVE_NODE';
-TreeActionsService.TREE_SAVE_NODE_SUCCESS = 'TREE_SAVE_NODE_SUCCESS';
-TreeActionsService.TREE_SAVE_NODE_ERROR = 'TREE_SAVE_NODE_ERROR';
-TreeActionsService.TREE_DELETE_NODE = 'TREE_DELETE_NODE';
-TreeActionsService.TREE_DELETE_NODE_SUCCESS = 'TREE_DELETE_NODE_SUCCESS';
-TreeActionsService.TREE_DELETE_NODE_ERROR = 'TREE_DELETE_NODE_ERROR';
-TreeActionsService.TREE_EDIT_NODE_START = 'TREE_EDIT_NODE_START';
-TreeActionsService.TREE_EXPAND_NODE = 'TREE_EXPAND_NODE';
-TreeActionsService.TREE_INSERT_NODE = 'TREE_INSERT_NODE';
-TreeActionsService.TREE_LOAD = 'TREE_LOAD';
-TreeActionsService.TREE_LOAD_SUCCESS = 'TREE_LOAD_SUCCESS';
-TreeActionsService.TREE_LOAD_ERROR = 'TREE_LOAD_ERROR';
-TreeActionsService.TREE_MOVE_NODE = 'TREE_MOVE_NODE';
-TreeActionsService.TREE_MOVE_NODE_SUCCESS = 'TREE_MOVE_NODE_SUCCESS';
-TreeActionsService.TREE_MOVE_NODE_ERROR = 'TREE_MOVE_NODE_ERROR';
-TreeActionsService.TREE_REGISTER = 'TREE_REGISTER';
-TreeActionsService = TreeActionsService_1 = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])()
-], TreeActionsService);
 
-var TreeActionsService_1;
 //# sourceMappingURL=/home/www/projects/angular2-tree/demo/src/treeActions.service.js.map
 
 /***/ }),
@@ -1789,13 +1858,14 @@ var TreeActionsService_1;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeEffectsService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngrx_effects__ = __webpack_require__("../../../../@ngrx/effects/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__treeActions_service__ = __webpack_require__("../../../../../src/store/treeActions.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__ = __webpack_require__("../../../../rxjs/Observable.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__service_nodesDispatcher_service__ = __webpack_require__("../../../../../src/service/nodesDispatcher.service.ts");
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeEffectsService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__dragAndDrop_dragAndDrop_service__ = __webpack_require__("../../../../../src/dragAndDrop/dragAndDrop.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1810,7 +1880,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-var TreeEffectsService = (function () {
+
+var TreeEffectsService = /** @class */ (function () {
     function TreeEffectsService(actions$, treeActions, nodeDispatcherService) {
         var _this = this;
         this.actions$ = actions$;
@@ -1836,6 +1907,9 @@ var TreeEffectsService = (function () {
             .catch(function () { return __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__["Observable"].of(_this.treeActions.saveNodeError(action.payload.treeId, action.payload.node)); }); });
         this.move$ = this.actions$
             .ofType(__WEBPACK_IMPORTED_MODULE_2__treeActions_service__["a" /* TreeActionsService */].TREE_MOVE_NODE)
+            .filter(function (action) {
+            return action.payload.sourceOfDroppedData === __WEBPACK_IMPORTED_MODULE_5__dragAndDrop_dragAndDrop_service__["a" /* DragAndDrop */].DROP_DATA_TYPE;
+        })
             .switchMap(function (action) { return _this.moveNode(action.payload.treeId, action.payload.oldNode, action.payload.node)
             .map(function (node) {
             return {
@@ -1876,34 +1950,34 @@ var TreeEffectsService = (function () {
         var nodeService = this.nodeDispatcherService.get(treeId);
         return nodeService.move(source, target);
     };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_1__ngrx_effects__["b" /* Effect */])(),
+        __metadata("design:type", Object)
+    ], TreeEffectsService.prototype, "register$", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_1__ngrx_effects__["b" /* Effect */])(),
+        __metadata("design:type", Object)
+    ], TreeEffectsService.prototype, "load$", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_1__ngrx_effects__["b" /* Effect */])(),
+        __metadata("design:type", Object)
+    ], TreeEffectsService.prototype, "delete$", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_1__ngrx_effects__["b" /* Effect */])(),
+        __metadata("design:type", Object)
+    ], TreeEffectsService.prototype, "save$", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_1__ngrx_effects__["b" /* Effect */])(),
+        __metadata("design:type", Object)
+    ], TreeEffectsService.prototype, "move$", void 0);
+    TreeEffectsService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__ngrx_effects__["a" /* Actions */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ngrx_effects__["a" /* Actions */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__treeActions_service__["a" /* TreeActionsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__treeActions_service__["a" /* TreeActionsService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4__service_nodesDispatcher_service__["a" /* NodeDispatcherService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__service_nodesDispatcher_service__["a" /* NodeDispatcherService */]) === "function" && _c || Object])
+    ], TreeEffectsService);
     return TreeEffectsService;
+    var _a, _b, _c;
 }());
-__decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__ngrx_effects__["a" /* Effect */])(),
-    __metadata("design:type", Object)
-], TreeEffectsService.prototype, "register$", void 0);
-__decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__ngrx_effects__["a" /* Effect */])(),
-    __metadata("design:type", Object)
-], TreeEffectsService.prototype, "load$", void 0);
-__decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__ngrx_effects__["a" /* Effect */])(),
-    __metadata("design:type", Object)
-], TreeEffectsService.prototype, "delete$", void 0);
-__decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__ngrx_effects__["a" /* Effect */])(),
-    __metadata("design:type", Object)
-], TreeEffectsService.prototype, "save$", void 0);
-__decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__ngrx_effects__["a" /* Effect */])(),
-    __metadata("design:type", Object)
-], TreeEffectsService.prototype, "move$", void 0);
-TreeEffectsService = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__ngrx_effects__["b" /* Actions */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ngrx_effects__["b" /* Actions */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__treeActions_service__["a" /* TreeActionsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__treeActions_service__["a" /* TreeActionsService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4__service_nodesDispatcher_service__["a" /* NodeDispatcherService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__service_nodesDispatcher_service__["a" /* NodeDispatcherService */]) === "function" && _c || Object])
-], TreeEffectsService);
 
-var _a, _b, _c;
 //# sourceMappingURL=/home/www/projects/angular2-tree/demo/src/treeEffects.service.js.map
 
 /***/ }),
@@ -1912,8 +1986,8 @@ var _a, _b, _c;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__treeActions_service__ = __webpack_require__("../../../../../src/store/treeActions.service.ts");
 /* harmony export (immutable) */ __webpack_exports__["a"] = treeReducer;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__treeActions_service__ = __webpack_require__("../../../../../src/store/treeActions.service.ts");
 
 function copyState(state, treeId) {
     if (treeId === void 0) { treeId = null; }
@@ -1975,7 +2049,7 @@ function insertNode(state, action) {
     var newNode = {
         id: null,
         treeId: action.payload.treeId,
-        name: 'New node',
+        name: 'New data',
         parentId: action.payload.id,
         children: [],
         parents: []
@@ -2023,7 +2097,7 @@ function moveNode(state, action) {
         var parent = treeState[oldNode.parentId];
         parent.children.splice(parent.children.indexOf(oldNode.id), 1);
     }
-    // add node
+    // add data
     treeState[newNode.id] = newNode;
     if (newNode.parentId) {
         var newParent = treeState[newNode.parentId];
@@ -2075,7 +2149,7 @@ function treeReducer(state, action) {
 /***/ "../../../../../src/tree.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"tree\">\n  <button *ngIf=\"treeModel.configuration.showAddButton\" class=\"btn btn-default\" (click)=\"onAdd()\">\n    <i class=\"fa fa-plus\"></i> Add node\n  </button>\n  <div #customTemplate><!-- no space --><ng-content></ng-content><!-- no space --></div>\n<div *ngIf=\"customTemplate.childNodes.length === 0\">\n  <rign-tree-item *ngFor=\"let node of treeModel.getRootNodes() | async\" [node]=\"node\" [treeModel]=\"treeModel\" [contextMenu]=\"contextMenu\"></rign-tree-item>\n</div>\n  <ri-dropzone [treeModel]=\"treeModel\"></ri-dropzone>\n  <context-menu #contextMenu>\n    <template *ngFor=\"let menuItem of menuList\" contextMenuItem let-item\n              (execute)=\"onContextMenuClick(menuItem.name, $event.item)\">\n      <span class=\"{{menuItem.iconCls}}\" style=\"width: 20px; display: inline-block;\"></span>\n      {{menuItem.text}}\n    </template>\n  </context-menu>\n</div>\n"
+module.exports = "<div class=\"tree\">\n  <button *ngIf=\"treeModel.configuration.showAddButton\" class=\"btn btn-default\" (click)=\"onAdd()\">\n    <i class=\"fa fa-plus\"></i> {{'RI_TREE_LBL_ADD_NODE' | translate}}\n  </button>\n  <div #customTemplate><!-- no space --><ng-content></ng-content><!-- no space --></div>\n  <div *ngIf=\"customTemplate.childNodes.length === 0\"><rign-tree-item *ngFor=\"let node of treeModel.getRootNodes() | async\" [node]=\"node\" [treeModel]=\"treeModel\"\n                    [contextMenu]=\"contextMenu\"></rign-tree-item>\n  </div>\n  <ri-dropzone [treeModel]=\"treeModel\"></ri-dropzone>\n  <context-menu #contextMenu>\n    <template *ngFor=\"let menuItem of menuList\" contextMenuItem let-item\n              (execute)=\"onContextMenuClick(menuItem.name, $event.item)\">\n      <span class=\"{{menuItem.iconCls}}\" style=\"width: 20px; display: inline-block;\"></span>\n      {{menuItem.text | translate}}\n    </template>\n  </context-menu>\n</div>\n"
 
 /***/ }),
 
@@ -2101,6 +2175,7 @@ module.exports = module.exports.toString();
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_TreeModel__ = __webpack_require__("../../../../../src/models/TreeModel.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angular2_contextmenu__ = __webpack_require__("../../../../angular2-contextmenu/angular2-contextmenu.js");
@@ -2108,7 +2183,6 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__dragAndDrop_dragAndDrop_service__ = __webpack_require__("../../../../../src/dragAndDrop/dragAndDrop.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__store_treeActions_service__ = __webpack_require__("../../../../../src/store/treeActions.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ngrx_store__ = __webpack_require__("../../../../@ngrx/store/index.js");
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2124,7 +2198,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-var TreeComponent = (function () {
+var TreeComponent = /** @class */ (function () {
     function TreeComponent(store, treeActions, dragAndDrop) {
         this.store = store;
         this.treeActions = treeActions;
@@ -2137,12 +2211,12 @@ var TreeComponent = (function () {
         this.defaultOptions = [
             {
                 name: 'onEdit',
-                text: 'Edit name',
+                text: 'RI_TREE_LBL_EDIT_NODE',
                 iconCls: 'fa fa-edit'
             },
             {
                 name: 'onDelete',
-                text: 'Remove',
+                text: 'RI_TREE_LBL_REMOVE_NODE',
                 iconCls: 'fa fa-trash'
             }
         ];
@@ -2171,7 +2245,7 @@ var TreeComponent = (function () {
      * On select item from context menu
      *
      * @param name - name of the event
-     * @param node - node item
+     * @param node - data item
      */
     TreeComponent.prototype.onContextMenuClick = function (name, node) {
         switch (name) {
@@ -2187,51 +2261,56 @@ var TreeComponent = (function () {
         }
     };
     /**
-     * Register node "move event"
+     * Register data "move event"
      */
     TreeComponent.prototype.registerMove = function () {
         var _this = this;
         if (this.treeModel.configuration.disableMoveNodes) {
             return;
         }
-        this.dragAndDrop.drop
+        this.dragAndDrop.drop$
             .filter(function (data) {
-            if (data.dropNode) {
-                return data.dropNode.node.treeId === _this.treeModel.treeId;
+            if (data.type === __WEBPACK_IMPORTED_MODULE_3__dragAndDrop_dragAndDrop_service__["a" /* DragAndDrop */].DROP_DATA_TYPE) {
+                if (data.dropNode) {
+                    return data.dropNode.data.treeId === _this.treeModel.treeId;
+                }
+                else {
+                    return data.dragNode.data.treeId === _this.treeModel.treeId;
+                }
             }
             else {
-                return data.dragNode.node.treeId === _this.treeModel.treeId;
+                if (data.dropNode && data.dropNode.zones && data.dropNode.zones.indexOf(data.dragNode.zoneId) === -1) {
+                    return false;
+                }
+                return true;
             }
         })
             .subscribe(function (data) {
-            if (data.dropNode && data.dropNode.zones && data.dropNode.zones.indexOf(data.dragNode.zoneId) === -1) {
-                return;
-            }
-            var dropNode = data.dropNode ? data.dropNode.node : null;
-            _this.store.dispatch(_this.treeActions.moveNode(_this.treeModel.treeId, data.dragNode.node, dropNode));
+            var dropNode = data.dropNode ? data.dropNode.data : null;
+            _this.store.dispatch(_this.treeActions.moveNode(data.type, _this.treeModel.treeId, data.dragNode.data, dropNode));
         });
     };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__models_TreeModel__["a" /* TreeModel */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__models_TreeModel__["a" /* TreeModel */]) === "function" && _a || Object)
+    ], TreeComponent.prototype, "treeModel", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('contextMenu'),
+        __metadata("design:type", typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2_angular2_contextmenu__["ContextMenuComponent"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_angular2_contextmenu__["ContextMenuComponent"]) === "function" && _b || Object)
+    ], TreeComponent.prototype, "contextMenu", void 0);
+    TreeComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            encapsulation: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewEncapsulation"].None,
+            selector: 'rign-tree',
+            template: __webpack_require__("../../../../../src/tree.component.html"),
+            styles: [__webpack_require__("../../../../../src/tree.component.less")]
+        }),
+        __metadata("design:paramtypes", [typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_5__ngrx_store__["f" /* Store */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__ngrx_store__["f" /* Store */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4__store_treeActions_service__["a" /* TreeActionsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__store_treeActions_service__["a" /* TreeActionsService */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_3__dragAndDrop_dragAndDrop_service__["a" /* DragAndDrop */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__dragAndDrop_dragAndDrop_service__["a" /* DragAndDrop */]) === "function" && _e || Object])
+    ], TreeComponent);
     return TreeComponent;
+    var _a, _b, _c, _d, _e;
 }());
-__decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__models_TreeModel__["a" /* TreeModel */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__models_TreeModel__["a" /* TreeModel */]) === "function" && _a || Object)
-], TreeComponent.prototype, "treeModel", void 0);
-__decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('contextMenu'),
-    __metadata("design:type", typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2_angular2_contextmenu__["ContextMenuComponent"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_angular2_contextmenu__["ContextMenuComponent"]) === "function" && _b || Object)
-], TreeComponent.prototype, "contextMenu", void 0);
-TreeComponent = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-        encapsulation: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewEncapsulation"].None,
-        selector: 'rign-tree',
-        template: __webpack_require__("../../../../../src/tree.component.html"),
-        styles: [__webpack_require__("../../../../../src/tree.component.less")]
-    }),
-    __metadata("design:paramtypes", [typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_5__ngrx_store__["g" /* Store */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__ngrx_store__["g" /* Store */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4__store_treeActions_service__["a" /* TreeActionsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__store_treeActions_service__["a" /* TreeActionsService */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_3__dragAndDrop_dragAndDrop_service__["a" /* DragAndDrop */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__dragAndDrop_dragAndDrop_service__["a" /* DragAndDrop */]) === "function" && _e || Object])
-], TreeComponent);
 
-var _a, _b, _c, _d, _e;
 //# sourceMappingURL=/home/www/projects/angular2-tree/demo/src/tree.component.js.map
 
 /***/ }),
@@ -2240,6 +2319,7 @@ var _a, _b, _c, _d, _e;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__("../../../common/@angular/common.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__item_item_component__ = __webpack_require__("../../../../../src/item/item.component.ts");
@@ -2259,12 +2339,17 @@ var _a, _b, _c, _d, _e;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__ngrx_effects__ = __webpack_require__("../../../../@ngrx/effects/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__store_treeEffects_service__ = __webpack_require__("../../../../../src/store/treeEffects.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__service_nodesDispatcher_service__ = __webpack_require__("../../../../../src/service/nodesDispatcher.service.ts");
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeModule; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__ngx_translate_core__ = __webpack_require__("../../../../@ngx-translate/core/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__angular_platform_browser__ = __webpack_require__("../../../platform-browser/@angular/platform-browser.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__angular_platform_browser_animations__ = __webpack_require__("../../../platform-browser/@angular/platform-browser/animations.es5.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
 
@@ -2284,29 +2369,57 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var TreeModule = (function () {
-    function TreeModule() {
+
+
+
+var TreeModule = /** @class */ (function () {
+    function TreeModule(translate) {
+        this.translate = translate;
+        this.setTranslationForEN();
+        this.setTranslationForPL();
+        this.translate.use('en');
     }
+    TreeModule.prototype.setTranslationForPL = function () {
+        this.translate.setTranslation('pl', {
+            RI_TREE_LBL_ADD_NODE: 'Dodaj',
+            RI_TREE_LBL_EDIT_NODE: 'Edytuj',
+            RI_TREE_LBL_REMOVE_NODE: 'Usuń',
+            RI_TREE_LBL_DROP_ZONE: 'Upuść tutaj'
+        });
+    };
+    TreeModule.prototype.setTranslationForEN = function () {
+        this.translate.setTranslation('en', {
+            RI_TREE_LBL_ADD_NODE: 'Add data',
+            RI_TREE_LBL_EDIT_NODE: 'Edit data',
+            RI_TREE_LBL_REMOVE_NODE: 'Delete data',
+            RI_TREE_LBL_DROP_ZONE: 'Drop here to move data to root level'
+        });
+    };
+    TreeModule = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
+            imports: [
+                __WEBPACK_IMPORTED_MODULE_19__angular_platform_browser__["a" /* BrowserModule */],
+                __WEBPACK_IMPORTED_MODULE_20__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_common__["CommonModule"],
+                __WEBPACK_IMPORTED_MODULE_6_angular2_contextmenu__["ContextMenuModule"],
+                __WEBPACK_IMPORTED_MODULE_8_ng2_dnd__["a" /* DndModule */].forRoot(),
+                __WEBPACK_IMPORTED_MODULE_15__ngrx_effects__["c" /* EffectsModule */].run(__WEBPACK_IMPORTED_MODULE_16__store_treeEffects_service__["a" /* TreeEffectsService */]),
+                __WEBPACK_IMPORTED_MODULE_4__angular_http__["b" /* HttpModule */],
+                __WEBPACK_IMPORTED_MODULE_5__angular_forms__["b" /* FormsModule */],
+                __WEBPACK_IMPORTED_MODULE_5__angular_forms__["c" /* ReactiveFormsModule */],
+                __WEBPACK_IMPORTED_MODULE_18__ngx_translate_core__["a" /* TranslateModule */],
+                __WEBPACK_IMPORTED_MODULE_14__ngrx_store__["g" /* StoreModule */]
+            ],
+            declarations: [__WEBPACK_IMPORTED_MODULE_7__tree_component__["a" /* TreeComponent */], __WEBPACK_IMPORTED_MODULE_2__item_item_component__["a" /* ItemComponent */], __WEBPACK_IMPORTED_MODULE_10__dragAndDrop_draggable_directive__["a" /* DraggableDirective */], __WEBPACK_IMPORTED_MODULE_11__dragAndDrop_droppable_directive__["a" /* DroppableDirective */], __WEBPACK_IMPORTED_MODULE_12__dragAndDrop_dropzone_dropzone_component__["a" /* DropzoneComponent */]],
+            exports: [__WEBPACK_IMPORTED_MODULE_7__tree_component__["a" /* TreeComponent */], __WEBPACK_IMPORTED_MODULE_2__item_item_component__["a" /* ItemComponent */], __WEBPACK_IMPORTED_MODULE_10__dragAndDrop_draggable_directive__["a" /* DraggableDirective */], __WEBPACK_IMPORTED_MODULE_11__dragAndDrop_droppable_directive__["a" /* DroppableDirective */], __WEBPACK_IMPORTED_MODULE_12__dragAndDrop_dropzone_dropzone_component__["a" /* DropzoneComponent */], __WEBPACK_IMPORTED_MODULE_8_ng2_dnd__["b" /* DraggableComponent */], __WEBPACK_IMPORTED_MODULE_14__ngrx_store__["g" /* StoreModule */], __WEBPACK_IMPORTED_MODULE_15__ngrx_effects__["c" /* EffectsModule */]],
+            providers: [__WEBPACK_IMPORTED_MODULE_9__dragAndDrop_dragAndDrop_service__["a" /* DragAndDrop */], __WEBPACK_IMPORTED_MODULE_3__service_node_service__["a" /* NodeService */], __WEBPACK_IMPORTED_MODULE_13__store_treeActions_service__["a" /* TreeActionsService */], __WEBPACK_IMPORTED_MODULE_16__store_treeEffects_service__["a" /* TreeEffectsService */], __WEBPACK_IMPORTED_MODULE_17__service_nodesDispatcher_service__["a" /* NodeDispatcherService */]],
+            schemas: [__WEBPACK_IMPORTED_MODULE_0__angular_core__["CUSTOM_ELEMENTS_SCHEMA"]]
+        }),
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_18__ngx_translate_core__["b" /* TranslateService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_18__ngx_translate_core__["b" /* TranslateService */]) === "function" && _a || Object])
+    ], TreeModule);
     return TreeModule;
+    var _a;
 }());
-TreeModule = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
-        imports: [
-            __WEBPACK_IMPORTED_MODULE_1__angular_common__["CommonModule"],
-            __WEBPACK_IMPORTED_MODULE_6_angular2_contextmenu__["ContextMenuModule"],
-            __WEBPACK_IMPORTED_MODULE_8_ng2_dnd__["a" /* DndModule */].forRoot(),
-            __WEBPACK_IMPORTED_MODULE_15__ngrx_effects__["c" /* EffectsModule */].run(__WEBPACK_IMPORTED_MODULE_16__store_treeEffects_service__["a" /* TreeEffectsService */]),
-            __WEBPACK_IMPORTED_MODULE_4__angular_http__["a" /* HttpModule */],
-            __WEBPACK_IMPORTED_MODULE_5__angular_forms__["a" /* FormsModule */],
-            __WEBPACK_IMPORTED_MODULE_5__angular_forms__["c" /* ReactiveFormsModule */],
-            __WEBPACK_IMPORTED_MODULE_14__ngrx_store__["a" /* StoreModule */]
-        ],
-        declarations: [__WEBPACK_IMPORTED_MODULE_7__tree_component__["a" /* TreeComponent */], __WEBPACK_IMPORTED_MODULE_2__item_item_component__["a" /* ItemComponent */], __WEBPACK_IMPORTED_MODULE_10__dragAndDrop_draggable_directive__["a" /* Draggable */], __WEBPACK_IMPORTED_MODULE_11__dragAndDrop_droppable_directive__["a" /* Droppable */], __WEBPACK_IMPORTED_MODULE_12__dragAndDrop_dropzone_dropzone_component__["a" /* DropzoneComponent */]],
-        exports: [__WEBPACK_IMPORTED_MODULE_7__tree_component__["a" /* TreeComponent */], __WEBPACK_IMPORTED_MODULE_2__item_item_component__["a" /* ItemComponent */], __WEBPACK_IMPORTED_MODULE_10__dragAndDrop_draggable_directive__["a" /* Draggable */], __WEBPACK_IMPORTED_MODULE_11__dragAndDrop_droppable_directive__["a" /* Droppable */], __WEBPACK_IMPORTED_MODULE_12__dragAndDrop_dropzone_dropzone_component__["a" /* DropzoneComponent */], __WEBPACK_IMPORTED_MODULE_14__ngrx_store__["a" /* StoreModule */], __WEBPACK_IMPORTED_MODULE_15__ngrx_effects__["c" /* EffectsModule */]],
-        providers: [__WEBPACK_IMPORTED_MODULE_9__dragAndDrop_dragAndDrop_service__["a" /* DragAndDrop */], __WEBPACK_IMPORTED_MODULE_3__service_node_service__["a" /* NodeService */], __WEBPACK_IMPORTED_MODULE_13__store_treeActions_service__["a" /* TreeActionsService */], __WEBPACK_IMPORTED_MODULE_16__store_treeEffects_service__["a" /* TreeEffectsService */], __WEBPACK_IMPORTED_MODULE_17__service_nodesDispatcher_service__["a" /* NodeDispatcherService */]],
-        schemas: [__WEBPACK_IMPORTED_MODULE_0__angular_core__["CUSTOM_ELEMENTS_SCHEMA"]]
-    })
-], TreeModule);
 
 //# sourceMappingURL=/home/www/projects/angular2-tree/demo/src/tree.module.js.map
 
