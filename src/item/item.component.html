@@ -5,7 +5,7 @@
      ri-draggable
      [dragZone]="treeModel.configuration.dragZone"
      [dropConfig]="{dropAllowedCssClass: 'drop-allowed', dropZone: treeModel.configuration.dropZone}"
-     [node]="node"
+     [data]="node"
 >
   <i *ngIf="!isExpanded" (click)="expand()" class="fa fa-caret-right pointer"></i>
   <i *ngIf="isExpanded" (click)="collapse()" class="fa fa-caret-down pointer"></i>
@@ -15,6 +15,9 @@
            name="name" (keydown)="onChange($event)" (blur)="onBlur($event)"/>
   </form>
 </div>
-<div class="tree" *ngIf="isExpanded">
-  <rign-tree-item *ngFor="let child of children$ | async" [node]="child" [treeModel]="treeModel" [contextMenu]="contextMenu"></rign-tree-item>
+<div class="tree" [@isExpanded]="animationState" (@isExpanded.done)="onAnimationDone($event)">
+  <div *ngIf="isExpanded">
+    <rign-tree-item *ngFor="let child of children$ | async" [node]="child" [treeModel]="treeModel"
+                    [contextMenu]="contextMenu"></rign-tree-item>
+  </div>
 </div>

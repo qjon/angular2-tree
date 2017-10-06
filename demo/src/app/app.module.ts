@@ -8,6 +8,7 @@ import {TreeTwoModule} from './treeTwo/treeTwo.module';
 import {StoreModule} from '@ngrx/store';
 import {treeReducer} from '../../../main';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import {StoreDevtoolsModule} from '@ngrx/store-devtools';
     HttpModule,
     TreeTwoModule,
     TreeOneModule,
+    TranslateModule.forRoot(),
     StoreModule.provideStore({trees: treeReducer}),
     StoreDevtoolsModule.instrumentOnlyWithExtension({})
   ],
@@ -27,4 +29,7 @@ import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 })
 export class AppModule {
 
+  public constructor(translate: TranslateService) {
+    translate.use('en');
+  }
 }

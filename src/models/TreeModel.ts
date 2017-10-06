@@ -35,6 +35,7 @@ export class TreeModel {
       dropZone: null,
       treeId: 'tree',
       showAddButton: true,
+      isAnimation: false,
     };
 
     for (const key in defaultConfiguration) {

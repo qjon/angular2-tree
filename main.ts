@@ -15,20 +15,20 @@ import {ITreeState, ITreeData, ITreeAction} from './src/store/ITreeState';
 import {treeReducer} from './src/store/treeReducer';
 export {
   IApiConfig,
-  TreeModule,
-  TreeComponent,
-  ItemComponent,
-  NodeService,
-  NodeDispatcherService,
-  TreeModel,
   IAppConfig,
   IConfiguration,
   IContextMenu,
   IOuterNode,
+  ItemComponent,
+  ITreeAction,
   ITreeData,
   ITreeState,
-  ITreeAction,
+  NodeService,
+  NodeDispatcherService,
   TreeActionsService,
+  TreeComponent,
   TreeEffectsService,
-  treeReducer
+  treeReducer,
+  TreeModel,
+  TreeModule,
 }

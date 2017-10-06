@@ -26,7 +26,8 @@ describe('TreeModel', () => {
         dragZone: null,
         dropZone: null,
         treeId: 'tree',
-        showAddButton: true
+        showAddButton: true,
+        isAnimation: false
       };
 
       expect(configurationMock).toEqual(expectedValue);
