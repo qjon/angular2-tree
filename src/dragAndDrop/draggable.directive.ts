@@ -34,7 +34,6 @@ export class DraggableDirective implements OnInit {
   }
 
   public ngOnInit() {
-    // this.dragEnabled = !this.data.tree.configuration.disableMoveNodes;
     this.el.nativeElement.draggable = this.dragEnabled;
 
     if (!this.data) {

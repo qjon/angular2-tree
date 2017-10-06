@@ -17,8 +17,8 @@ export class DragAndDrop {
     });
   }
 
-  public dragStart(dragE: IDragElement) {
-    this.dragStream$.next(dragE);
+  public dragStart(dragElement: IDragElement) {
+    this.dragStream$.next(dragElement);
   }
 
   public dragEnd(dropElement: IDropElement | null) {

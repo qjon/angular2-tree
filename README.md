@@ -119,7 +119,7 @@ and _newItem.component.html_
          ri-draggable
          [dragZone]="treeModel.configuration.dragZone"
          [dropConfig]="{dropAllowedCssClass: 'drop-enabled', dropZone: treeModel.configuration.dropZone}"
-         [node]="node"
+         [data]="node"
     >
       <div class="col-sm-8">
         <i *ngIf="!isExpanded" (click)="expand()" class="fa fa-plus pointer"></i>
