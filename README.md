@@ -225,6 +225,9 @@ At the end do not forget to add this effects to your app.
  
 ## Changes
 
+### v2.1.1
+* fix bug with adding new node to root element
+
 ### v2.1.0
 * add translation module
 * drop elements on tree nodes 
