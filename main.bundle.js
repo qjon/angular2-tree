@@ -1272,6 +1272,9 @@ var ItemComponent = /** @class */ (function () {
         this.isEditMode = this.node.id === null;
         this.children$ = this.treeModel.getChildren(this.node.id);
         this.insert$
+            .filter(function (action) {
+            return Boolean(action.payload.id);
+        })
             .subscribe(function () {
             _this.expand();
         });
@@ -2012,7 +2015,12 @@ function removeNode(state, action) {
     var treeId = action.payload.treeId;
     var treeState = newState[treeId];
     var node = action.payload.node;
-    delete treeState[node.id];
+    if (node.id) {
+        delete treeState[node.id];
+    }
+    else {
+        delete treeState[0];
+    }
     if (parentId) {
         var parent = treeState[node.parentId];
         parent.children.splice(parent.children.indexOf(node.parentId), 1);
