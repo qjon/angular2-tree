@@ -6,7 +6,7 @@ import {ContextMenuComponent, ContextMenuService} from 'angular2-contextmenu';
 import {IOuterNode} from '../interfaces/IOuterNode';
 import {TreeActionsService} from '../store/treeActions.service';
 import {Action, Store} from '@ngrx/store';
-import {ITreeState} from '../store/ITreeState';
+import {ITreeAction, ITreeState} from '../store/ITreeState';
 import {Observable} from 'rxjs/Observable';
 import {TreeModel} from '../models/TreeModel';
 import {Actions} from '@ngrx/effects';
@@ -104,6 +104,9 @@ export class ItemComponent implements OnInit, AfterViewInit {
     this.children$ = this.treeModel.getChildren(this.node.id);
 
     this.insert$
+      .filter((action: ITreeAction) => {
+        return Boolean(action.payload.id);
+      })
       .subscribe(() => {
         this.expand();
       });

@@ -30,7 +30,11 @@ function removeNode(state: ITreeState, action: Action): ITreeState {
   const treeState = newState[treeId];
   const node = action.payload.node;
 
-  delete treeState[node.id];
+  if (node.id) {
+    delete treeState[node.id];
+  } else {
+    delete treeState[0];
+  }
 
   if (parentId) {
     const parent = treeState[node.parentId];
