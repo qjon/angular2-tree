@@ -225,6 +225,9 @@ At the end do not forget to add this effects to your app.
  
 ## Changes
 
+### v2.2.0
+* change translation module to _ng2-translate_
+
 ### v2.1.1
 * fix bug with adding new node to root element
 

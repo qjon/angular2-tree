@@ -8,7 +8,7 @@ import {TreeTwoModule} from './treeTwo/treeTwo.module';
 import {StoreModule} from '@ngrx/store';
 import {treeReducer} from '../../../main';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
-import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {TranslateModule, TranslateService} from 'ng2-translate';
 
 @NgModule({
   declarations: [

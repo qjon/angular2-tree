@@ -1,6 +1,6 @@
 {
   "name": "@rign/angular2-tree",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "license": "MIT",
   "angular-cli": {},
   "scripts": {
@@ -30,13 +30,13 @@
     "@ngrx/core": "^1.2.0",
     "@ngrx/effects": "^2.0.3",
     "@ngrx/store": "^2.2.2",
-    "@ngx-translate/core": "^8.0.0",
     "angular2-contextmenu": "^0.7.7",
     "angular2-uuid": "^1.1.1",
     "bootstrap": "^3.3.7",
     "core-js": "^2.4.1",
     "font-awesome": "^4.6.3",
     "ng2-dnd": "^2.2.2",
+    "ng2-translate": "^5.0.0",
     "rxjs": "^5.1.0",
     "zone.js": "^0.8.4"
   },
