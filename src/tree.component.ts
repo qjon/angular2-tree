@@ -2,12 +2,13 @@ import {Component, OnChanges, Input, ViewEncapsulation, ViewChild, OnInit} from 
 import {IOuterNode} from './interfaces/IOuterNode';
 import {IContextMenu} from './interfaces/IContextMenu';
 import {TreeModel} from './models/TreeModel';
-import {ContextMenuComponent} from 'angular2-contextmenu';
+import {ContextMenuComponent} from 'ngx-contextmenu';
 import {DragAndDrop} from './dragAndDrop/dragAndDrop.service';
 import {IDragAndDrop} from './interfaces/IDragAndDrop';
 import {TreeActionsService} from './store/treeActions.service';
 import {Store} from '@ngrx/store';
 import {ITreeState} from './store/ITreeState';
+import {filter} from 'rxjs/operators';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -98,21 +99,23 @@ export class TreeComponent implements OnInit, OnChanges {
     }
 
     this.dragAndDrop.drop$
-      .filter((data: IDragAndDrop) => {
-        if (data.type === DragAndDrop.DROP_DATA_TYPE) {
-          if (data.dropNode) {
-            return data.dropNode.data.treeId === this.treeModel.treeId;
+      .pipe(
+        filter((data: IDragAndDrop) => {
+          if (data.type === DragAndDrop.DROP_DATA_TYPE) {
+            if (data.dropNode) {
+              return data.dropNode.data.treeId === this.treeModel.treeId;
+            } else {
+              return data.dragNode.data.treeId === this.treeModel.treeId;
+            }
           } else {
-            return data.dragNode.data.treeId === this.treeModel.treeId;
-          }
-        } else {
-          if (data.dropNode && data.dropNode.zones && data.dropNode.zones.indexOf(data.dragNode.zoneId) === -1) {
-            return false;
-          }
+            if (data.dropNode && data.dropNode.zones && data.dropNode.zones.indexOf(data.dragNode.zoneId) === -1) {
+              return false;
+            }
 
-          return true;
-        }
-      })
+            return true;
+          }
+        })
+      )
       .subscribe((data: IDragAndDrop) => {
 
         const dropNode = data.dropNode ? data.dropNode.data : null;

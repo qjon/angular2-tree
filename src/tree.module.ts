@@ -2,9 +2,7 @@ import {NgModule, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ItemComponent} from './item/item.component';
 import {NodeService} from './service/node.service';
-import {HttpModule} from '@angular/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {ContextMenuModule} from 'angular2-contextmenu';
 import {TreeComponent} from './tree.component';
 import {DndModule, DraggableComponent} from 'ng2-dnd';
 import {DragAndDrop} from './dragAndDrop/dragAndDrop.service';
@@ -19,6 +17,9 @@ import {NodeDispatcherService} from './service/nodesDispatcher.service';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {TranslateModule, TranslateService} from 'ng2-translate';
+import {HttpClientModule} from '@angular/common/http';
+import {ContextMenuModule} from 'ngx-contextmenu';
+import {treeReducer} from './store/treeReducer';
 
 @NgModule({
   imports: [
@@ -27,12 +28,12 @@ import {TranslateModule, TranslateService} from 'ng2-translate';
     CommonModule,
     ContextMenuModule,
     DndModule.forRoot(),
-    EffectsModule.run(TreeEffectsService),
-    HttpModule,
+    EffectsModule.forFeature([TreeEffectsService]),
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    StoreModule.forFeature('trees', treeReducer),
     TranslateModule,
-    StoreModule
   ],
   declarations: [TreeComponent, ItemComponent, DraggableDirective, DroppableDirective, DropzoneComponent],
   exports: [TreeComponent, ItemComponent, DraggableDirective, DroppableDirective, DropzoneComponent, DraggableComponent, StoreModule, EffectsModule],

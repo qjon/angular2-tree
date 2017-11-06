@@ -7,7 +7,7 @@
 
 ## Usage
     
-Include _TreeModule_  in your application module and create Store
+Include _TreeModule_  in your application module and create Store with empty state and initialize Effects
 
     import {TreeModule} from '@rign/angular2-tree/main';
     
@@ -18,7 +18,8 @@ Include _TreeModule_  in your application module and create Store
       imports: [
         ...
         TreeModule,
-        StoreModule.provideStore({trees: treeReducer})
+        EffectsModule.forRoot([]),
+        StoreModule.forRoot({})
       ]
     })
     
@@ -31,8 +32,7 @@ You need also init translations module, because Tree needs it to translate all l
       imports: [
         ...
         TranslationModule.forRoot(),
-        TreeModule,
-        StoreModule.provideStore({trees: treeReducer})
+        TreeModule
       ]
     })
     
@@ -87,7 +87,7 @@ In component where you create tree, you should register _tree store_, create _Tr
     
         this.store.dispatch(this.treeActions.registerTree(treeId));
     
-        this.folders = this.store.select('trees')
+        this.folders = this.store.select(treeStateSelector)
           .map((data: ITreeState) => {
             return data[treeId];
           })
@@ -208,9 +208,11 @@ Then you have to create _@Effects_ similar to that one in _[treeEffects.service]
 
     @Effect() move$ = this.actions$
       .ofType(TreeActionsService.TREE_MOVE_NODE)
-      .filter((action: ITreeAction) => {
-        return action.payload.sourceOfDroppedData === DragAndDrop.DROP_DATA_TYPE;
-      }) 
+      .pipe(
+        filter((action: ITreeAction) => {
+          return action.payload.sourceOfDroppedData === DragAndDrop.DROP_DATA_TYPE;
+        }) 
+      )
       ...
       
 but you have to replace 
@@ -227,6 +229,8 @@ At the end do not forget to add this effects to your app.
 
 ### v2.2.0
 * change translation module to _ng2-translate_
+* upgrade angular to verison _^5.0.0_
+* upgrade @ngrx/store to version ^4.1.0 (use _forFeature_ to init store and effects)
 
 ### v2.1.1
 * fix bug with adding new node to root element

@@ -8,10 +8,10 @@
   </div>
   <ri-dropzone [treeModel]="treeModel"></ri-dropzone>
   <context-menu #contextMenu>
-    <template *ngFor="let menuItem of menuList" contextMenuItem let-item
+    <ng-template *ngFor="let menuItem of menuList" contextMenuItem let-item
               (execute)="onContextMenuClick(menuItem.name, $event.item)">
       <span class="{{menuItem.iconCls}}" style="width: 20px; display: inline-block;"></span>
       {{menuItem.text | translate}}
-    </template>
+    </ng-template>
   </context-menu>
 </div>
