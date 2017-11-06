@@ -1,6 +1,5 @@
-import {Injectable, Inject} from '@angular/core';
-import {Http, URLSearchParams, Response} from '@angular/http';
-import {Observable} from 'rxjs';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs/Observable';
 import {IOuterNode} from '../interfaces/IOuterNode';
 import {IApiConfig} from '../IApiConfig.service';
 import {HttpClient, HttpParams} from '@angular/common/http';
@@ -72,7 +71,7 @@ export class NodeService implements INodeService {
    */
   protected getPath(type: string, nodeId: string, destNodeId: string = null) {
     if (!this.apiConfig) {
-      throw 'No API configuration for Tree';
+      throw new Error('No API configuration for Tree');
     }
 
     const urlMap = {

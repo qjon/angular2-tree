@@ -1,7 +1,7 @@
 <div class="tree-item row"
      [ngClass]="{'tree-item-selected': isSelected}"
-     ri-droppable
-     ri-draggable
+     riDroppable
+     riDraggable
      [dragZone]="treeModel.configuration.dragZone"
      [dropConfig]="{dropAllowedCssClass: 'drop-enabled', dropZone: treeModel.configuration.dropZone}"
      [data]="node"

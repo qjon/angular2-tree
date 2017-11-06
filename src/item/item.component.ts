@@ -15,7 +15,7 @@ import {filter} from 'rxjs/operators';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
-  selector: 'rign-tree-item',
+  selector: 'ri-tree-item',
   templateUrl: './item.component.html',
   styleUrls: ['./item.component.less'],
   animations: [

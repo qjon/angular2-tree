@@ -29,7 +29,7 @@ export class NodeDispatcherService {
     if (this.services[key]) {
       return this.services[key];
     } else {
-      throw '[NodeDispatcherService] No service for key ' + key;
+      throw new Error('[NodeDispatcherService] No service for key ' + key);
     }
   }
 }

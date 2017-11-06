@@ -2,7 +2,7 @@ import {Directive, ElementRef, Input, OnInit, Renderer} from '@angular/core';
 import {DragAndDrop} from './dragAndDrop.service';
 
 @Directive({
-  selector: '[ri-draggable]'
+  selector: '[riDraggable]'
 })
 export class DraggableDirective implements OnInit {
   @Input() data: any;
@@ -37,7 +37,7 @@ export class DraggableDirective implements OnInit {
     this.el.nativeElement.draggable = this.dragEnabled;
 
     if (!this.data) {
-      throw 'DraggableDirective needs data';
+      throw new Error('DraggableDirective needs data');
     }
   }
 }

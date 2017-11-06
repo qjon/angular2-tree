@@ -8,7 +8,7 @@ import {DropConfig, DroppableDirective} from './droppable.directive';
 
 @Component({
   template: `
-    <div ri-droppable [data]="data" [dropConfig]="dropConfig"></div>`
+    <div riDroppable [data]="data" [dropConfig]="dropConfig"></div>`
 })
 class FakeComponent {
   public data: any;

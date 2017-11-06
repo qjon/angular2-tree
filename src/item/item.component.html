@@ -1,8 +1,8 @@
 <div class="tree-item"
      [ngClass]="{'tree-item-selected': isSelected}"
      (contextmenu)="onContextMenu($event)"
-     ri-droppable
-     ri-draggable
+     riDroppable
+     riDraggable
      [dragZone]="treeModel.configuration.dragZone"
      [dropConfig]="{dropAllowedCssClass: 'drop-allowed', dropZone: treeModel.configuration.dropZone}"
      [data]="node"
@@ -17,7 +17,7 @@
 </div>
 <div class="tree" [@isExpanded]="animationState" (@isExpanded.done)="onAnimationDone($event)">
   <div *ngIf="isExpanded">
-    <rign-tree-item *ngFor="let child of children$ | async" [node]="child" [treeModel]="treeModel"
-                    [contextMenu]="contextMenu"></rign-tree-item>
+    <ri-tree-item *ngFor="let child of children$ | async" [node]="child" [treeModel]="treeModel"
+                  [contextMenu]="contextMenu"></ri-tree-item>
   </div>
 </div>

@@ -12,7 +12,7 @@ import {filter} from 'rxjs/operators';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
-  selector: 'rign-tree',
+  selector: 'ri-tree',
   templateUrl: './tree.component.html',
   styleUrls: ['./tree.component.less']
 })
