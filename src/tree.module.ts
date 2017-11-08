@@ -14,8 +14,6 @@ import {StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
 import {TreeEffectsService} from './store/treeEffects.service';
 import {NodeDispatcherService} from './service/nodesDispatcher.service';
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {TranslateModule, TranslateService} from 'ng2-translate';
 import {HttpClientModule} from '@angular/common/http';
 import {ContextMenuModule} from 'ngx-contextmenu';
@@ -23,8 +21,6 @@ import {treeReducer} from './store/treeReducer';
 
 @NgModule({
   imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
     CommonModule,
     ContextMenuModule,
     DndModule.forRoot(),
