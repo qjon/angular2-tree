@@ -23,7 +23,7 @@ Include _TreeModule_  in your application module and create Store with empty sta
       ],
       imports: [
         ...
-        TreeModule,
+        TreeModule.forRoot(),
         EffectsModule.forRoot([]),
         StoreModule.forRoot({})
       ]
@@ -38,7 +38,7 @@ You need also init translations module, because Tree needs it to translate all l
       imports: [
         ...
         TranslationModule.forRoot(),
-        TreeModule
+        TreeModule.forRoot()
       ]
     })
     
@@ -234,6 +234,7 @@ At the end do not forget to add this effects to your app.
 ## Changes
 
 ### v2.2.0
+* add _forRoot_ static method
 * change translation module to _ng2-translate_
 * upgrade angular to verison _^5.0.0_
 * upgrade @ngrx/store to version ^4.1.0 (use _forFeature_ to init store and effects)

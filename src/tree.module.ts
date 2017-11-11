@@ -1,4 +1,4 @@
-import {NgModule, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {NgModule, CUSTOM_ELEMENTS_SCHEMA, ModuleWithProviders} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ItemComponent} from './item/item.component';
 import {NodeService} from './service/node.service';
@@ -33,10 +33,23 @@ import {treeReducer} from './store/treeReducer';
   ],
   declarations: [TreeComponent, ItemComponent, DraggableDirective, DroppableDirective, DropzoneComponent],
   exports: [TreeComponent, ItemComponent, DraggableDirective, DroppableDirective, DropzoneComponent, DraggableComponent, StoreModule, EffectsModule],
-  providers: [DragAndDrop, NodeService, TreeActionsService, TreeEffectsService, NodeDispatcherService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TreeModule {
+
+  public static forRoot(): ModuleWithProviders {
+    return {
+      ngModule: TreeModule,
+      providers: [
+        DragAndDrop,
+        NodeDispatcherService,
+        NodeService,
+        TreeActionsService,
+        TreeEffectsService
+      ]
+    }
+  }
+
   public constructor(private translate: TranslateService) {
     this.setTranslationForEN();
     this.setTranslationForPL();

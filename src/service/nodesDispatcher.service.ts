@@ -5,7 +5,7 @@ import {INodeService, NodeService} from './node.service';
 export class NodeDispatcherService {
   private services: { [key: string]: INodeService } = {};
 
-  constructor(private nodeService: NodeService) {
+  constructor(nodeService: NodeService) {
     this.services['tree'] = nodeService;
   }
 

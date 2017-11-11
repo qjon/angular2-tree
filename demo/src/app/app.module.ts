@@ -9,6 +9,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {TreeModule} from '../../../src/tree.module';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     HttpClientModule,
     TreeTwoModule,
     TreeOneModule,
+    TreeModule.forRoot(),
     TranslateModule.forRoot(),
     EffectsModule.forRoot([]),
     StoreModule.forRoot({}),
