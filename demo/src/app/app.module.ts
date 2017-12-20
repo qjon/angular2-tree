@@ -1,28 +1,31 @@
-import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {HttpModule} from '@angular/http';
 import {AppComponent} from './app.component';
 import {TreeOneModule} from './treeOne/treeOne.module';
 import {TreeTwoModule} from './treeTwo/treeTwo.module';
-import {StoreModule} from '@ngrx/store';
-import {treeReducer} from '../../../main';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
-import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {TranslateModule, TranslateService} from 'ng2-translate';
+import {HttpClientModule} from '@angular/common/http';
+import {StoreModule} from '@ngrx/store';
+import {EffectsModule} from '@ngrx/effects';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {TreeModule} from '../../../src/tree.module';
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     TreeTwoModule,
     TreeOneModule,
+    TreeModule.forRoot(),
     TranslateModule.forRoot(),
-    StoreModule.provideStore({trees: treeReducer}),
-    StoreDevtoolsModule.instrumentOnlyWithExtension({})
+    EffectsModule.forRoot([]),
+    StoreModule.forRoot({}),
+    StoreDevtoolsModule.instrument()
   ],
   providers: [],
   bootstrap: [AppComponent]

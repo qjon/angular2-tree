@@ -1,8 +1,18 @@
 import {Component, OnInit} from '@angular/core';
-import {IConfiguration, IContextMenu, ITreeState, ITreeData, TreeActionsService, TreeModel, NodeDispatcherService} from '../../../../main';
+import {
+  IConfiguration,
+  IContextMenu,
+  ITreeState,
+  ITreeData,
+  TreeActionsService,
+  TreeModel,
+  NodeDispatcherService,
+  treeStateSelector
+} from '../../../../main';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs/Observable';
 import {TreeOneNodeService} from './treeOneNode.service';
+import {filter, map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-tree-one',
@@ -36,12 +46,14 @@ export class TreeOneComponent implements OnInit {
 
     this.store.dispatch(this.treeActions.registerTree(treeId));
 
-    this.folders = this.store.select('trees')
-      .map((data: ITreeState) => {
-        return data[treeId];
-      })
-      .filter((data: ITreeData) => !!data)
-    ;
+    this.folders = this.store.select(treeStateSelector)
+      .pipe(
+        map((data: ITreeState) => {
+          return data[treeId];
+        }),
+        filter((data: ITreeData) => !!data)
+      );
+
     this.treeModel = new TreeModel(this.folders, this.treeConfiguration);
   }
 }

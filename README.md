@@ -1,3 +1,9 @@
+[![npm (scoped)](https://img.shields.io/npm/v/@rign/angular2-tree.svg)]()
+[![Build Status](https://travis-ci.org/qjon/angular2-tree.svg?branch=master)](https://travis-ci.org/qjon/angular2-tree)
+[![npm version](https://badge.fury.io/js/%40rign%2Fangular2-tree.svg)](https://badge.fury.io/js/%40rign%2Fangular2-tree.svg)
+[![npm](https://img.shields.io/npm/dm/@rign\/angular2-tree.svg)](https://img.shields.io/npm/dm/@rign\/angular2-tree.svg)
+[![npm](https://img.shields.io/npm/l/@rign\/angular2-tree.svg)](https://github.com/qjon/angular2-tree/blob/master/LICENSE)
+
 # angular2-tree
 
 ## Installation
@@ -7,7 +13,7 @@
 
 ## Usage
     
-Include _TreeModule_  in your application module and create Store
+Include _TreeModule_  in your application module and create Store with empty state and initialize Effects
 
     import {TreeModule} from '@rign/angular2-tree/main';
     
@@ -17,8 +23,9 @@ Include _TreeModule_  in your application module and create Store
       ],
       imports: [
         ...
-        TreeModule,
-        StoreModule.provideStore({trees: treeReducer})
+        TreeModule.forRoot(),
+        EffectsModule.forRoot([]),
+        StoreModule.forRoot({})
       ]
     })
     
@@ -31,8 +38,7 @@ You need also init translations module, because Tree needs it to translate all l
       imports: [
         ...
         TranslationModule.forRoot(),
-        TreeModule,
-        StoreModule.provideStore({trees: treeReducer})
+        TreeModule.forRoot()
       ]
     })
     
@@ -40,7 +46,7 @@ More information about translations you can find below in section _Translation_.
     
 In any html file put 
 
-    <rign-tree [treeModel]="treeModel"></rign-tree>
+    <ri-tree [treeModel]="treeModel"></ri-tree>
     
 Create your own loader service as it is done in example        
 
@@ -87,7 +93,7 @@ In component where you create tree, you should register _tree store_, create _Tr
     
         this.store.dispatch(this.treeActions.registerTree(treeId));
     
-        this.folders = this.store.select('trees')
+        this.folders = this.store.select(treeStateSelector)
           .map((data: ITreeState) => {
             return data[treeId];
           })
@@ -115,8 +121,8 @@ and _newItem.component.html_
 
     <div class="tree-item row"
          [ngClass]="{'tree-item-selected': isSelected}"
-         ri-droppable
-         ri-draggable
+         riDroppable
+         riDraggable
          [dragZone]="treeModel.configuration.dragZone"
          [dropConfig]="{dropAllowedCssClass: 'drop-enabled', dropZone: treeModel.configuration.dropZone}"
          [data]="node"
@@ -196,7 +202,7 @@ To change language to polish you have to add these lines to your app module:
     
 ## Drop elements on tree node
 
-Now you have new possibilities to move different elements to the tree (files or other data). To do that, you have to use _ri-draggable_ directive in following way
+Now you have new possibilities to move different elements to the tree (files or other data). To do that, you have to use _riDraggable_ directive in following way
 
     <div ri-draggable [dragZone]="treeModel.configuration.dragZone" [data]="your_data" [sourceType]="'YOUR_SOURCE_TYPE'">Drag element</div>  
     
@@ -208,9 +214,11 @@ Then you have to create _@Effects_ similar to that one in _[treeEffects.service]
 
     @Effect() move$ = this.actions$
       .ofType(TreeActionsService.TREE_MOVE_NODE)
-      .filter((action: ITreeAction) => {
-        return action.payload.sourceOfDroppedData === DragAndDrop.DROP_DATA_TYPE;
-      }) 
+      .pipe(
+        filter((action: ITreeAction) => {
+          return action.payload.sourceOfDroppedData === DragAndDrop.DROP_DATA_TYPE;
+        }) 
+      )
       ...
       
 but you have to replace 
@@ -224,6 +232,13 @@ to
 At the end do not forget to add this effects to your app.
  
 ## Changes
+
+### v2.2.0
+* add _forRoot_ static method
+* change translation module to _ng2-translate_
+* upgrade angular to verison _^5.0.0_
+* upgrade @ngrx/store to version ^4.1.0 (use _forFeature_ to init store and effects)
+* rename selector __ri-tree__
 
 ### v2.1.1
 * fix bug with adding new node to root element

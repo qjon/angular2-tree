@@ -2,7 +2,7 @@ import {
   Component, ViewChild, Input, ViewEncapsulation, OnInit, AfterViewInit
 } from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {ContextMenuComponent, ContextMenuService} from 'angular2-contextmenu';
+import {ContextMenuComponent, ContextMenuService} from 'ngx-contextmenu';
 import {IOuterNode} from '../interfaces/IOuterNode';
 import {TreeActionsService} from '../store/treeActions.service';
 import {Action, Store} from '@ngrx/store';
@@ -11,10 +11,11 @@ import {Observable} from 'rxjs/Observable';
 import {TreeModel} from '../models/TreeModel';
 import {Actions} from '@ngrx/effects';
 import {animate, AnimationEvent, state, style, transition, trigger} from '@angular/animations';
+import {filter} from 'rxjs/operators';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
-  selector: 'rign-tree-item',
+  selector: 'ri-tree-item',
   templateUrl: './item.component.html',
   styleUrls: ['./item.component.less'],
   animations: [
@@ -63,9 +64,11 @@ export class ItemComponent implements OnInit, AfterViewInit {
 
   protected insert$: Observable<Action> = this.actions$
     .ofType(TreeActionsService.TREE_INSERT_NODE)
-    .filter((action: Action) => {
-      return action.payload && action.payload.id === this.node.id;
-    });
+    .pipe(
+      filter((action: ITreeAction) => {
+        return action.payload && action.payload.id === this.node.id;
+      })
+    );
 
   protected isStartSave = false;
 
@@ -80,9 +83,11 @@ export class ItemComponent implements OnInit, AfterViewInit {
 
     this.actions$
       .ofType(TreeActionsService.TREE_EXPAND_NODE)
-      .filter((action: Action): boolean => {
-        return !this.isExpanded && action.payload.node && this.node.id === action.payload.node.id;
-      })
+      .pipe(
+        filter((action: ITreeAction): boolean => {
+          return !this.isExpanded && action.payload.node && this.node.id === action.payload.node.id;
+        })
+      )
       .subscribe(() => {
         this.expand();
       });
@@ -104,9 +109,11 @@ export class ItemComponent implements OnInit, AfterViewInit {
     this.children$ = this.treeModel.getChildren(this.node.id);
 
     this.insert$
-      .filter((action: ITreeAction) => {
-        return Boolean(action.payload.id);
-      })
+      .pipe(
+        filter((action: ITreeAction) => {
+          return Boolean(action.payload.id);
+        })
+      )
       .subscribe(() => {
         this.expand();
       });
@@ -118,8 +125,10 @@ export class ItemComponent implements OnInit, AfterViewInit {
 
     this.actions$
       .ofType(TreeActionsService.TREE_EDIT_NODE_START)
-      .filter((action: Action) => action.payload.node === this.node)
-      .subscribe((action: Action) => {
+      .pipe(
+        filter((action: ITreeAction) => action.payload.node === this.node)
+      )
+      .subscribe((action: ITreeAction) => {
         this.nameField.setValue(this.node.name);
         this.isEditMode = true;
         this.setFocus();

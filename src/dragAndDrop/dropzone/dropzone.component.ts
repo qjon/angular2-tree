@@ -3,6 +3,8 @@ import {TreeModel} from '../../models/TreeModel';
 import {DragAndDrop} from '../dragAndDrop.service';
 import {IDragAndDrop, IDragElement} from '../../interfaces/IDragAndDrop';
 import {Observable} from 'rxjs/Observable';
+import {map} from 'rxjs/operators';
+import 'rxjs/add/observable/merge';
 
 @Component({
   selector: 'ri-dropzone',
@@ -18,27 +20,31 @@ export class DropzoneComponent {
   constructor(public dragAndDrop: DragAndDrop) {
 
     const isDragStart$ = this.dragAndDrop.getDragStream()
-      .map((dragElement: IDragElement): boolean => {
-        const isDragElement = !!dragElement && !!dragElement.data;
+      .pipe(
+        map((dragElement: IDragElement): boolean => {
+          const isDragElement = !!dragElement && !!dragElement.data;
 
-        if (isDragElement) {
-          if (dragElement.type === DragAndDrop.DROP_DATA_TYPE) {
-            const isNotRootElement = dragElement.data.parentId;
-            const isFromCurrentTree = dragElement.data.treeId === this.treeModel.treeId;
+          if (isDragElement) {
+            if (dragElement.type === DragAndDrop.DROP_DATA_TYPE) {
+              const isNotRootElement = dragElement.data.parentId;
+              const isFromCurrentTree = dragElement.data.treeId === this.treeModel.treeId;
 
-            return (isNotRootElement && isFromCurrentTree) ? true : false;
-          } else {
-            return true;
+              return (isNotRootElement && isFromCurrentTree) ? true : false;
+            } else {
+              return true;
+            }
           }
-        }
 
-        return false;
-      });
+          return false;
+        })
+      );
 
     const isDragEnd$ = this.dragAndDrop.drop$
-      .map((data: IDragAndDrop): boolean => {
-        return false;
-      });
+      .pipe(
+        map((data: IDragAndDrop): boolean => {
+          return false;
+        })
+      );
 
     this.isOpen$ = Observable.merge(isDragStart$, isDragEnd$);
   }

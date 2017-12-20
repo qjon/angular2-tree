@@ -1,8 +1,8 @@
-import {Injectable, Inject} from '@angular/core';
-import {Http, URLSearchParams, Response} from '@angular/http';
-import {Observable} from 'rxjs';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs/Observable';
 import {IOuterNode} from '../interfaces/IOuterNode';
 import {IApiConfig} from '../IApiConfig.service';
+import {HttpClient, HttpParams} from '@angular/common/http';
 
 export interface INodeService {
   load(nodeId: string): Observable<IOuterNode[]>;
@@ -26,65 +26,38 @@ export class NodeService implements INodeService {
     removeUrl: '/api/nodes',
   };
 
-  public constructor(protected http: Http) {
+  public constructor(protected http: HttpClient) {
   }
 
   public load(nodeId = ''): Observable<IOuterNode[]> {
-    const params = new URLSearchParams();
-    params.set('nodeId', nodeId);
-    const options = {
-      search: params
-    };
-    return this.http.get(this.getPath('GET', nodeId), options)
-      .map((res: Response) => {
-        const body = res.json();
+    const params = new HttpParams().set('nodeId', nodeId);
 
-        return body || [];
-      });
+    return this.http.get<IOuterNode[]>(this.getPath('GET', nodeId), {params});
   }
 
 
   public add(node: IOuterNode, parentNodeId: string = null): Observable<IOuterNode> {
-    const data = {
+    return this.http.post<IOuterNode>(this.getPath('CREATE', parentNodeId), {
       node: node,
       parentNodeId: parentNodeId
-    };
-    return this.http.post(this.getPath('CREATE', parentNodeId), data)
-      .map((res: Response) => {
-        const body = res.json();
-
-        return body || [];
-      });
+    });
   }
 
   public move(srcNode: IOuterNode, targetNode: IOuterNode | null): Observable<IOuterNode> {
     const srcId = srcNode.id;
     const targetId = targetNode ? targetNode.id : null;
 
-    return this.http.put(this.getPath('MOVE', srcId, targetId), {source: srcId, target: targetId})
-      .map((res: Response) => {
-        const body = res.json();
-
-        return body || [];
-      });
+    return this.http.put<IOuterNode>(this.getPath('MOVE', srcId, targetId), {source: srcId, target: targetId});
   }
 
   public update(node: IOuterNode): Observable<IOuterNode> {
-    return this.http.put(this.getPath('UPDATE', node.id), node)
-      .map((res: Response) => {
-        const body = res.json();
-
-        return body || [];
-      });
+    return this.http.put<IOuterNode>(this.getPath('UPDATE', node.id), node);
   }
 
   public remove(nodeId: string): Observable<IOuterNode> {
-    return this.http.delete(this.getPath('REMOVE', nodeId), {body: {nodeId: nodeId}})
-      .map((res: Response) => {
-        const body = res.json();
+    const params = new HttpParams().set('nodeId', nodeId);
 
-        return body || [];
-      });
+    return this.http.delete<IOuterNode>(this.getPath('REMOVE', nodeId), {params});
   }
 
   /**
@@ -98,7 +71,7 @@ export class NodeService implements INodeService {
    */
   protected getPath(type: string, nodeId: string, destNodeId: string = null) {
     if (!this.apiConfig) {
-      throw 'No API configuration for Tree';
+      throw new Error('No API configuration for Tree');
     }
 
     const urlMap = {

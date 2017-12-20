@@ -12,7 +12,7 @@ import {TreeActionsService} from './src/store/treeActions.service';
 import {NodeDispatcherService} from './src/service/nodesDispatcher.service';
 import {TreeEffectsService} from './src/store/treeEffects.service';
 import {ITreeState, ITreeData, ITreeAction} from './src/store/ITreeState';
-import {treeReducer} from './src/store/treeReducer';
+import {treeStateSelector} from './src/store/treeReducer'
 export {
   IApiConfig,
   IAppConfig,
@@ -28,7 +28,7 @@ export {
   TreeActionsService,
   TreeComponent,
   TreeEffectsService,
-  treeReducer,
   TreeModel,
   TreeModule,
+  treeStateSelector
 }
