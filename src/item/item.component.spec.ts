@@ -8,7 +8,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ITreeAction, ITreeData, ITreeState} from '../store/ITreeState';
 import {Store} from '@ngrx/store';
 import {TreeActionsService} from '../store/treeActions.service';
-import {ContextMenuService, IContextMenuClickEvent} from 'angular2-contextmenu';
+import {ContextMenuService, IContextMenuClickEvent} from 'ngx-contextmenu';
 import {Actions} from '@ngrx/effects';
 import {Observable} from 'rxjs/Observable';
 import {DragAndDrop} from '../dragAndDrop/dragAndDrop.service';

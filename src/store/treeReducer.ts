@@ -1,7 +1,7 @@
 import {ITreeAction, ITreeData, ITreeState} from './ITreeState';
-import {Action} from '@ngrx/store';
 import {TreeActionsService} from './treeActions.service';
 import {IOuterNode} from '../interfaces/IOuterNode';
+import {createFeatureSelector} from '@ngrx/store';
 
 function copyState(state: ITreeState, treeId: string = null) {
   let newState = {};
@@ -23,12 +23,12 @@ function copyState(state: ITreeState, treeId: string = null) {
   return newState;
 }
 
-function removeNode(state: ITreeState, action: Action): ITreeState {
+function removeNode(state: ITreeState, action: ITreeAction): ITreeState {
   const newState = copyState(state, action.payload.treeId);
-  const parentId = action.payload.parentId;
   const treeId = action.payload.treeId;
   const treeState = newState[treeId];
   const node = action.payload.node;
+  const parentId = node.parentId;
 
   if (node.id) {
     delete treeState[node.id];
@@ -75,7 +75,7 @@ function loadNodes(state: ITreeState, action: ITreeAction) {
 }
 
 
-function insertNode(state: ITreeState, action: Action): ITreeState {
+function insertNode(state: ITreeState, action: ITreeAction): ITreeState {
   const newState = copyState(state, action.payload.treeId);
   const newNode: IOuterNode = {
     id: null,
@@ -125,7 +125,7 @@ function saveNode(state: ITreeState, action: ITreeAction): ITreeState {
   return newState;
 }
 
-function moveNode(state: ITreeState, action: Action) {
+function moveNode(state: ITreeState, action: ITreeAction) {
   const newState = copyState(state, action.payload.treeId);
   const oldNode = action.payload.source;
   const newNode = action.payload.target;
@@ -192,3 +192,5 @@ export function treeReducer(state: ITreeState = {}, action: ITreeAction): ITreeS
   }
 
 }
+
+export const treeStateSelector = createFeatureSelector<ITreeState>('trees');

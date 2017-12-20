@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {IConfiguration, IContextMenu, ITreeState, ITreeData, TreeModel, TreeActionsService, NodeDispatcherService} from '../../../../main';
+import {IConfiguration, IContextMenu, ITreeState, ITreeData, TreeModel, TreeActionsService, NodeDispatcherService, treeStateSelector} from '../../../../main';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs/Observable';
 import {TreeTwoNodeService} from './treeTwoNode.service';
+import {filter, map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-tree-two',
@@ -35,12 +36,14 @@ export class TreeTwoComponent implements OnInit {
 
     this.store.dispatch(this.treeActions.registerTree(treeId));
 
-    this.folders = this.store.select('trees')
-      .map((data: ITreeState) => {
-        return data[treeId];
-      })
-      .filter((data: ITreeData) => !!data)
-    ;
+
+    this.folders = this.store.select(treeStateSelector)
+      .pipe(
+        map((data: ITreeState) => {
+          return data[treeId];
+        }),
+        filter((data: ITreeData) => !!data)
+      );
     this.treeModel = new TreeModel(this.folders, this.treeConfiguration);
   }
 }

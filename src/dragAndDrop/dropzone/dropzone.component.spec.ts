@@ -1,10 +1,10 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {DropzoneComponent} from './dropzone.component';
-import {TranslateModule} from '@ngx-translate/core';
 import {DragAndDrop} from '../dragAndDrop.service';
 import {TreeModel} from '../../models/TreeModel';
 import {IDragElement} from '../../interfaces/IDragAndDrop';
+import {TranslateModule} from 'ng2-translate';
 
 
 describe('DropzoneComponent', () => {

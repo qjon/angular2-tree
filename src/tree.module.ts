@@ -1,10 +1,8 @@
-import {NgModule, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {NgModule, CUSTOM_ELEMENTS_SCHEMA, ModuleWithProviders} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ItemComponent} from './item/item.component';
 import {NodeService} from './service/node.service';
-import {HttpModule} from '@angular/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {ContextMenuModule} from 'angular2-contextmenu';
 import {TreeComponent} from './tree.component';
 import {DndModule, DraggableComponent} from 'ng2-dnd';
 import {DragAndDrop} from './dragAndDrop/dragAndDrop.service';
@@ -16,30 +14,42 @@ import {StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
 import {TreeEffectsService} from './store/treeEffects.service';
 import {NodeDispatcherService} from './service/nodesDispatcher.service';
-import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {TranslateModule, TranslateService} from 'ng2-translate';
+import {HttpClientModule} from '@angular/common/http';
+import {ContextMenuModule} from 'ngx-contextmenu';
+import {treeReducer} from './store/treeReducer';
 
 @NgModule({
   imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
     CommonModule,
     ContextMenuModule,
     DndModule.forRoot(),
-    EffectsModule.run(TreeEffectsService),
-    HttpModule,
+    EffectsModule.forFeature([TreeEffectsService]),
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    StoreModule.forFeature('trees', treeReducer),
     TranslateModule,
-    StoreModule
   ],
   declarations: [TreeComponent, ItemComponent, DraggableDirective, DroppableDirective, DropzoneComponent],
   exports: [TreeComponent, ItemComponent, DraggableDirective, DroppableDirective, DropzoneComponent, DraggableComponent, StoreModule, EffectsModule],
-  providers: [DragAndDrop, NodeService, TreeActionsService, TreeEffectsService, NodeDispatcherService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TreeModule {
+
+  public static forRoot(): ModuleWithProviders {
+    return {
+      ngModule: TreeModule,
+      providers: [
+        DragAndDrop,
+        NodeDispatcherService,
+        NodeService,
+        TreeActionsService,
+        TreeEffectsService
+      ]
+    }
+  }
+
   public constructor(private translate: TranslateService) {
     this.setTranslationForEN();
     this.setTranslationForPL();

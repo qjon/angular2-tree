@@ -9,7 +9,7 @@ export interface DropConfig {
 
 
 @Directive({
-  selector: '[ri-droppable]'
+  selector: '[riDroppable]'
 })
 export class DroppableDirective implements OnInit {
   @Input() data: IOuterNode;
@@ -42,7 +42,7 @@ export class DroppableDirective implements OnInit {
     this.initConfig();
 
     if (!this.data) {
-      throw 'DroppableDirective needs data';
+      throw new Error('DroppableDirective needs data');
     }
   }
 
@@ -89,7 +89,9 @@ export class DroppableDirective implements OnInit {
     };
 
     for (const key in defaultConfig) {
-      this.dropConfig[key] = this.dropConfig[key] || defaultConfig[key];
+      if (defaultConfig.hasOwnProperty(key)) {
+        this.dropConfig[key] = this.dropConfig[key] || defaultConfig[key];
+      }
     }
   }
 }

@@ -31,7 +31,7 @@ describe('NodeDispatcherService', () => {
       expect(() => {
         service.get(OTHER_SERVICE_NAME)
       })
-        .toThrow('[NodeDispatcherService] No service for key ' + OTHER_SERVICE_NAME);
+        .toThrow(new Error('[NodeDispatcherService] No service for key ' + OTHER_SERVICE_NAME));
     });
 
     it('should throw exception if service not found', () => {

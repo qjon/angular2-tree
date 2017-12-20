@@ -3,6 +3,7 @@ import {Observable} from 'rxjs/Observable';
 import {IConfiguration} from '../interfaces/IConfiguration';
 import {ITreeData} from '../store/ITreeState';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {map} from 'rxjs/operators';
 
 export class TreeModel {
   public currentSelectedNode$: BehaviorSubject<IOuterNode> = new BehaviorSubject(null);
@@ -22,10 +23,12 @@ export class TreeModel {
 
   public getChildren(nodeId: string | null) {
     return this.nodes$
-      .map((state: ITreeData): IOuterNode[] => this.getNodesByParentId(state, nodeId))
-      .map((nodes: IOuterNode[]) => {
-        return nodes.sort(this.sortNodes);
-      });
+      .pipe(
+        map((state: ITreeData): IOuterNode[] => this.getNodesByParentId(state, nodeId)),
+        map((nodes: IOuterNode[]) => {
+          return nodes.sort(this.sortNodes);
+        })
+      );
   }
 
   private initConfiguration(): void {

@@ -32,7 +32,7 @@ export class TreeActionsService {
     };
   }
 
-  public editNodeStart(node: IOuterNode): Action {
+  public editNodeStart(node: IOuterNode): ITreeAction {
     return {
       type: TreeActionsService.TREE_EDIT_NODE_START,
       payload: {

@@ -8,7 +8,7 @@ import {By} from '@angular/platform-browser';
 
 @Component({
   template: `
-    <div ri-draggable [data]="data" [dragZone]="dragZone"></div>`
+    <div riDraggable [data]="data" [dragZone]="dragZone"></div>`
 })
 class FakeComponent {
   public data: any;

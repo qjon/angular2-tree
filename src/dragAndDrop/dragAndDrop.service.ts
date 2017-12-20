@@ -1,6 +1,9 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {IDragAndDrop, IDragElement, IDropElement} from '../interfaces/IDragAndDrop';
+import {Subject} from 'rxjs/Subject';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/operator/withLatestFrom';
 
 @Injectable()
 export class DragAndDrop {
