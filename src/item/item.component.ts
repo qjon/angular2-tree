@@ -1,6 +1,4 @@
-import {
-  Component, ViewChild, Input, ViewEncapsulation, OnInit, AfterViewInit
-} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {ContextMenuComponent, ContextMenuService} from 'ngx-contextmenu';
 import {IOuterNode} from '../interfaces/IOuterNode';
@@ -50,7 +48,6 @@ export class ItemComponent implements OnInit, AfterViewInit {
 
   /**
    * Form field to change data name
-   * @type {FormControl}
    */
   public nameField = new FormControl();
 
@@ -73,15 +70,11 @@ export class ItemComponent implements OnInit, AfterViewInit {
   protected isStartSave = false;
 
 
-  /**
-   * @param contextMenuService
-   */
   public constructor(protected store: Store<ITreeState>,
                      protected treeActionsService: TreeActionsService,
                      protected contextMenuService: ContextMenuService,
                      protected actions$: Actions) {
-
-    this.actions$
+    actions$
       .ofType(TreeActionsService.TREE_EXPAND_NODE)
       .pipe(
         filter((action: ITreeAction): boolean => {

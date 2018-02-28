@@ -1,7 +1,7 @@
 import {ITreeAction, ITreeData, ITreeState} from './ITreeState';
 import {TreeActionsService} from './treeActions.service';
 import {IOuterNode} from '../interfaces/IOuterNode';
-import {createFeatureSelector} from '@ngrx/store';
+import * as store from '@ngrx/store';
 
 function copyState(state: ITreeState, treeId: string = null) {
   let newState = {};
@@ -193,4 +193,4 @@ export function treeReducer(state: ITreeState = {}, action: ITreeAction): ITreeS
 
 }
 
-export const treeStateSelector = createFeatureSelector<ITreeState>('trees');
+export const treeStateSelector = store.createFeatureSelector  <ITreeState>('trees');

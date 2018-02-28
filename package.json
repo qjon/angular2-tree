@@ -5,7 +5,10 @@
   "angular-cli": {},
   "scripts": {
     "start": "ng serve",
-    "build": "ng build",
+    "build": "npm run build:inline && npm run build:esm2015 && npm run build:fesm2015",
+    "build:inline": "rm -rf ./tmp && rsync -a --exclude *spec.ts *.ts  ./tmp & node inlineAssets.js",
+    "build:esm2015": "ngc -p tsconfig-es2015.json",
+    "build:fesm2015": "rollup -c rollup-esm2015.conf.js",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "test": "./node_modules/.bin/karma --config karma.conf.js start",
@@ -43,7 +46,7 @@
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
-    "@angular/cli": "1.4.4",
+    "@angular/cli": "^1.7.1",
     "@angular/compiler-cli": "^5.0.0",
     "@angular/language-service": "^5.0.0",
     "@types/jasmine": "~2.5.53",
@@ -51,6 +54,7 @@
     "@types/node": "~6.0.60",
     "angular-cli-ghpages": "^0.5.1",
     "codelyzer": "~3.0.1",
+    "gulp-inline-ng2-template": "^4.1.0",
     "jasmine-core": "~2.6.2",
     "jasmine-spec-reporter": "~4.1.0",
     "karma": "~1.7.0",
@@ -60,9 +64,14 @@
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-diff-reporter": "^1.1.1",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "ng2-inline-template": "^0.1.1",
     "protractor": "~5.1.2",
+    "rollup": "^0.56.3",
+    "rollup-plugin-commonjs": "^8.3.0",
+    "rollup-plugin-node-resolve": "^3.0.3",
     "ts-node": "~3.0.4",
     "tslint": "~5.7.0",
-    "typescript": "~2.5.2"
+    "typescript": "^2.7.2",
+    "vinyl-fs": "^3.0.2"
   }
 }

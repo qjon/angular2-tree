@@ -60,15 +60,6 @@ export class NodeService implements INodeService {
     return this.http.delete<IOuterNode>(this.getPath('REMOVE', nodeId), {params});
   }
 
-  /**
-   *
-   * Replace in url nodeIds
-   *
-   * @param type
-   * @param nodeId
-   * @param destNodeId
-   * @returns {void|string|any}
-   */
   protected getPath(type: string, nodeId: string, destNodeId: string = null) {
     if (!this.apiConfig) {
       throw new Error('No API configuration for Tree');
