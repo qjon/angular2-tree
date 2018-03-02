@@ -40,3 +40,6 @@ testem.log
 .DS_Store
 Thumbs.db
 proxy.config.json
+
+
+.rpt2_cache

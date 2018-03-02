@@ -2,11 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {
   IConfiguration,
   IContextMenu,
-  ITreeState,
   ITreeData,
+  ITreeState,
+  NodeDispatcherService,
   TreeActionsService,
   TreeModel,
-  NodeDispatcherService,
   treeStateSelector
 } from '../../../../main';
 import {Store} from '@ngrx/store';

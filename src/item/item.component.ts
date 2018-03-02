@@ -10,26 +10,29 @@ import {TreeModel} from '../models/TreeModel';
 import {Actions} from '@ngrx/effects';
 import {animate, AnimationEvent, state, style, transition, trigger} from '@angular/animations';
 import {filter} from 'rxjs/operators';
+import {AnimationTriggerMetadata} from '@angular/animations/src/animation_metadata';
+
+export function expand(): AnimationTriggerMetadata {
+  return trigger('isExpanded', [
+    state('inactive', style({
+      height: 0,
+      opacity: 0,
+      transform: 'scaleY(0)'
+    })),
+    state('active', style({
+      transform: 'scaleY(1)'
+    })),
+    transition('inactive => active', animate('300ms')),
+    transition('active => inactive', animate('300ms'))
+  ]);
+}
 
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'ri-tree-item',
   templateUrl: './item.component.html',
   styleUrls: ['./item.component.less'],
-  animations: [
-    trigger('isExpanded', [
-      state('inactive', style({
-        height: 0,
-        opacity: 0,
-        transform: 'scaleY(0)'
-      })),
-      state('active', style({
-        transform: 'scaleY(1)'
-      })),
-      transition('inactive => active', animate('300ms')),
-      transition('active => inactive', animate('300ms'))
-    ])
-  ]
+  animations: [expand()]
 })
 export class ItemComponent implements OnInit, AfterViewInit {
   /**

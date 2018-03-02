@@ -6,42 +6,26 @@ import typescript from 'rollup-plugin-typescript2';
 import angular from 'rollup-plugin-angular-aot';
 
 export default {
-  input: 'tmp/esm2015/main.js',
+  input: 'tmp/esm5/main.js',
   output: {
     format: 'es',
-    file: 'dist/esm2015/angular2-tree.es2015.js',
+    file: 'dist/esm5/angular2-tree.es5.js',
     name: 'angular2tree',
     sourcemap: false,
-    globals: {
-      '@angular/common': 'vendor._angular_common',
-      '@angular/compiler': 'vendor._angular_compiler',
-      '@angular/core': 'vendor._angular_core',
-      '@angular/http': 'vendor._angular_http',
-      '@angular/platform-browser': 'vendor._angular_platformBrowser',
-      '@angular/platform-browser-dynamic': 'vendor._angular_platformBrowserDynamic',
-      '@angular/router': 'vendor._angular_router',
-      '@angular/forms': 'vendor._angular_forms',
-      //   '@ngrx/core': 'vendor._ngrx_core',
-      //   '@ngrx/store': 'vendor._ngrx_store',
-      //   '@ngrx/effects': 'vendor._ngrx_effects',
-      //   'ngx-contextmenu': 'vendor._ng_contextmenu',
-      'rxjs/BehaviorSubject': 'vendor:rxjs_BehaviorSubject',
-      'rxjs/Observable': 'vendor:rxjs_Observable',
-      'ng2-translate': 'vendor._ng_translate',
-      'ng2-dnd': 'vendor._ng_dnd',
-    }
+    globals: {}
   },
   context: 'this',
   plugins: [
     angular(),
     typescript(),
     alias({
-      rxjs: __dirname + '/node_modules/rxjs/_esm2015'
+      rxjs: __dirname + '/node_modules/rxjs-es'
     }),
     resolve({
       jsnext: true,
       main: true,
-      browser: true
+      browser: true,
+      modulesOnly: true
     })
   ],
   external: [
