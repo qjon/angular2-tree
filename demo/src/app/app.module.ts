@@ -9,7 +9,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {TreeModule} from '../../../src/tree.module';
+import {TreeModule} from '../../../main';
 import {DndModule} from 'ng2-dnd';
 
 @NgModule({

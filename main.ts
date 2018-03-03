@@ -13,3 +13,7 @@ export * from './src/service/nodesDispatcher.service';
 export * from './src/store/treeEffects.service';
 export * from './src/store/ITreeState';
 export * from './src/store/treeReducer'
+export * from './src/dragAndDrop/dragAndDrop.service';
+export * from './src/dragAndDrop/draggable.directive';
+export * from './src/dragAndDrop/droppable.directive';
+export * from './src/dragAndDrop/dropzone/dropzone.component';

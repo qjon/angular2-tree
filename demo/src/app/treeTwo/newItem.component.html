@@ -12,7 +12,7 @@
     <span *ngIf="!isEditMode" class="tree-item-name" (click)="onSelect()">{{node.name}}</span>
     <form name="form">
       <input #inputElement type="text" class="form-control" *ngIf="isEditMode" [formControl]="nameField"
-             name="name" (keydown)="onChange($event)" (blur)="onBlur($event)"/>
+             name="name" (keydown)="onChange($event)" (blur)="onBlur()"/>
     </form>
   </div>
   <div class="col-sm-4 text-right">

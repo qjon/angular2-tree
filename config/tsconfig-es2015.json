@@ -3,12 +3,12 @@
     "declaration": true,
     "module": "es2015",
     "target": "es2015",
-    "baseUrl": "./tmp",
+    "baseUrl": "../tmp",
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
-    "outDir": "./tmp/esm2015",
-    "rootDir": "./tmp",
+    "outDir": "../tmp/esm2015",
+    "rootDir": "../tmp",
     "skipLibCheck": true,
     "lib": [
       "es2015",
@@ -16,16 +16,16 @@
     ]
   },
   "files": [
-    "./tmp/public_api.ts"
+    "../tmp/public_api.ts"
   ],
   "exclude": [
-    "./node_modules"
+    "../node_modules"
   ],
   "angularCompilerOptions": {
     "annotateForClosureCompiler": true,
     "strictMetadataEmit": true,
     "skipTemplateCodegen": true,
     "flatModuleOutFile": "angular2-tree.js",
-    "flatModuleId": "angular2-tree"
+    "flatModuleId": "@rign/angular2-tree"
   }
 }

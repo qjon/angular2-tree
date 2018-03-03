@@ -94,5 +94,5 @@ export default {
     'rxjs/Observable',
     'rxjs/Subscription',
     'ngx-contextmenu'
-  ],
+  ]
 }

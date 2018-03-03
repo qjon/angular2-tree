@@ -1,10 +1,12 @@
+# angular2-tree
+
+Simple component to display tree structure
+
 [![npm (scoped)](https://img.shields.io/npm/v/@rign/angular2-tree.svg)]()
 [![Build Status](https://travis-ci.org/qjon/angular2-tree.svg?branch=master)](https://travis-ci.org/qjon/angular2-tree)
 [![npm version](https://badge.fury.io/js/%40rign%2Fangular2-tree.svg)](https://badge.fury.io/js/%40rign%2Fangular2-tree.svg)
 [![npm](https://img.shields.io/npm/dm/@rign\/angular2-tree.svg)](https://img.shields.io/npm/dm/@rign\/angular2-tree.svg)
 [![npm](https://img.shields.io/npm/l/@rign\/angular2-tree.svg)](https://github.com/qjon/angular2-tree/blob/master/LICENSE)
-
-# angular2-tree
 
 ## Installation
 
@@ -13,9 +15,9 @@
 
 ## Usage
     
-Include _TreeModule_  in your application module and create Store with empty state and initialize Effects
+Include _TreeModule_  in your application module and create Store with empty state and initialize Effects. 
 
-    import {TreeModule} from '@rign/angular2-tree/main';
+    import {TreeModule} from '@rign/angular2-tree';
     
     @NgModule({
       declarations: [
@@ -29,7 +31,7 @@ Include _TreeModule_  in your application module and create Store with empty sta
       ]
     })
     
-You need also init translations module, because Tree needs it to translate all labels. 
+You need also init translations and animations module, because Tree needs it to translate all labels and animate expanding and collapsing. 
 
     @NgModule({
       declarations: [
@@ -37,6 +39,7 @@ You need also init translations module, because Tree needs it to translate all l
       ],
       imports: [
         ...
+        BrowserAnimationsModule,
         TranslationModule.forRoot(),
         TreeModule.forRoot()
       ]
@@ -103,6 +106,18 @@ In component where you create tree, you should register _tree store_, create _Tr
       }
     }
 
+### CSS Styles
+
+To load default CSS styles and makes our tree looks nice you have to add 2 CSS files to your _angular-cli.json_ file:
+
+    ...
+    "styles": [
+      "../node_modules/bootstrap/dist/css/bootstrap.css",
+      "../node_modules/font-awesome/css/font-awesome.css",
+      "../node_modules/@rign/angular2-tree/styles.css",
+      "styles.css"
+    ],
+  
 
 ### Create own item template
 
@@ -233,6 +248,10 @@ At the end do not forget to add this effects to your app.
  
 ## Changes
 
+### v2.3.0
+* fix problem with building tree component in AOT
+* fix few small issues
+
 ### v2.2.0
 * add _forRoot_ static method
 * change translation module to _ng2-translate_
@@ -302,6 +321,9 @@ At the end do not forget to add this effects to your app.
 ## Demo
 
 Working demo with _local storage_ you can find [here](https://qjon.github.io/angular2-tree/).
+To run Demo locally clone this repository and run
+
+    npm start
 
 ## License
 
