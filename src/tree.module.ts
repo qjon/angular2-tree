@@ -1,4 +1,4 @@
-import {NgModule, CUSTOM_ELEMENTS_SCHEMA, ModuleWithProviders} from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ItemComponent} from './item/item.component';
 import {NodeService} from './service/node.service';
@@ -23,7 +23,7 @@ import {treeReducer} from './store/treeReducer';
   imports: [
     CommonModule,
     ContextMenuModule,
-    DndModule.forRoot(),
+    DndModule,
     EffectsModule.forFeature([TreeEffectsService]),
     HttpClientModule,
     FormsModule,
