@@ -1,5 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {IConfiguration, IContextMenu, ITreeState, ITreeData, TreeModel, TreeActionsService, NodeDispatcherService, treeStateSelector} from '../../../../main';
+import {
+  IConfiguration,
+  IContextMenu,
+  ITreeData,
+  ITreeState,
+  NodeDispatcherService,
+  TreeActionsService,
+  TreeModel,
+  treeStateSelector
+} from '../../../../main';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs/Observable';
 import {TreeTwoNodeService} from './treeTwoNode.service';

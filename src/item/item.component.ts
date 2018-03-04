@@ -1,6 +1,4 @@
-import {
-  Component, ViewChild, Input, ViewEncapsulation, OnInit, AfterViewInit
-} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {ContextMenuComponent, ContextMenuService} from 'ngx-contextmenu';
 import {IOuterNode} from '../interfaces/IOuterNode';
@@ -12,26 +10,29 @@ import {TreeModel} from '../models/TreeModel';
 import {Actions} from '@ngrx/effects';
 import {animate, AnimationEvent, state, style, transition, trigger} from '@angular/animations';
 import {filter} from 'rxjs/operators';
+import {AnimationTriggerMetadata} from '@angular/animations/src/animation_metadata';
+
+export function expand(): AnimationTriggerMetadata {
+  return trigger('isExpanded', [
+    state('inactive', style({
+      height: 0,
+      opacity: 0,
+      transform: 'scaleY(0)'
+    })),
+    state('active', style({
+      transform: 'scaleY(1)'
+    })),
+    transition('inactive => active', animate('300ms')),
+    transition('active => inactive', animate('300ms'))
+  ]);
+}
 
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'ri-tree-item',
   templateUrl: './item.component.html',
   styleUrls: ['./item.component.less'],
-  animations: [
-    trigger('isExpanded', [
-      state('inactive', style({
-        height: 0,
-        opacity: 0,
-        transform: 'scaleY(0)'
-      })),
-      state('active', style({
-        transform: 'scaleY(1)'
-      })),
-      transition('inactive => active', animate('300ms')),
-      transition('active => inactive', animate('300ms'))
-    ])
-  ]
+  animations: [expand()]
 })
 export class ItemComponent implements OnInit, AfterViewInit {
   /**
@@ -50,7 +51,6 @@ export class ItemComponent implements OnInit, AfterViewInit {
 
   /**
    * Form field to change data name
-   * @type {FormControl}
    */
   public nameField = new FormControl();
 
@@ -73,15 +73,11 @@ export class ItemComponent implements OnInit, AfterViewInit {
   protected isStartSave = false;
 
 
-  /**
-   * @param contextMenuService
-   */
   public constructor(protected store: Store<ITreeState>,
                      protected treeActionsService: TreeActionsService,
                      protected contextMenuService: ContextMenuService,
                      protected actions$: Actions) {
-
-    this.actions$
+    actions$
       .ofType(TreeActionsService.TREE_EXPAND_NODE)
       .pipe(
         filter((action: ITreeAction): boolean => {
