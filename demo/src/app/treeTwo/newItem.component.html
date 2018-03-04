@@ -12,7 +12,7 @@
     <span *ngIf="!isEditMode" class="tree-item-name" (click)="onSelect()">{{node.name}}</span>
     <form name="form">
       <input #inputElement type="text" class="form-control" *ngIf="isEditMode" [formControl]="nameField"
-             name="name" (keydown)="onChange($event)" (blur)="onBlur($event)"/>
+             name="name" (keydown)="onChange($event)" (blur)="onBlur()"/>
     </form>
   </div>
   <div class="col-sm-4 text-right">
@@ -20,12 +20,13 @@
         <button class="btn btn-primary" (click)="onEdit($event)" [disabled]="isEditMode">
           <i class="fa fa-edit"></i>
         </button>
-        <button class="btn btn-danger" (click)="onDelete()" [disabled]="isEditMode">
+        <button class="btn btn-danger" (click)="onDelete($event)" [disabled]="isEditMode">
           <i class="fa fa-trash"></i>
         </button>
       </span>
   </div>
 </div>
 <div class="tree" *ngIf="isExpanded">
-  <new-tree-item  *ngFor="let child of children$ | async" [node]="child" [treeModel]="treeModel" [contextMenu]="contextMenu"></new-tree-item>
+  <new-tree-item *ngFor="let child of children$ | async" [node]="child" [treeModel]="treeModel"
+                 [contextMenu]="contextMenu"></new-tree-item>
 </div>

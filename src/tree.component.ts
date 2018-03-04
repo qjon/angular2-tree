@@ -1,4 +1,4 @@
-import {Component, OnChanges, Input, ViewEncapsulation, ViewChild, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {IOuterNode} from './interfaces/IOuterNode';
 import {IContextMenu} from './interfaces/IContextMenu';
 import {TreeModel} from './models/TreeModel';
@@ -23,8 +23,6 @@ export class TreeComponent implements OnInit, OnChanges {
 
   /**
    * List of default options for context menu
-   *
-   * @type {{name: string; text: string; iconCls: string}[]}
    */
   private defaultOptions: IContextMenu[] = [
     {
@@ -41,8 +39,6 @@ export class TreeComponent implements OnInit, OnChanges {
 
   /**
    * List of context menu items
-   *
-   * @type {Array}
    */
   public menuList: IContextMenu[] = [];
 
@@ -117,7 +113,6 @@ export class TreeComponent implements OnInit, OnChanges {
         })
       )
       .subscribe((data: IDragAndDrop) => {
-
         const dropNode = data.dropNode ? data.dropNode.data : null;
         this.store.dispatch(this.treeActions.moveNode(data.type, this.treeModel.treeId, data.dragNode.data, dropNode));
       });
