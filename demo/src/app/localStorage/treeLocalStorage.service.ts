@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {NodeService, IOuterNode} from '../../../../main';
+import {IOuterNode, NodeService} from '../../../../main';
 import {Observable} from 'rxjs/Observable';
 import {UUID} from 'angular2-uuid';
 
@@ -66,7 +66,10 @@ export class TreeLocalStorageNodeService extends NodeService {
     } else {
       return Observable.throw('Node is not empty');
     }
+  }
 
+  public setAllNodes(nodes: IOuterNode[]): void {
+    this.nodes = nodes;
   }
 
   private findIndexByNodeId(nodeId: string): number {

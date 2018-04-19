@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {IOuterNode} from '../interfaces/IOuterNode';
-import {Action} from '@ngrx/store';
 import {ITreeAction} from './ITreeState';
 
 @Injectable()
@@ -22,13 +21,12 @@ export class TreeActionsService {
   static TREE_MOVE_NODE_ERROR = 'TREE_MOVE_NODE_ERROR';
 
   static TREE_REGISTER = 'TREE_REGISTER';
+  static TREE_SET_ALL_NODES = 'TREE_SET_ALL_NODES';
 
-  public registerTree(treeId: string): ITreeAction {
+  public registerTree(treeId: string, silent = false, nodes: IOuterNode[] = []): ITreeAction {
     return {
       type: TreeActionsService.TREE_REGISTER,
-      payload: {
-        treeId: treeId
-      }
+      payload: {treeId, silent, nodes}
     };
   }
 
@@ -184,6 +182,16 @@ export class TreeActionsService {
         treeId: treeId,
         source: source,
         target: target
+      }
+    };
+  }
+
+  public setAllNodes(treeId: string, nodes: IOuterNode[]): ITreeAction {
+    return {
+      type: TreeActionsService.TREE_SET_ALL_NODES,
+      payload: {
+        treeId: treeId,
+        nodes: nodes
       }
     };
   }

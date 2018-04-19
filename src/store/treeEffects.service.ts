@@ -15,7 +15,13 @@ export class TreeEffectsService {
   @Effect() register$ = this.actions$
     .ofType(TreeActionsService.TREE_REGISTER)
     .pipe(
-      map((action: ITreeAction): ITreeAction => this.treeActions.loadTree(action.payload.treeId, null))
+      map((action: ITreeAction): ITreeAction => {
+        if (action.payload.silent) {
+          return this.treeActions.setAllNodes(action.payload.treeId, action.payload.nodes);
+        } else {
+          return this.treeActions.loadTree(action.payload.treeId, null)
+        }
+      })
     );
 
   @Effect() load$ = this.actions$

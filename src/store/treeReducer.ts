@@ -1,7 +1,7 @@
 import {ITreeAction, ITreeData, ITreeState} from './ITreeState';
 import {TreeActionsService} from './treeActions.service';
 import {IOuterNode} from '../interfaces/IOuterNode';
-import {createFeatureSelector} from '@ngrx/store';
+import {createFeatureSelector, createSelector} from '@ngrx/store';
 import {MemoizedSelector} from '@ngrx/store/src/selector';
 
 function copyState(state: ITreeState, treeId: string = null) {
@@ -167,6 +167,23 @@ function registerTree(state: ITreeState, action: ITreeAction) {
   return newState;
 }
 
+
+function setAllNodes(state: ITreeState, action: ITreeAction): ITreeState {
+  const newState = copyState(state, action.payload.treeId);
+  const treeId = action.payload.treeId;
+  const nodes = action.payload.nodes;
+  const newNodes: ITreeData = {};
+
+  nodes.forEach((nodeData: IOuterNode) => {
+    nodeData.treeId = treeId;
+    newNodes[nodeData.id] = nodeData;
+  });
+
+  newState[treeId] = newNodes;
+
+  return newState;
+}
+
 export function treeReducer(state: ITreeState = {}, action: ITreeAction): ITreeState {
   switch (action.type) {
     case TreeActionsService.TREE_REGISTER:
@@ -181,6 +198,8 @@ export function treeReducer(state: ITreeState = {}, action: ITreeAction): ITreeS
       return loadNodes(state, action);
     case TreeActionsService.TREE_MOVE_NODE_SUCCESS:
       return moveNode(state, action);
+    case TreeActionsService.TREE_SET_ALL_NODES:
+      return setAllNodes(state, action);
     case TreeActionsService.TREE_DELETE_NODE:
     case TreeActionsService.TREE_EDIT_NODE_START:
     case TreeActionsService.TREE_EXPAND_NODE:
@@ -195,3 +214,7 @@ export function treeReducer(state: ITreeState = {}, action: ITreeAction): ITreeS
 }
 
 export const treeStateSelector: MemoizedSelector<object, ITreeState> = createFeatureSelector<ITreeState>('trees');
+
+export function treeSelector(treeId: string): MemoizedSelector<object, ITreeData> {
+  return createSelector(treeStateSelector, (state: ITreeState) => state[treeId] || {});
+}

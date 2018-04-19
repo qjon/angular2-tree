@@ -146,7 +146,10 @@ export class ItemComponent implements OnInit, AfterViewInit {
     }
 
     this.isExpanded = true;
-    this.store.dispatch(this.treeActionsService.loadTree(this.treeModel.treeId, this.node.id));
+
+    if (!this.treeModel.isFullyLoaded) {
+      this.store.dispatch(this.treeActionsService.loadTree(this.treeModel.treeId, this.node.id));
+    }
   }
 
   public onAnimationDone($event: AnimationEvent): void {

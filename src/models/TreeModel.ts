@@ -12,8 +12,13 @@ export class TreeModel {
     return this.configuration.treeId;
   }
 
+  public get isFullyLoaded(): boolean {
+    return this._fullyLoaded;
+  }
+
   public constructor(private nodes$: Observable<ITreeData>,
-                     public configuration: IConfiguration) {
+                     public configuration: IConfiguration,
+                     private _fullyLoaded = false) {
     this.initConfiguration();
   }
 

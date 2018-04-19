@@ -18,6 +18,8 @@ import {TranslateModule, TranslateService} from 'ng2-translate';
 import {HttpClientModule} from '@angular/common/http';
 import {ContextMenuModule} from 'ngx-contextmenu';
 import {treeReducer} from './store/treeReducer';
+import {TreeModelGeneratorService} from './service/treeModelGenerator.service';
+import {TreeActionsDispatcherService} from './store/treeActionsDispatcher.service';
 
 @NgModule({
   imports: [
@@ -44,8 +46,10 @@ export class TreeModule {
         DragAndDrop,
         NodeDispatcherService,
         NodeService,
+        TreeActionsDispatcherService,
         TreeActionsService,
-        TreeEffectsService
+        TreeEffectsService,
+        TreeModelGeneratorService
       ]
     }
   }

@@ -1,18 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {
-  IConfiguration,
-  IContextMenu,
-  ITreeData,
-  ITreeState,
-  NodeDispatcherService,
-  TreeActionsService,
-  TreeModel,
-  treeStateSelector
-} from '../../../../main';
-import {Store} from '@ngrx/store';
+import {IConfiguration, IContextMenu, ITreeData, TreeModel} from '../../../../main';
 import {Observable} from 'rxjs/Observable';
 import {TreeOneNodeService} from './treeOneNode.service';
-import {filter, map} from 'rxjs/operators';
+import {TreeModelGeneratorService} from '../../../../src/service/treeModelGenerator.service';
+import {IOuterNode} from '../../../../src/interfaces/IOuterNode';
 
 @Component({
   selector: 'app-tree-one',
@@ -34,26 +25,15 @@ export class TreeOneComponent implements OnInit {
 
   public treeModel: TreeModel;
 
-  public constructor(private store: Store<ITreeState>,
-                     private treeActions: TreeActionsService,
-                     private nodeDispatcherService: NodeDispatcherService,
+  public constructor(private treeModelGenerator: TreeModelGeneratorService,
                      private nodeService: TreeOneNodeService) {
   }
 
   public ngOnInit() {
-    const treeId = this.treeConfiguration.treeId;
-    this.nodeDispatcherService.register(treeId, this.nodeService);
+    const nodes: IOuterNode[] = JSON.parse(localStorage.getItem('treeOne'));
 
-    this.store.dispatch(this.treeActions.registerTree(treeId));
+    this.nodeService.setAllNodes(nodes);
 
-    this.folders = this.store.select(treeStateSelector)
-      .pipe(
-        map((data: ITreeState) => {
-          return data[treeId];
-        }),
-        filter((data: ITreeData) => !!data)
-      );
-
-    this.treeModel = new TreeModel(this.folders, this.treeConfiguration);
+    this.treeModel = this.treeModelGenerator.createTreeModel(this.treeConfiguration, this.nodeService, nodes);
   }
 }
