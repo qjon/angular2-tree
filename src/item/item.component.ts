@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {ContextMenuComponent, ContextMenuService} from 'ngx-contextmenu';
 import {IOuterNode} from '../interfaces/IOuterNode';
@@ -11,6 +11,7 @@ import {Actions} from '@ngrx/effects';
 import {animate, AnimationEvent, state, style, transition, trigger} from '@angular/animations';
 import {filter} from 'rxjs/operators';
 import {AnimationTriggerMetadata} from '@angular/animations/src/animation_metadata';
+import {Subscription} from 'rxjs/Subscription';
 
 export function expand(): AnimationTriggerMetadata {
   return trigger('isExpanded', [
@@ -34,7 +35,7 @@ export function expand(): AnimationTriggerMetadata {
   styleUrls: ['./item.component.less'],
   animations: [expand()]
 })
-export class ItemComponent implements OnInit, AfterViewInit {
+export class ItemComponent implements OnInit, OnDestroy, AfterViewInit {
   /**
    * Input field where we can change data name
    */
@@ -72,27 +73,34 @@ export class ItemComponent implements OnInit, AfterViewInit {
 
   protected isStartSave = false;
 
+  protected subscription = new Subscription();
 
   public constructor(protected store: Store<ITreeState>,
                      protected treeActionsService: TreeActionsService,
                      protected contextMenuService: ContextMenuService,
                      protected actions$: Actions) {
-    actions$
-      .ofType(TreeActionsService.TREE_EXPAND_NODE)
-      .pipe(
-        filter((action: ITreeAction): boolean => {
-          return !this.isExpanded && action.payload.node && this.node.id === action.payload.node.id;
+    this.subscription.add(
+      actions$
+        .ofType(TreeActionsService.TREE_EXPAND_NODE)
+        .pipe(
+          filter((action: ITreeAction): boolean => {
+            return !this.isExpanded && action.payload.node && this.node.id === action.payload.node.id;
+          })
+        )
+        .subscribe(() => {
+          this.expand();
         })
-      )
-      .subscribe(() => {
-        this.expand();
-      });
+    );
   }
 
   public ngAfterViewInit() {
     if (this.isEditMode) {
       this.setFocus();
     }
+  }
+
+  public ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   public ngOnInit() {
