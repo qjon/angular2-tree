@@ -3,15 +3,16 @@ import {Actions, Effect} from '@ngrx/effects';
 import {TreeActionsService} from './treeActions.service';
 import {IOuterNode} from '../interfaces/IOuterNode';
 import {Observable} from 'rxjs/Observable';
-import {ITreeAction, ITreeActionPayload} from './ITreeState';
+import {ITreeAction, ITreeActionPayload, ITreeState} from './ITreeState';
 import {NodeDispatcherService} from '../service/nodesDispatcher.service';
 import {DragAndDrop} from '../dragAndDrop/dragAndDrop.service';
-import {catchError, filter, map, mergeMap, switchMap} from 'rxjs/operators';
+import {catchError, filter, map, mergeMap, switchMap, take} from 'rxjs/operators';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/combineLatest';
+import {Store} from '@ngrx/store';
 
 @Injectable()
 export class TreeEffectsService {
-
   @Effect() register$ = this.actions$
     .ofType(TreeActionsService.TREE_REGISTER)
     .pipe(
@@ -89,9 +90,53 @@ export class TreeEffectsService {
       })
     );
 
+  @Effect()
+  public insert$ = this.actions$
+    .ofType(TreeActionsService.TREE_INSERT_NODE)
+    .pipe(
+      map((action: ITreeAction) => {
+        return this.treeActions.expandNode(action.payload.treeId, action.payload.id);
+      })
+    );
+
+  @Effect()
+  public initPathForFullyLoadedTreeEffect$ = this.actions$
+    .ofType(TreeActionsService.TREE_LOAD_PATH)
+    .pipe(
+      filter((action: ITreeAction) => action.payload.hasLoadedNodes),
+      mergeMap((action: ITreeAction) => {
+        return action.payload.ids.map((id: string) => this.treeActions.expandNode(action.payload.treeId, id));
+      })
+    );
+
+
+  @Effect()
+  public initPathForNotFullyLoadedTreeEffect$ = this.actions$
+    .ofType(TreeActionsService.TREE_LOAD_PATH)
+    .pipe(
+      filter((action: ITreeAction) => !action.payload.hasLoadedNodes),
+      switchMap((action: ITreeAction) => {
+        const loadActions = action.payload.ids.map((id: string) => this.loadNodes(action.payload.treeId, id))
+        return Observable.combineLatest(loadActions)
+          .pipe(
+            take(1),
+            map((data: IOuterNode[][]) => {
+              return [action, ...data];
+            })
+          )
+      }),
+      mergeMap(([action, ...data]: [ITreeAction, IOuterNode[]]) => {
+        const loadSuccess = data.map((nodes: IOuterNode[], index) => this.treeActions.loadTreeSuccess(action.payload.treeId, action.payload.ids[index], nodes))
+        const expandNodes = action.payload.ids.map((id: string) => this.treeActions.expandNode(action.payload.treeId, id));
+
+        return [...loadSuccess, ...expandNodes];
+      })
+    );
+
   constructor(private actions$: Actions,
               private treeActions: TreeActionsService,
-              private nodeDispatcherService: NodeDispatcherService) {
+              private nodeDispatcherService: NodeDispatcherService,
+              private store: Store<ITreeState>) {
   }
 
   protected deleteNode(treeId: string, node: IOuterNode): Observable<IOuterNode> {

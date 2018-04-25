@@ -3,13 +3,16 @@
     <i class="fa fa-plus"></i> {{'RI_TREE_LBL_ADD_NODE' | translate}}
   </button>
   <div #customTemplate><!-- no space --><ng-content></ng-content><!-- no space --></div>
-  <div *ngIf="customTemplate.childNodes.length === 0"><ri-tree-item *ngFor="let node of treeModel.getRootNodes() | async" [node]="node" [treeModel]="treeModel"
-                                                                    [contextMenu]="contextMenu"></ri-tree-item>
+  <div *ngIf="customTemplate.childNodes.length === 0"><ri-tree-item
+    *ngFor="let node of treeModel.getRootNodes() | async; trackBy: trackByFn"
+    [node]="node"
+    [treeModel]="treeModel"
+    [contextMenu]="contextMenu"></ri-tree-item>
   </div>
   <ri-dropzone [treeModel]="treeModel"></ri-dropzone>
   <context-menu #contextMenu>
     <ng-template *ngFor="let menuItem of menuList" contextMenuItem let-item
-              (execute)="onContextMenuClick(menuItem.name, $event.item)">
+                 (execute)="onContextMenuClick(menuItem.name, $event.item)">
       <span class="{{menuItem.iconCls}}" style="width: 20px; display: inline-block;"></span>
       {{menuItem.text | translate}}
     </ng-template>

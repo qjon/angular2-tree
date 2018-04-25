@@ -29,6 +29,6 @@ export class TreeModelGeneratorService {
 
     const folders$ = this.store.select(treeSelector(configuration.treeId));
 
-    return new TreeModel(folders$, configuration, isFullyLoaded);
+    return new TreeModel(this.treeActionsDispatcher, folders$, configuration, isFullyLoaded);
   }
 }

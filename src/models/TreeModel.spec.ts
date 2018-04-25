@@ -2,20 +2,27 @@ import {TreeModel} from './TreeModel';
 import {Observable} from 'rxjs/Observable';
 import {ITreeData} from '../store/ITreeState';
 import {IConfiguration} from '../interfaces/IConfiguration';
+import {TreeActionsDispatcherService} from '../store/treeActionsDispatcher.service';
+import SpyObj = jasmine.SpyObj;
 
 describe('TreeModel', () => {
   let treeModel: TreeModel;
   let nodesMock$: Observable<ITreeData>;
   let configurationMock: IConfiguration;
+  let treeActionDispatcherMock: SpyObj<TreeActionsDispatcherService>;
 
   beforeEach(() => {
+    treeActionDispatcherMock = jasmine.createSpyObj<TreeActionsDispatcherService>('TreeActionsDispatcherService', [
+      'loadPath'
+    ]);
+
     configurationMock = {
       disableContextMenu: true
     };
 
     nodesMock$ = new Observable();
 
-    treeModel = new TreeModel(nodesMock$, configurationMock);
+    treeModel = new TreeModel(treeActionDispatcherMock, nodesMock$, configurationMock);
   });
 
   describe('class constructor', () => {

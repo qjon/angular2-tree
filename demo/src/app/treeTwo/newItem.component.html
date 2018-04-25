@@ -27,6 +27,6 @@
   </div>
 </div>
 <div class="tree" *ngIf="isExpanded">
-  <new-tree-item *ngFor="let child of children$ | async" [node]="child" [treeModel]="treeModel"
+  <new-tree-item *ngFor="let child of children$ | async; trackBy: trackByFn" [node]="child" [treeModel]="treeModel"
                  [contextMenu]="contextMenu"></new-tree-item>
 </div>

@@ -76,6 +76,26 @@ function loadNodes(state: ITreeState, action: ITreeAction) {
 }
 
 
+function expandNode(state: ITreeState, action: ITreeAction): ITreeState {
+  const newState = copyState(state, action.payload.treeId);
+  const nodeId = action.payload.id;
+
+  newState[action.payload.treeId][nodeId] = Object.assign({}, newState[action.payload.treeId][nodeId], {isExpanded: true});
+
+  return newState;
+}
+
+
+function collapseNode(state: ITreeState, action: ITreeAction): ITreeState {
+  const newState = copyState(state, action.payload.treeId);
+  const nodeId = action.payload.id;
+
+  newState[action.payload.treeId][nodeId] = Object.assign({}, newState[action.payload.treeId][nodeId], {isExpanded: false});
+
+  return newState;
+}
+
+
 function insertNode(state: ITreeState, action: ITreeAction): ITreeState {
   const newState = copyState(state, action.payload.treeId);
   const newNode: IOuterNode = {
@@ -84,7 +104,8 @@ function insertNode(state: ITreeState, action: ITreeAction): ITreeState {
     name: 'New data',
     parentId: action.payload.id,
     children: [],
-    parents: []
+    parents: [],
+    isExpanded: false
   };
 
   newState[action.payload.treeId][0] = newNode;
@@ -200,9 +221,12 @@ export function treeReducer(state: ITreeState = {}, action: ITreeAction): ITreeS
       return moveNode(state, action);
     case TreeActionsService.TREE_SET_ALL_NODES:
       return setAllNodes(state, action);
+    case TreeActionsService.TREE_EXPAND_NODE:
+      return expandNode(state, action);
+    case TreeActionsService.TREE_COLLAPSE_NODE:
+      return collapseNode(state, action);
     case TreeActionsService.TREE_DELETE_NODE:
     case TreeActionsService.TREE_EDIT_NODE_START:
-    case TreeActionsService.TREE_EXPAND_NODE:
     case TreeActionsService.TREE_LOAD:
     case TreeActionsService.TREE_MOVE_NODE:
     case TreeActionsService.TREE_SAVE_NODE:

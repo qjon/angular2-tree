@@ -4,6 +4,7 @@ import {IConfiguration} from '../interfaces/IConfiguration';
 import {ITreeData} from '../store/ITreeState';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {map} from 'rxjs/operators';
+import {TreeActionsDispatcherService} from '../store/treeActionsDispatcher.service';
 
 export class TreeModel {
   public currentSelectedNode$: BehaviorSubject<IOuterNode> = new BehaviorSubject(null);
@@ -16,7 +17,8 @@ export class TreeModel {
     return this._fullyLoaded;
   }
 
-  public constructor(private nodes$: Observable<ITreeData>,
+  public constructor(private treeActionDispatcher: TreeActionsDispatcherService,
+                     private nodes$: Observable<ITreeData>,
                      public configuration: IConfiguration,
                      private _fullyLoaded = false) {
     this.initConfiguration();
@@ -34,6 +36,10 @@ export class TreeModel {
           return nodes.sort(this.sortNodes);
         })
       );
+  }
+
+  public initPath(path: string[]): void {
+    this.treeActionDispatcher.loadPath(this.configuration.treeId, path, this.isFullyLoaded);
   }
 
   private initConfiguration(): void {

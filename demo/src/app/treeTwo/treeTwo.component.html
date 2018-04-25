@@ -1,3 +1,5 @@
 <ri-tree [treeModel]="treeModel">
-  <new-tree-item *ngFor="let node of treeModel.getRootNodes() | async" [node]="node" [treeModel]="treeModel" [contextMenu]="contextMenu"></new-tree-item>
+  <new-tree-item *ngFor="let node of treeModel.getRootNodes() | async; trackBy: trackByFn" [node]="node"
+                 [treeModel]="treeModel"
+                 [contextMenu]="contextMenu"></new-tree-item>
 </ri-tree>

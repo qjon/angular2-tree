@@ -11,9 +11,11 @@ export class TreeActionsService {
   static TREE_DELETE_NODE_SUCCESS = 'TREE_DELETE_NODE_SUCCESS';
   static TREE_DELETE_NODE_ERROR = 'TREE_DELETE_NODE_ERROR';
   static TREE_EDIT_NODE_START = 'TREE_EDIT_NODE_START';
+  static TREE_COLLAPSE_NODE = 'TREE_COLLAPSE_NODE';
   static TREE_EXPAND_NODE = 'TREE_EXPAND_NODE';
   static TREE_INSERT_NODE = 'TREE_INSERT_NODE';
   static TREE_LOAD = 'TREE_LOAD';
+  static TREE_LOAD_PATH = 'TREE_LOAD_PATH';
   static TREE_LOAD_SUCCESS = 'TREE_LOAD_SUCCESS';
   static TREE_LOAD_ERROR = 'TREE_LOAD_ERROR';
   static TREE_MOVE_NODE = 'TREE_MOVE_NODE';
@@ -81,13 +83,17 @@ export class TreeActionsService {
     };
   }
 
-  public expandNode(treeId: string, node: IOuterNode): ITreeAction {
+  public collapseNode(treeId: string, id: string): ITreeAction {
+    return {
+      type: TreeActionsService.TREE_COLLAPSE_NODE,
+      payload: {treeId, id}
+    };
+  }
+
+  public expandNode(treeId: string, id: string): ITreeAction {
     return {
       type: TreeActionsService.TREE_EXPAND_NODE,
-      payload: {
-        treeId: treeId,
-        node: node
-      }
+      payload: {treeId, id}
     };
   }
 
@@ -193,6 +199,13 @@ export class TreeActionsService {
         treeId: treeId,
         nodes: nodes
       }
+    };
+  }
+
+  public loadPath(treeId: string, ids: string[], hasLoadedNodes = false): ITreeAction {
+    return {
+      type: TreeActionsService.TREE_LOAD_PATH,
+      payload: {treeId, ids, hasLoadedNodes}
     };
   }
 

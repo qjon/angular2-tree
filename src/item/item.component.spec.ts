@@ -10,11 +10,14 @@ import {Store} from '@ngrx/store';
 import {TreeActionsService} from '../store/treeActions.service';
 import {ContextMenuService, IContextMenuClickEvent} from 'ngx-contextmenu';
 import {Actions} from '@ngrx/effects';
-import {Observable} from 'rxjs/Observable';
 import {DragAndDrop} from '../dragAndDrop/dragAndDrop.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {AnimationEvent} from '@angular/animations';
 import {Subject} from 'rxjs/Subject';
+import {TreeActionsDispatcherService} from '../store/treeActionsDispatcher.service';
+import {AnimationEvent} from '@angular/animations';
+import {Observable} from 'rxjs/Observable';
+import {SimpleChange, SimpleChanges} from '@angular/core';
+import SpyObj = jasmine.SpyObj;
 
 describe('ItemComponent', () => {
   const TREE_ID = 'tree';
@@ -28,9 +31,18 @@ describe('ItemComponent', () => {
   let treeActionServiceMock: any;
   let treeModelMock: TreeModel;
   let actions$: Subject<ITreeAction>;
+  let treeActionDispatcherMock: SpyObj<TreeActionsDispatcherService>;
 
   beforeEach(() => {
     actions$ = new Subject<ITreeAction>();
+    treeActionDispatcherMock = jasmine.createSpyObj<TreeActionsDispatcherService>('TreeActionsDispatcherService', [
+      'collapseNode',
+      'deleteNode',
+      'expandNode',
+      'loadPath',
+      'loadTree',
+      'saveNode'
+    ]);
 
     actionsMock = <Actions>jasmine.createSpyObj('actions', ['ofType']);
     contextMenuServiceMock = <ContextMenuService>{
@@ -40,7 +52,6 @@ describe('ItemComponent', () => {
     treeActionServiceMock = <TreeActionsService>jasmine.createSpyObj('TreeActionsService', ['deleteNode', 'loadTree', 'saveNode']);
 
     dragAndDropMock = <DragAndDrop>{};
-    // dragAndDropMock.TREE_EXPAND_NODE = 'TREE_NODE';
 
     actionsMock.ofType.and.returnValue(actions$);
 
@@ -48,10 +59,17 @@ describe('ItemComponent', () => {
       id: 'node-id',
       name: 'name',
       treeId: TREE_ID,
-      children: []
+      children: [],
+      isExpanded: false,
     };
 
-    treeModelMock = new TreeModel(Observable.of(<ITreeData>{}), {disableContextMenu: true, isAnimation: false});
+    treeModelMock = new TreeModel(treeActionDispatcherMock, Observable.of(<ITreeData>{}), {
+      disableContextMenu: true,
+      isAnimation: false
+    });
+
+    spyOn(treeModelMock, 'getChildren').and.returnValue(Observable.of(<ITreeData>{}));
+
 
     TestBed.configureTestingModule({
       imports: [
@@ -63,8 +81,7 @@ describe('ItemComponent', () => {
         {provide: Actions, useValue: actionsMock},
         {provide: ContextMenuService, useValue: contextMenuServiceMock},
         {provide: DragAndDrop, useValue: dragAndDropMock},
-        {provide: Store, useValue: storeMock},
-        {provide: TreeActionsService, useValue: treeActionServiceMock}
+        {provide: TreeActionsDispatcherService, useValue: treeActionDispatcherMock}
       ],
       declarations: [
         ItemComponent,
@@ -107,22 +124,92 @@ describe('ItemComponent', () => {
     });
   });
 
-  describe('ngOnInit', () => {
-    it('should call expand method if action TREE_INSERT_NODE has been detected', () => {
-      spyOn(component, 'expand');
+  describe('ngOnChanges', () => {
+    describe('if change is first', () => {
+      let nodeChange: SimpleChange;
+      let value: SimpleChanges;
 
-      actions$.next({
-        type: TreeActionsService.TREE_INSERT_NODE,
-        payload: {
-          treeId: TREE_ID,
-          id: node.id
-        }
+      beforeEach(() => {
+        nodeChange = new SimpleChange(null, node, true);
+        value = {
+          node: nodeChange
+        };
+
+        component.isExpanded = false;
+
+        component.ngOnChanges(value);
       });
 
-      expect(component.expand).toHaveBeenCalled();
+      it('should mark node as not expanded', () => {
+        expect(component.isExpanded).toBe(false);
+      });
     });
 
+    describe('if change is not first', () => {
+      let nodeChange: SimpleChange;
+      let value: SimpleChanges;
+      let newNode: IOuterNode;
 
+      beforeEach(() => {
+        newNode = Object.assign({}, node);
+        newNode.id = 'new-node-id';
+
+        nodeChange = new SimpleChange(node, newNode, false);
+        value = {
+          node: nodeChange
+        };
+
+        component.isExpanded = false;
+
+        component.node = newNode;
+
+        component.ngOnChanges(value);
+      });
+
+      it('should set $children for the second time', () => {
+        expect(treeModelMock.getChildren).toHaveBeenCalledWith('new-node-id')
+      });
+
+      it('should mark node as not expanded', () => {
+        expect(component.isExpanded).toBe(false);
+      });
+    });
+
+    describe('if change is not first and node is expanded', () => {
+      let nodeChange: SimpleChange;
+      let value: SimpleChanges;
+      let newNode: IOuterNode;
+
+      beforeEach(() => {
+        newNode = Object.assign({}, node);
+        newNode.id = 'new-node-id';
+        newNode.isExpanded = true;
+
+        nodeChange = new SimpleChange(node, newNode, false);
+        value = {
+          node: nodeChange
+        };
+
+        component.isExpanded = false;
+
+        component.node = newNode;
+
+        component.ngOnChanges(value);
+      });
+
+      it('should set $children for the second time', () => {
+        expect(treeModelMock.getChildren).toHaveBeenCalledWith('new-node-id')
+      });
+
+      it('should mark node as expanded', () => {
+        expect(component.isExpanded).toBe(true);
+      });
+    });
+
+  });
+
+
+  describe('ngOnInit', () => {
     describe('animationState', () => {
       it('should be null', () => {
         expect(component.animationState).toBeNull();
@@ -174,41 +261,22 @@ describe('ItemComponent', () => {
   });
 
   describe('collapse', () => {
-    it('should set isExpanded to false if animations is OFF', () => {
-      component.isExpanded = true;
-
+    it('should dispatch action expand node', () => {
       component.collapse();
 
-      expect(component.isExpanded).toBe(false);
-    });
-
-    it('should change animation state to "inactive" if animation is ON', () => {
-      component.treeModel.configuration.isAnimation = true;
-      component.animationState = 'active';
-
-      component.collapse();
-
-      expect(component.animationState).toBe('inactive');
+      expect(treeActionDispatcherMock.collapseNode).toHaveBeenCalledWith(TREE_ID, node.id);
     });
   });
 
   describe('expanded', () => {
-    it('should set isExpanded to true if animations is OFF', () => {
-      component.isExpanded = false;
-
+    it('should call expand node and tree load if tree is not fully loaded', () => {
+      spyOn(treeModelMock, 'isFullyLoaded').and.returnValue(false);
       component.expand();
 
-      expect(component.isExpanded).toBe(true);
+      expect(treeActionDispatcherMock.expandNode).toHaveBeenCalledWith(TREE_ID, node.id);
+      expect(treeActionDispatcherMock.loadTree).toHaveBeenCalledWith(TREE_ID, node.id);
     });
 
-    it('should change animation state to "active" if animation is ON', () => {
-      component.treeModel.configuration.isAnimation = true;
-      component.animationState = 'inactive';
-
-      component.expand();
-
-      expect(component.animationState).toBe('active');
-    });
   });
 
   describe('onAnimationDone', () => {
@@ -236,59 +304,30 @@ describe('ItemComponent', () => {
   });
 
   describe('onBlur', () => {
-    describe('isStartSave set to TRUE', () => {
-      beforeEach(() => {
-        const event = <KeyboardEvent>{
-          keyCode: 13,
-          altKey: false,
-          char: 'ESC',
-          stopPropagation: () => {
-          }
-        };
+    it('should change state to nit edit mode', () => {
+      component.onBlur();
 
-        spyOn(event, 'stopPropagation');
-
-        component.onChange(event);
-      });
-
-      it('should change is startSave to false and do nothing', () => {
-        component.isEditMode = true;
-        component.onBlur();
-
-        expect(component.isEditMode).toBe(true);
-
-        component.onBlur();
-        expect(component.isEditMode).toBe(false);
-      });
+      expect(component.isEditMode).toBe(false);
     });
 
-    describe('isStartSave set to FALSE', () => {
-      it('should set editMode to false', () => {
-        component.isEditMode = true;
+    it('should dispatch deleteNode action if node is new', () => {
+      const newNode = Object.assign({}, node);
+      newNode.id = null;
 
-        component.onBlur();
+      jasmine.clock().install();
+      component.node = newNode;
 
-        expect(component.isEditMode).toBe(false);
-      });
+      fixture.detectChanges();
+      spyOn(component.input.nativeElement, 'focus');
+      jasmine.clock().tick(0);
 
-      it('should dispatch delete action if node is NEW', () => {
-        component.node.id = null;
-        treeActionServiceMock.deleteNode.and.returnValue('action');
-        component.onBlur();
+      component.onBlur();
+      jasmine.clock().uninstall();
 
-        expect(treeActionServiceMock.deleteNode).toHaveBeenCalledWith(TREE_ID, node);
-        expect(storeMock.dispatch).toHaveBeenCalledWith('action');
-      });
-
-      it('should not dispatch delete action if node is not NEW', () => {
-        treeActionServiceMock.deleteNode.and.returnValue('action');
-        component.onBlur();
-
-        expect(treeActionServiceMock.deleteNode).not.toHaveBeenCalled();
-        expect(storeMock.dispatch).not.toHaveBeenCalled();
-      });
+      expect(treeActionDispatcherMock.deleteNode).toHaveBeenCalledWith(TREE_ID, newNode);
     });
   });
+
 
   describe('onChange', () => {
     describe('if ENTER is pressed', () => {
@@ -306,21 +345,19 @@ describe('ItemComponent', () => {
         component.isEditMode = true;
         component.nameField.setValue(newNodeName);
 
-        treeActionServiceMock.saveNode.and.returnValue('action');
-
         component.onChange(event);
       });
 
       it('should dispatch saveNode event if ENTER key is pressed', () => {
-        expect(treeActionServiceMock.saveNode).toHaveBeenCalledWith(TREE_ID, {
+        expect(treeActionDispatcherMock.saveNode).toHaveBeenCalledWith(TREE_ID, {
           id: node.id,
           treeId: node.treeId,
           name: newNodeName,
           parentId: undefined,
           children: [],
-          parents: undefined
+          parents: undefined,
+          isExpanded: false
         });
-        expect(storeMock.dispatch).toHaveBeenCalledWith('action');
       });
 
       it('should change editMode to false', () => {
@@ -435,5 +472,10 @@ describe('ItemComponent', () => {
     });
   });
 
+  describe('trackByFn', () => {
+    it('should return node id', () => {
+      expect(component.trackByFn(node)).toBe('node-id');
+    });
+  });
 
 });

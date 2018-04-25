@@ -35,5 +35,6 @@ export class TreeOneComponent implements OnInit {
     this.nodeService.setAllNodes(nodes);
 
     this.treeModel = this.treeModelGenerator.createTreeModel(this.treeConfiguration, this.nodeService, nodes);
+    this.treeModel.initPath(['cca2ccca-fcb1-e44d-6623-7cebf40dd05a', 'ed361d54-ee45-09ea-b913-59bca72c531e']);
   }
 }

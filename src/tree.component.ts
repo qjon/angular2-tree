@@ -61,7 +61,6 @@ export class TreeComponent implements OnInit, OnChanges {
     const parent = this.treeModel.currentSelectedNode$.getValue();
     const parentId = parent ? parent.id : null;
 
-    this.store.dispatch(this.treeActions.expandNode(this.treeModel.treeId, parent));
     this.store.dispatch(this.treeActions.insertNode(this.treeModel.treeId, parentId));
   }
 
@@ -84,6 +83,10 @@ export class TreeComponent implements OnInit, OnChanges {
       default:
         console.warn('Unknown context menu action: ' + name);
     }
+  }
+
+  public trackByFn(node: IOuterNode): string {
+    return node.id;
   }
 
   /**

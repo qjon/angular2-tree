@@ -196,6 +196,8 @@ Using _ngrx/store_ you can listen on below actions and do whatever you want:
     TreeActionsService.TREE_MOVE_NODE_SUCCESS
     TreeActionsService.TREE_MOVE_NODE_ERROR
     TreeActionsService.TREE_REGISTER
+    TreeActionsService.TREE_SET_ALL_NODES
+    TreeActionsService.TREE_LOAD_PATH
 
 ## Translation
 
@@ -248,6 +250,10 @@ At the end do not forget to add this effects to your app.
  
 ## Changes
 
+### v2.4.0
+* add possibility to open path of the tree
+* add new actions
+  
 ### v2.3.0
 * fix problem with building tree component in AOT
 * fix few small issues

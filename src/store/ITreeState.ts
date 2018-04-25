@@ -19,7 +19,9 @@ export interface ITreeActionPayload {
   source?: IOuterNode;
   target?: IOuterNode;
   sourceOfDroppedData?: string;
+  ids?: string[];
   silent?: boolean;
+  hasLoadedNodes?: boolean;
 }
 
 export interface ITreeAction extends Action {
