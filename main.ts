@@ -8,6 +8,7 @@ export * from './src/interfaces/IContextMenu';
 export * from './src/interfaces/IOuterNode';
 export * from './src/service/node.service';
 export * from './src/IApiConfig.service';
+export * from './src/parents-list/parents-list.component';
 export * from './src/service/nodesDispatcher.service';
 export * from './src/service/treeModelGenerator.service';
 export * from './src/store/treeActions.service';

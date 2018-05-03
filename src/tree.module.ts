@@ -20,6 +20,7 @@ import {ContextMenuModule} from 'ngx-contextmenu';
 import {treeReducer} from './store/treeReducer';
 import {TreeModelGeneratorService} from './service/treeModelGenerator.service';
 import {TreeActionsDispatcherService} from './store/treeActionsDispatcher.service';
+import {ParentsListComponent} from './parents-list/parents-list.component';
 
 @NgModule({
   imports: [
@@ -33,8 +34,25 @@ import {TreeActionsDispatcherService} from './store/treeActionsDispatcher.servic
     StoreModule.forFeature('trees', treeReducer),
     TranslateModule,
   ],
-  declarations: [TreeComponent, ItemComponent, DraggableDirective, DroppableDirective, DropzoneComponent],
-  exports: [TreeComponent, ItemComponent, DraggableDirective, DroppableDirective, DropzoneComponent, DraggableComponent, StoreModule, EffectsModule],
+  declarations: [
+    TreeComponent,
+    ItemComponent,
+    DraggableDirective,
+    DroppableDirective,
+    DropzoneComponent,
+    ParentsListComponent,
+  ],
+  exports: [
+    TreeComponent,
+    ItemComponent,
+    DraggableDirective,
+    DroppableDirective,
+    DropzoneComponent,
+    DraggableComponent,
+    ParentsListComponent,
+    StoreModule,
+    EffectsModule,
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TreeModule {

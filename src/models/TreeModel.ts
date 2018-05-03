@@ -3,8 +3,9 @@ import {Observable} from 'rxjs/Observable';
 import {IConfiguration} from '../interfaces/IConfiguration';
 import {ITreeData} from '../store/ITreeState';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {map} from 'rxjs/operators';
 import {TreeActionsDispatcherService} from '../store/treeActionsDispatcher.service';
+import {map} from 'rxjs/operators';
+import 'rxjs/add/observable/combineLatest';
 
 export class TreeModel {
   public currentSelectedNode$: BehaviorSubject<IOuterNode> = new BehaviorSubject(null);
@@ -26,6 +27,26 @@ export class TreeModel {
 
   public getRootNodes() {
     return this.getChildren(null);
+  }
+
+  public getParentsList(): Observable<IOuterNode[]> {
+    return Observable.combineLatest(
+      this.currentSelectedNode$.asObservable(),
+      this.nodes$
+    )
+      .pipe(
+        map(([currentNode, nodes]: [IOuterNode, ITreeData]): IOuterNode[] => {
+          const parents: IOuterNode[] = [];
+          let node: IOuterNode = Object.assign({}, currentNode);
+
+          do {
+            parents.push(node);
+            node = node.parentId ? nodes[node.parentId] : null;
+          } while (node);
+
+          return parents.reverse();
+        })
+      )
   }
 
   public getChildren(nodeId: string | null) {
