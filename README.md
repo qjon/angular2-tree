@@ -25,7 +25,7 @@ Include _TreeModule_  in your application module and create Store with empty sta
       ],
       imports: [
         ...
-        TreeModule.forRoot(),
+        TreeModule.forRoot(AppNodeService),
         EffectsModule.forRoot([]),
         StoreModule.forRoot({})
       ]
@@ -41,7 +41,7 @@ You need also init translations and animations module, because Tree needs it to 
         ...
         BrowserAnimationsModule,
         TranslationModule.forRoot(),
-        TreeModule.forRoot()
+        TreeModule.forRoot(AppNodeService)
       ]
     })
     
@@ -55,6 +55,10 @@ Create your own loader service as it is done in example
 
     @Injectable()
     export class AppNodeService extends NodeService {
+      public get treeId(): string {
+        return 'tree';
+      }
+      
       protected apiConfig = {
         addUrl: '/api/nodes',
         getUrl: '/api/nodes',
@@ -84,25 +88,12 @@ In component where you create tree, you should register _tree store_, create _Tr
     
       public treeModel: TreeModel;
     
-      public constructor(private store: Store<ITreeState>,
-                         private treeActions: TreeActionsService,
-                         private nodeDispatcherService: NodeDispatcherService,
-                         private appNodeService: AppNodeService) {
+
+      public constructor(private treeModelGenerator: TreeModelGeneratorService) {
       }
     
       public ngOnInit() {
-        const treeId = this.treeConfiguration.treeId;
-        this.nodeDispatcherService.register(treeId, this.appNodeService);
-    
-        this.store.dispatch(this.treeActions.registerTree(treeId));
-    
-        this.folders = this.store.select(treeStateSelector)
-          .map((data: ITreeState) => {
-            return data[treeId];
-          })
-          .filter((data: ITreeData) => !!data)
-        ;
-        this.treeModel = new TreeModel(this.folders, this.treeConfiguration);
+        this.treeModel = this.treeModelGenerator.createTreeModel(this.treeConfiguration);
       }
     }
 
@@ -249,6 +240,9 @@ to
 At the end do not forget to add this effects to your app.
  
 ## Changes
+
+### v3.0.0
+* change the way of injecting NodeService provider
 
 ### v2.4.0
 * add possibility to open path of the tree

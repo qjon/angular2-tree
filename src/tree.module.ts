@@ -1,7 +1,6 @@
-import {CUSTOM_ELEMENTS_SCHEMA, ModuleWithProviders, NgModule} from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, ModuleWithProviders, NgModule, Type} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ItemComponent} from './item/item.component';
-import {NodeService} from './service/node.service';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TreeComponent} from './tree.component';
 import {DndModule, DraggableComponent} from 'ng2-dnd';
@@ -21,6 +20,7 @@ import {treeReducer} from './store/treeReducer';
 import {TreeModelGeneratorService} from './service/treeModelGenerator.service';
 import {TreeActionsDispatcherService} from './store/treeActionsDispatcher.service';
 import {ParentsListComponent} from './parents-list/parents-list.component';
+import {NODE_SERVICE, NodeService} from './service/node.service';
 
 @NgModule({
   imports: [
@@ -53,21 +53,39 @@ import {ParentsListComponent} from './parents-list/parents-list.component';
     StoreModule,
     EffectsModule,
   ],
+  providers: [
+    {provide: NODE_SERVICE, useClass: NodeService, multi: true}
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TreeModule {
 
-  public static forRoot(): ModuleWithProviders {
+  public static forRoot(nodeService: Type<NodeService>): ModuleWithProviders {
     return {
       ngModule: TreeModule,
       providers: [
         DragAndDrop,
         NodeDispatcherService,
-        NodeService,
         TreeActionsDispatcherService,
         TreeActionsService,
         TreeEffectsService,
-        TreeModelGeneratorService
+        TreeModelGeneratorService,
+        {provide: NODE_SERVICE, useClass: nodeService, multi: true}
+      ]
+    }
+  }
+
+  public static forFeature(nodeService: Type<NodeService>): ModuleWithProviders {
+    return {
+      ngModule: TreeModule,
+      providers: [
+        DragAndDrop,
+        NodeDispatcherService,
+        TreeActionsDispatcherService,
+        TreeActionsService,
+        TreeEffectsService,
+        TreeModelGeneratorService,
+        {provide: NODE_SERVICE, useClass: nodeService, multi: true}
       ]
     }
   }
@@ -96,3 +114,4 @@ export class TreeModule {
     });
   }
 }
+

@@ -5,43 +5,36 @@ describe('NodeDispatcherService', () => {
   const OTHER_SERVICE_NAME = 'other';
   let service: NodeDispatcherService;
   let nodeService: any;
-  let otherNodeService: any;
+  let nodeService2: any;
+  let baseNodeService: any;
 
   beforeEach(() => {
-    nodeService = <NodeService>{};
-    otherNodeService = <INodeService>{};
+    nodeService = <NodeService>{
+      get treeId(): string {
+        return 'tree';
+      }
+    };
+    nodeService2 = <NodeService>{
+      get treeId(): string {
+        return 'tree2';
+      }
+    };
+    baseNodeService = <INodeService>{
+      get treeId(): string {
+        return 'tree_base';
+      }
+    };
 
-    service = new NodeDispatcherService(nodeService);
+    service = new NodeDispatcherService([baseNodeService, nodeService, nodeService2]);
   });
 
-  describe('register', () => {
-    it('should register new node service', () => {
-      service.register(OTHER_SERVICE_NAME, otherNodeService);
-
-      expect(service.get(OTHER_SERVICE_NAME)).toEqual(otherNodeService);
-    });
-  });
-
-  describe('unregister', () => {
-    it('should unregistred "other" service', () => {
-      service.register(OTHER_SERVICE_NAME, otherNodeService);
-      expect(service.get(OTHER_SERVICE_NAME)).toEqual(otherNodeService);
-
-      service.unregister(OTHER_SERVICE_NAME);
-      expect(() => {
-        service.get(OTHER_SERVICE_NAME)
-      })
-        .toThrow(new Error('[NodeDispatcherService] No service for key ' + OTHER_SERVICE_NAME));
+  describe('get', () => {
+    it('should return NodeService if passed value is "tree"', () => {
+      expect(service.get('tree')).toEqual(nodeService);
     });
 
-    it('should throw exception if service not found', () => {
-      service.register(OTHER_SERVICE_NAME, otherNodeService);
-      expect(service.get(OTHER_SERVICE_NAME)).toEqual(otherNodeService);
-
-      spyOn(console, 'warn');
-      service.unregister('some_name');
-
-      expect(console.warn).toHaveBeenCalledWith('[NodeDispatcherService] No service for key some_name');
+    it('should return BaseNodeService if node service is not found', () => {
+      expect(service.get('some_tree')).toEqual(baseNodeService);
     });
   });
 

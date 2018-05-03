@@ -4,4 +4,8 @@ import {TreeLocalStorageNodeService} from '../localStorage/treeLocalStorage.serv
 @Injectable()
 export class TreeTwoNodeService extends TreeLocalStorageNodeService {
   protected treeName = 'treeTwo';
+
+  public get treeId(): string {
+    return 'tree2';
+  }
 }
