@@ -10,6 +10,7 @@ import {catchError, filter, map, mergeMap, switchMap, take} from 'rxjs/operators
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/combineLatest';
 import {Store} from '@ngrx/store';
+import {NEW_NODE_ID} from './treeReducer';
 
 @Injectable()
 export class TreeEffectsService {
@@ -52,7 +53,7 @@ export class TreeEffectsService {
   @Effect() save$ = this.actions$
     .ofType(TreeActionsService.TREE_SAVE_NODE)
     .pipe(
-      switchMap((action: ITreeAction) => this.saveNode(action.payload.treeId, action.payload.node)
+      switchMap((action: ITreeAction) => this.saveNode(action.payload.treeId, {...action.payload.node})
         .pipe(
           map((node: IOuterNode): ITreeAction => this.treeActions.saveNodeSuccess(action.payload.treeId, action.payload.node, node)),
           catchError(() => Observable.of(this.treeActions.saveNodeError(action.payload.treeId, action.payload.node)))
@@ -66,27 +67,36 @@ export class TreeEffectsService {
       filter((action: ITreeAction) => {
         return action.payload.sourceOfDroppedData === DragAndDrop.DROP_DATA_TYPE;
       }),
-      switchMap((action: ITreeAction) => this.moveNode(action.payload.treeId, action.payload.oldNode, action.payload.node)
-        .pipe(
-          map((node: IOuterNode): ITreeActionPayload => {
-            return {
-              treeId: action.payload.treeId,
-              oldNode: action.payload.oldNode,
-              node: node
-            };
-          }),
-          catchError(() => {
-            this.treeActions.moveNodeError(action.payload.treeId, action.payload.oldNode, action.payload.node);
+      switchMap((action: ITreeAction) => {
+          const source = {...action.payload.oldNode};
+          const target = Boolean(action.payload.node) ? {...action.payload.node} : null;
 
-            return Observable.of(action.payload);
-          })
-        )
+          return this.moveNode(action.payload.treeId, source, target)
+            .pipe(
+              map((node: IOuterNode): ITreeActionPayload => {
+                return {
+                  treeId: action.payload.treeId,
+                  oldNode: action.payload.oldNode,
+                  node: node
+                };
+              }),
+              catchError(() => {
+                this.treeActions.moveNodeError(action.payload.treeId, action.payload.oldNode, action.payload.node);
+
+                return Observable.of(action.payload);
+              })
+            );
+        }
       ),
       mergeMap((data: ITreeActionPayload) => {
-        return [
+        const actions = [
           this.treeActions.moveNodeSuccess(data.treeId, data.oldNode, data.node),
-          this.treeActions.loadTree(data.treeId, data.node.parentId)
         ];
+
+        // todo: read if node is fully loaded if not below acton should be triggered
+        // this.treeActions.loadTree(data.treeId, data.node.parentId)
+
+        return actions;
       })
     );
 
@@ -142,6 +152,8 @@ export class TreeEffectsService {
   protected deleteNode(treeId: string, node: IOuterNode): Observable<IOuterNode> {
     const nodeService = this.nodeDispatcherService.get(treeId);
 
+    console.log(nodeService);
+
     return node.id ? nodeService.remove(node.id) : Observable.of(node);
   }
 
@@ -154,15 +166,17 @@ export class TreeEffectsService {
   protected saveNode(treeId: string, node: IOuterNode): Observable<IOuterNode> {
     const nodeService = this.nodeDispatcherService.get(treeId);
 
-    if (node.id) {
-      return nodeService.update(node);
-    } else {
+    if (node.id === NEW_NODE_ID) {
       return nodeService.add(node, node.parentId);
+    } else {
+      return nodeService.update(node);
     }
   }
 
   protected moveNode(treeId: string, source: IOuterNode, target: IOuterNode): Observable<IOuterNode> {
     const nodeService = this.nodeDispatcherService.get(treeId);
+
+    console.log(source, target)
 
     return nodeService.move(source, target);
   }

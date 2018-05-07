@@ -13,6 +13,7 @@ import {AnimationTriggerMetadata} from '@angular/animations/src/animation_metada
 import {Subscription} from 'rxjs/Subscription';
 import {TreeActionsDispatcherService} from '../store/treeActionsDispatcher.service';
 import 'rxjs/add/observable/empty';
+import {NEW_NODE_ID} from '../store/treeReducer';
 
 export function expand(): AnimationTriggerMetadata {
   return trigger('isExpanded', [
@@ -210,7 +211,7 @@ export class ItemComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   protected isNewNode() {
-    return this.node.id === null;
+    return this.node.id === NEW_NODE_ID;
   }
 
   protected setFocus() {
@@ -271,7 +272,11 @@ export class ItemComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   protected initEditModeIfNeeded(node: IOuterNode) {
-    this.isEditMode = node.id === null;
+    if (!node) {
+      return;
+    }
+
+    this.isEditMode = node.id === NEW_NODE_ID;
 
     if (this.isEditMode) {
       this.nameField.setValue('');

@@ -9,6 +9,7 @@ import {TreeActionsService} from './store/treeActions.service';
 import {Store} from '@ngrx/store';
 import {ITreeState} from './store/ITreeState';
 import {filter} from 'rxjs/operators';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -42,6 +43,8 @@ export class TreeComponent implements OnInit, OnChanges {
    */
   public menuList: IContextMenu[] = [];
 
+  public rootNodes$: Observable<IOuterNode[]>;
+
   public constructor(protected store: Store<ITreeState>,
                      protected treeActions: TreeActionsService,
                      protected dragAndDrop: DragAndDrop) {
@@ -50,6 +53,8 @@ export class TreeComponent implements OnInit, OnChanges {
 
   public ngOnInit() {
     this.registerMove();
+
+    this.rootNodes$ = this.treeModel.getRootNodes();
   }
 
   public ngOnChanges(data: any) {

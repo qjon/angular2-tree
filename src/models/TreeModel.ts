@@ -1,11 +1,14 @@
 import {IOuterNode} from '../interfaces/IOuterNode';
 import {Observable} from 'rxjs/Observable';
 import {IConfiguration} from '../interfaces/IConfiguration';
-import {ITreeData} from '../store/ITreeState';
+import {ITreeData, ITreeNodes} from '../store/ITreeState';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {TreeActionsDispatcherService} from '../store/treeActionsDispatcher.service';
-import {map} from 'rxjs/operators';
+import {distinctUntilChanged, map} from 'rxjs/operators';
 import 'rxjs/add/observable/combineLatest';
+import 'rxjs/add/operator/do';
+import * as isEqual from 'lodash.isequal';
+import {NEW_NODE_ID} from '../store/treeReducer';
 
 export class TreeModel {
   public currentSelectedNode$: BehaviorSubject<IOuterNode> = new BehaviorSubject(null);
@@ -18,15 +21,39 @@ export class TreeModel {
     return this._fullyLoaded;
   }
 
+  public nodes$: Observable<ITreeNodes>;
+  public rootNodes$: Observable<IOuterNode[]>;
+
   public constructor(private treeActionDispatcher: TreeActionsDispatcherService,
-                     private nodes$: Observable<ITreeData>,
+                     private treeData$: Observable<ITreeData>,
                      public configuration: IConfiguration,
                      private _fullyLoaded = false) {
+    this.nodes$ = this.treeData$
+      .pipe(
+        distinctUntilChanged((prev: ITreeData, next: ITreeData) => {
+          return isEqual(prev.nodes.entities, next.nodes.entities)
+        }),
+        map((treeData: ITreeData): ITreeNodes => treeData.nodes.entities)
+      )
+      .do((data) => console.log('data', data))
+    ;
+
+    this.rootNodes$ = this.treeData$
+      .pipe(
+        map((treeData: ITreeData): IOuterNode[] => treeData.nodes.rootNodes.map((id) => treeData.nodes.entities[id]).sort(this.sortNodes)),
+        distinctUntilChanged(),
+      )
+      .do((data) => console.log('rootNodes', data));
+
     this.initConfiguration();
   }
 
   public getRootNodes() {
-    return this.getChildren(null);
+    // this.rootNodes$
+    //   .subscribe((data) => console.log('rootNodes', data));
+    //
+    // return Observable.of([])
+    return this.rootNodes$;
   }
 
   public getParentsList(): Observable<IOuterNode[]> {
@@ -35,7 +62,7 @@ export class TreeModel {
       this.nodes$
     )
       .pipe(
-        map(([currentNode, nodes]: [IOuterNode, ITreeData]): IOuterNode[] => {
+        map(([currentNode, nodes]: [IOuterNode, ITreeNodes]): IOuterNode[] => {
           const parents: IOuterNode[] = [];
           let node: IOuterNode = Object.assign({}, currentNode);
 
@@ -52,9 +79,9 @@ export class TreeModel {
   public getChildren(nodeId: string | null) {
     return this.nodes$
       .pipe(
-        map((state: ITreeData): IOuterNode[] => this.getNodesByParentId(state, nodeId)),
+        map((state: ITreeNodes): IOuterNode[] => this.getNodesByParentId(state, nodeId)),
         map((nodes: IOuterNode[]) => {
-          return nodes.sort(this.sortNodes);
+          return [...nodes].sort(this.sortNodes);
         })
       );
   }
@@ -80,15 +107,15 @@ export class TreeModel {
     }
   }
 
-  private getNodesByParentId(state: ITreeData, id: string | null): IOuterNode[] {
+  private getNodesByParentId(state: ITreeNodes, id: string | null): IOuterNode[] {
     return Object.keys(state)
       .filter((key: string) => state[key].parentId === id)
       .map((key: string) => state[key]);
   }
 
   private sortNodes(first: IOuterNode, second: IOuterNode): number {
-    if (second.id === null) {
-      return 1;
+    if (second.id === NEW_NODE_ID) {
+      return -1;
     }
 
     return first.name > second.name ? 1 : -1;

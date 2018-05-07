@@ -14,6 +14,8 @@ export class TreeLocalStorageNodeService extends NodeService {
       this.nodes = this.getAllDataFromLocalStorage();
     }
 
+    console.log('load', this.nodes);
+
     const nodes = this.getChildren(nodeId);
 
     return Observable.of(nodes);
@@ -32,11 +34,20 @@ export class TreeLocalStorageNodeService extends NodeService {
 
   public move(srcNode: IOuterNode, targetNode: IOuterNode | null): Observable<IOuterNode> {
     const srcId = srcNode.id;
+    const oldParentId = srcNode.parentId;
     const targetId = targetNode ? targetNode.id : null;
 
     const index = this.findIndexByNodeId(srcId);
 
+    this.nodes[index] = {...this.nodes[index]};
     this.nodes[index].parentId = targetId;
+
+    if (oldParentId) {
+      const oldParentIndex = this.findIndexByNodeId(oldParentId);
+
+      this.nodes[oldParentIndex].children = this.nodes[oldParentIndex].children.filter(id => id !== srcId);
+    }
+
     this.saveNodes();
 
     return Observable.of(this.nodes[index]);
@@ -69,10 +80,12 @@ export class TreeLocalStorageNodeService extends NodeService {
   }
 
   public setAllNodes(nodes: IOuterNode[]): void {
-    this.nodes = nodes;
+    this.nodes = [...nodes];
+    console.log('set', this.nodes);
   }
 
   private findIndexByNodeId(nodeId: string): number {
+    console.log('find', this, this.nodes, nodeId);
     return this.nodes.findIndex((node) => {
       return node.id === nodeId;
     });

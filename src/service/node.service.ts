@@ -16,6 +16,8 @@ export interface INodeService {
   update(node: IOuterNode): Observable<IOuterNode>;
 
   remove(nodeId: string): Observable<IOuterNode>;
+
+  setAllNodes(nodes: IOuterNode[]): void;
 }
 
 export const NODE_SERVICE = new InjectionToken('NODE_SERVICE');
@@ -35,6 +37,10 @@ export class NodeService implements INodeService {
   }
 
   public constructor(protected http: HttpClient) {
+  }
+
+  public setAllNodes(nodes: IOuterNode[]): void {
+
   }
 
   public load(nodeId = ''): Observable<IOuterNode[]> {

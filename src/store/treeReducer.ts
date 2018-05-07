@@ -1,24 +1,33 @@
-import {ITreeAction, ITreeData, ITreeState} from './ITreeState';
+import {ITreeAction, ITreeData, ITreeNodes, ITreeState} from './ITreeState';
 import {TreeActionsService} from './treeActions.service';
 import {IOuterNode} from '../interfaces/IOuterNode';
 import {createFeatureSelector, createSelector} from '@ngrx/store';
 import {MemoizedSelector} from '@ngrx/store/src/selector';
 
+export const NEW_NODE_ID = 'ri-new-node-id';
+
+export const emptyTreeData: ITreeData = {
+  nodes: {
+    entities: {},
+    selected: null,
+    rootNodes: []
+  },
+  configuration: null
+};
+
 function copyState(state: ITreeState, treeId: string = null) {
-  let newState = {};
+  const newState = {...state};
 
   // todo: find better way to clone object
   if (treeId) {
-    Object.keys(state)
-      .filter((key) => key !== treeId)
-      .forEach((key) => newState[key] = state[key]);
-
-    newState[treeId] = {};
-
-    Object.keys(state[treeId])
-      .forEach((key) => newState[treeId][key] = state[treeId][key]);
-  } else {
-    newState = state;
+    newState[treeId] = {
+      nodes: {
+        entities: {...state[treeId].nodes.entities},
+        selected: state[treeId].nodes.selected,
+        rootNodes: [...state[treeId].nodes.rootNodes]
+      },
+      configuration: {...state[treeId].configuration}
+    };
   }
 
   return newState;
@@ -31,16 +40,14 @@ function removeNode(state: ITreeState, action: ITreeAction): ITreeState {
   const node = action.payload.node;
   const parentId = node.parentId;
 
-  if (node.id) {
-    delete treeState[node.id];
-  } else {
-    delete treeState[0];
-  }
+  delete treeState.nodes.entities[node.id];
 
   if (parentId) {
-    const parent = treeState[node.parentId];
+    const parent = treeState.nodes.entities[parentId];
 
-    parent.children.splice(parent.children.indexOf(node.parentId), 1);
+    parent.children = parent.children.filter((id) => id !== node.id);
+  } else {
+    treeState.nodes.rootNodes = treeState.nodes.rootNodes.filter((id) => id !== node.id);
   }
 
   return newState;
@@ -54,10 +61,10 @@ function loadNodes(state: ITreeState, action: ITreeAction) {
   const parentId = action.payload.id;
 
   if (parentId) {
-    parent = newState[treeId][parentId];
+    parent = newState[treeId].nodes.entities[parentId];
     parent.children = [];
   } else {
-    newState[treeId] = {};
+    newState[treeId].nodes.entities = {};
   }
 
   action.payload.nodes.forEach((nodeData: IOuterNode) => {
@@ -69,7 +76,11 @@ function loadNodes(state: ITreeState, action: ITreeAction) {
       nodeData.parents = [];
     }
 
-    newState[treeId][nodeData.id] = nodeData;
+    newState[treeId].nodes.entities[nodeData.id] = nodeData;
+
+    if (!parentId) {
+      newState[treeId].nodes.rootNodes.push(nodeData.id);
+    }
   });
 
   return newState;
@@ -77,10 +88,11 @@ function loadNodes(state: ITreeState, action: ITreeAction) {
 
 
 function expandNode(state: ITreeState, action: ITreeAction): ITreeState {
-  const newState = copyState(state, action.payload.treeId);
+  const treeId = action.payload.treeId;
+  const newState = copyState(state, treeId);
   const nodeId = action.payload.id;
 
-  newState[action.payload.treeId][nodeId] = Object.assign({}, newState[action.payload.treeId][nodeId], {isExpanded: true});
+  newState[treeId].nodes.entities[nodeId] = Object.assign({}, newState[treeId].nodes.entities[nodeId], {isExpanded: true});
 
   return newState;
 }
@@ -90,25 +102,33 @@ function collapseNode(state: ITreeState, action: ITreeAction): ITreeState {
   const newState = copyState(state, action.payload.treeId);
   const nodeId = action.payload.id;
 
-  newState[action.payload.treeId][nodeId] = Object.assign({}, newState[action.payload.treeId][nodeId], {isExpanded: false});
+  newState[action.payload.treeId].nodes.entities[nodeId] = Object.assign({}, newState[action.payload.treeId].nodes.entities[nodeId], {isExpanded: false});
 
   return newState;
 }
 
 
 function insertNode(state: ITreeState, action: ITreeAction): ITreeState {
-  const newState = copyState(state, action.payload.treeId);
+  const treeId = action.payload.treeId;
+  const newState = copyState(state, treeId);
+  const parentId = action.payload.id;
   const newNode: IOuterNode = {
-    id: null,
-    treeId: action.payload.treeId,
+    id: NEW_NODE_ID,
+    treeId: treeId,
     name: 'New data',
-    parentId: action.payload.id,
+    parentId: parentId,
     children: [],
     parents: [],
     isExpanded: false
   };
 
-  newState[action.payload.treeId][0] = newNode;
+  newState[treeId].nodes.entities[NEW_NODE_ID] = newNode;
+
+  console.log('parentId', parentId);
+
+  if (!parentId) {
+    newState[treeId].nodes.rootNodes = [...newState[treeId].nodes.rootNodes, NEW_NODE_ID];
+  }
 
   return newState;
 }
@@ -118,10 +138,10 @@ function saveNode(state: ITreeState, action: ITreeAction): ITreeState {
   const old = action.payload.oldNode;
   const newNode = action.payload.node;
   const treeId = action.payload.treeId;
-  const treeState = newState[treeId];
+  const treeState = newState[treeId].nodes.entities;
 
-  if (treeState[0]) {
-    delete treeState[0];
+  if (treeState[NEW_NODE_ID]) {
+    delete treeState[NEW_NODE_ID];
   } else {
     delete treeState[old.id];
   }
@@ -139,9 +159,9 @@ function saveNode(state: ITreeState, action: ITreeAction): ITreeState {
 
       treeState[parentId].children.push(nodeId);
     }
-
-    newNode.children = Object.keys(state[treeId])
-      .filter((key: string) => key === nodeId);
+  } else if (old.id === NEW_NODE_ID) {
+    newState[treeId].nodes.rootNodes = newState[treeId].nodes.rootNodes.filter((id) => id !== NEW_NODE_ID);
+    newState[treeId].nodes.rootNodes.push(nodeId);
   }
 
   return newState;
@@ -152,30 +172,29 @@ function moveNode(state: ITreeState, action: ITreeAction) {
   const oldNode = action.payload.source;
   const newNode = action.payload.target;
   const treeId = action.payload.treeId;
-  const treeState = newState[treeId];
-
-  // remove old nodes
-  delete treeState[oldNode.id];
+  const treeData = newState[treeId];
+  const treeState = newState[treeId].nodes.entities;
 
   // remove info about removed child
   if (oldNode.parentId) {
-    const parent = treeState[oldNode.parentId];
-    parent.children.splice(parent.children.indexOf(oldNode.id), 1);
+    treeState[oldNode.parentId].children = treeState[oldNode.parentId].children.filter((id) => id !== oldNode.id);
+  } else {
+    treeData.nodes.rootNodes = treeData.nodes.rootNodes.filter((id) => id !== oldNode.id);
   }
 
-  // add data
-  treeState[newNode.id] = newNode;
-
+  // add info about moved node
   if (newNode.parentId) {
     const newParent = treeState[newNode.parentId];
 
     if (newParent.children) {
       newParent.children.push(newNode.id);
     }
-    newNode.parents = [...newParent.parents, ...[newParent.id]];
   } else {
-    newNode.parents = [];
+    treeData.nodes.rootNodes.push(newNode.id);
   }
+
+  // replace node data
+  treeState[newNode.id] = {...newNode};
 
   return newState;
 }
@@ -183,7 +202,14 @@ function moveNode(state: ITreeState, action: ITreeAction) {
 function registerTree(state: ITreeState, action: ITreeAction) {
   const newState = copyState(state);
 
-  newState[action.payload.treeId] = <ITreeData>{};
+  newState[action.payload.treeId] = {
+    nodes: {
+      entities: {},
+      selected: null,
+      rootNodes: []
+    },
+    configuration: null
+  };
 
   return newState;
 }
@@ -193,14 +219,18 @@ function setAllNodes(state: ITreeState, action: ITreeAction): ITreeState {
   const newState = copyState(state, action.payload.treeId);
   const treeId = action.payload.treeId;
   const nodes = action.payload.nodes;
-  const newNodes: ITreeData = {};
+  const newNodes: ITreeNodes = {};
 
   nodes.forEach((nodeData: IOuterNode) => {
     nodeData.treeId = treeId;
     newNodes[nodeData.id] = nodeData;
+
+    if (nodeData.parentId === null) {
+      newState[treeId].nodes.rootNodes.push(nodeData.id);
+    }
   });
 
-  newState[treeId] = newNodes;
+  newState[treeId].nodes.entities = newNodes;
 
   return newState;
 }
@@ -240,5 +270,5 @@ export function treeReducer(state: ITreeState = {}, action: ITreeAction): ITreeS
 export const treeStateSelector: MemoizedSelector<object, ITreeState> = createFeatureSelector<ITreeState>('trees');
 
 export function treeSelector(treeId: string): MemoizedSelector<object, ITreeData> {
-  return createSelector(treeStateSelector, (state: ITreeState) => state[treeId] || {});
+  return createSelector(treeStateSelector, (state: ITreeState) => state[treeId] || null);
 }

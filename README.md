@@ -243,6 +243,7 @@ At the end do not forget to add this effects to your app.
 
 ### v3.0.0
 * change the way of injecting NodeService provider
+* change tree state - add root nodes list
 
 ### v2.4.0
 * add possibility to open path of the tree
