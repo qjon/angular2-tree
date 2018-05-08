@@ -240,12 +240,10 @@ describe('TreeActionsService', () => {
     it('should return proper load path action', () => {
       action = {
         type: TreeActionsService.TREE_LOAD_PATH,
-        payload: {treeId, ids: [id], hasLoadedNodes: false}
+        payload: {treeId, ids: [id]}
       };
 
       expect(service.loadPath(treeId, [id])).toEqual(action);
     });
   });
-
-
 });

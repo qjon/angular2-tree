@@ -6,13 +6,17 @@ export interface ITreeNodes {
   [key: string]: IOuterNode
 }
 
+export interface ITreeConfiguration extends IConfiguration {
+  isFullyLoaded: boolean;
+}
+
 export interface ITreeData {
   nodes: {
     entities: ITreeNodes;
     selected: string;
     rootNodes: string[];
   };
-  configuration: IConfiguration;
+  configuration: ITreeConfiguration;
 }
 
 export interface ITreeState {
@@ -31,7 +35,6 @@ export interface ITreeActionPayload {
   sourceOfDroppedData?: string;
   ids?: string[];
   silent?: boolean;
-  hasLoadedNodes?: boolean;
 }
 
 export interface ITreeAction extends Action {

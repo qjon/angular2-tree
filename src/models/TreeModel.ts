@@ -34,26 +34,15 @@ export class TreeModel {
           return isEqual(prev.nodes.entities, next.nodes.entities)
         }),
         map((treeData: ITreeData): ITreeNodes => treeData.nodes.entities)
-      )
-      .do((data) => console.log('data', data))
-    ;
+      );
 
     this.rootNodes$ = this.treeData$
       .pipe(
         map((treeData: ITreeData): IOuterNode[] => treeData.nodes.rootNodes.map((id) => treeData.nodes.entities[id]).sort(this.sortNodes)),
         distinctUntilChanged(),
-      )
-      .do((data) => console.log('rootNodes', data));
+      );
 
     this.initConfiguration();
-  }
-
-  public getRootNodes() {
-    // this.rootNodes$
-    //   .subscribe((data) => console.log('rootNodes', data));
-    //
-    // return Observable.of([])
-    return this.rootNodes$;
   }
 
   public getParentsList(): Observable<IOuterNode[]> {
@@ -87,7 +76,7 @@ export class TreeModel {
   }
 
   public initPath(path: string[]): void {
-    this.treeActionDispatcher.loadPath(this.configuration.treeId, path, this.isFullyLoaded);
+    this.treeActionDispatcher.loadPath(this.configuration.treeId, path);
   }
 
   private initConfiguration(): void {

@@ -54,7 +54,7 @@ export class TreeComponent implements OnInit, OnChanges {
   public ngOnInit() {
     this.registerMove();
 
-    this.rootNodes$ = this.treeModel.getRootNodes();
+    this.rootNodes$ = this.treeModel.rootNodes$;
   }
 
   public ngOnChanges(data: any) {

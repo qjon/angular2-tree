@@ -22,6 +22,13 @@ export class TreeModelGeneratorService {
     // register new tree in store
     this.treeActionsDispatcher.registerTree(treeId, isFullyLoaded, nodes);
 
+    // init tree configuration
+    this.treeActionsDispatcher.setConfiguration(treeId, configuration);
+
+    if (Boolean(nodes)) {
+      this.treeActionsDispatcher.markAsFullyLoaded(treeId);
+    }
+
     const folders$ = this.store.select(treeSelector(configuration.treeId));
 
     return new TreeModel(this.treeActionsDispatcher, folders$, configuration, isFullyLoaded);

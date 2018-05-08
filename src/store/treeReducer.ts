@@ -1,5 +1,5 @@
-import {ITreeAction, ITreeData, ITreeNodes, ITreeState} from './ITreeState';
-import {TreeActionsService} from './treeActions.service';
+import {ITreeAction, ITreeConfiguration, ITreeData, ITreeNodes, ITreeState} from './ITreeState';
+import {ITreeConfigurationAction, TreeActionsService} from './treeActions.service';
 import {IOuterNode} from '../interfaces/IOuterNode';
 import {createFeatureSelector, createSelector} from '@ngrx/store';
 import {MemoizedSelector} from '@ngrx/store/src/selector';
@@ -12,7 +12,9 @@ export const emptyTreeData: ITreeData = {
     selected: null,
     rootNodes: []
   },
-  configuration: null
+  configuration: {
+    isFullyLoaded: false
+  }
 };
 
 function copyState(state: ITreeState, treeId: string = null) {
@@ -204,11 +206,11 @@ function registerTree(state: ITreeState, action: ITreeAction) {
 
   newState[action.payload.treeId] = {
     nodes: {
-      entities: {},
-      selected: null,
-      rootNodes: []
+      entities: {...emptyTreeData.nodes.entities},
+      selected: emptyTreeData.nodes.selected,
+      rootNodes: [...emptyTreeData.nodes.rootNodes]
     },
-    configuration: null
+    configuration: {...emptyTreeData.configuration}
   };
 
   return newState;
@@ -235,7 +237,25 @@ function setAllNodes(state: ITreeState, action: ITreeAction): ITreeState {
   return newState;
 }
 
-export function treeReducer(state: ITreeState = {}, action: ITreeAction): ITreeState {
+function markTreeAsFullyLoaded(state: ITreeState, action: ITreeAction): ITreeState {
+  const treeId = action.payload.treeId;
+  const newState = copyState(state, treeId);
+
+  newState[treeId].configuration = {...newState[treeId].configuration, ...{isFullyLoaded: true}};
+
+  return newState;
+}
+
+function setConfiguration(state: ITreeState, action: ITreeConfigurationAction): ITreeState {
+  const treeId = action.payload.treeId;
+  const newState = copyState(state, treeId);
+
+  newState[treeId].configuration = {...newState[treeId].configuration, ...action.payload.configuration};
+
+  return newState;
+}
+
+export function treeReducer(state: ITreeState = {}, action: ITreeAction | ITreeConfigurationAction): ITreeState {
   switch (action.type) {
     case TreeActionsService.TREE_REGISTER:
       return registerTree(state, action);
@@ -251,6 +271,10 @@ export function treeReducer(state: ITreeState = {}, action: ITreeAction): ITreeS
       return moveNode(state, action);
     case TreeActionsService.TREE_SET_ALL_NODES:
       return setAllNodes(state, action);
+    case TreeActionsService.TREE_MARK_AS_FULLY_LOADED:
+      return markTreeAsFullyLoaded(state, action);
+    case TreeActionsService.TREE_SET_CONFIGURATION:
+      return setConfiguration(state, <ITreeConfigurationAction>action);
     case TreeActionsService.TREE_EXPAND_NODE:
       return expandNode(state, action);
     case TreeActionsService.TREE_COLLAPSE_NODE:
@@ -271,4 +295,8 @@ export const treeStateSelector: MemoizedSelector<object, ITreeState> = createFea
 
 export function treeSelector(treeId: string): MemoizedSelector<object, ITreeData> {
   return createSelector(treeStateSelector, (state: ITreeState) => state[treeId] || null);
+}
+
+export function treeConfigurationSelector(treeId: string): MemoizedSelector<object, ITreeConfiguration> {
+  return createSelector(treeStateSelector, (state: ITreeState) => state[treeId].configuration || null);
 }
