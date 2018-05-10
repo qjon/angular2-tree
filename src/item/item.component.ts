@@ -88,11 +88,14 @@ export class ItemComponent implements OnInit, OnDestroy, OnChanges {
     // if node is added to the tree then some part of nodes is moving down
     // and the new one is inserted, then all sub nodes should be rewritten
     const node = values.node;
+
     if (node && !node.firstChange && node.previousValue.id !== node.currentValue.id) {
       this.children$ = this.treeModel.getChildren(this.node.id);
 
       if (this.node.isExpanded) {
         this.markNodeAsExpanded();
+      } else {
+        this.markNodeAsCollapsed();
       }
     }
   }
@@ -237,6 +240,8 @@ export class ItemComponent implements OnInit, OnDestroy, OnChanges {
   protected markNodeAsCollapsed(): void {
     if (this.treeModel.configuration.isAnimation) {
       this.animationState = 'inactive';
+    } else {
+      this.isExpanded = false;
     }
   }
 

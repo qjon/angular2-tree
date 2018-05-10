@@ -6,7 +6,7 @@ import {Subject} from 'rxjs/Subject';
 import {IOuterNode} from '../interfaces/IOuterNode';
 import SpyObj = jasmine.SpyObj;
 
-fdescribe('TreeModel', () => {
+describe('TreeModel', () => {
   let service: TreeModel;
   let nodesMock$: Subject<ITreeData>;
   let configurationMock: IConfiguration;
@@ -193,7 +193,7 @@ fdescribe('TreeModel', () => {
 
       service.initPath(path);
 
-      expect(treeActionDispatcherMock.loadPath).toHaveBeenCalledWith(configuration.treeId, path, service.isFullyLoaded);
+      expect(treeActionDispatcherMock.loadPath).toHaveBeenCalledWith(configuration.treeId, path);
     });
   });
 

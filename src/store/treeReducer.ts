@@ -101,10 +101,11 @@ function expandNode(state: ITreeState, action: ITreeAction): ITreeState {
 
 
 function collapseNode(state: ITreeState, action: ITreeAction): ITreeState {
-  const newState = copyState(state, action.payload.treeId);
+  const treeId = action.payload.treeId;
+  const newState = copyState(state, treeId);
   const nodeId = action.payload.id;
 
-  newState[action.payload.treeId].nodes.entities[nodeId] = Object.assign({}, newState[action.payload.treeId].nodes.entities[nodeId], {isExpanded: false});
+  newState[treeId].nodes.entities[nodeId] = {...newState[treeId].nodes.entities[nodeId], ...{isExpanded: false}};
 
   return newState;
 }
@@ -125,8 +126,6 @@ function insertNode(state: ITreeState, action: ITreeAction): ITreeState {
   };
 
   newState[treeId].nodes.entities[NEW_NODE_ID] = newNode;
-
-  console.log('parentId', parentId);
 
   if (!parentId) {
     newState[treeId].nodes.rootNodes = [...newState[treeId].nodes.rootNodes, NEW_NODE_ID];

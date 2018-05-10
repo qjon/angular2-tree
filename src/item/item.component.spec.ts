@@ -17,6 +17,7 @@ import {TreeActionsDispatcherService} from '../store/treeActionsDispatcher.servi
 import {AnimationEvent} from '@angular/animations';
 import {Observable} from 'rxjs/Observable';
 import {SimpleChange, SimpleChanges} from '@angular/core';
+import {NEW_NODE_ID} from '../store/treeReducer';
 import SpyObj = jasmine.SpyObj;
 
 describe('ItemComponent', () => {
@@ -163,10 +164,11 @@ describe('ItemComponent', () => {
 
         component.node = newNode;
 
-        component.ngOnChanges(value);
       });
 
       it('should set $children for the second time', () => {
+        component.ngOnChanges(value);
+
         expect(treeModelMock.getChildren).toHaveBeenCalledWith('new-node-id')
       });
 
@@ -312,13 +314,12 @@ describe('ItemComponent', () => {
 
     it('should dispatch deleteNode action if node is new', () => {
       const newNode = Object.assign({}, node);
-      newNode.id = null;
+      newNode.id = NEW_NODE_ID;
 
       jasmine.clock().install();
       component.node = newNode;
 
       fixture.detectChanges();
-      spyOn(component.input.nativeElement, 'focus');
       jasmine.clock().tick(0);
 
       component.onBlur();

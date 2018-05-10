@@ -14,7 +14,8 @@ import {NEW_NODE_ID, treeConfigurationSelector} from './treeReducer';
 
 @Injectable()
 export class TreeEffectsService {
-  @Effect() register$ = this.actions$
+  @Effect()
+  public register$ = this.actions$
     .ofType(TreeActionsService.TREE_REGISTER)
     .pipe(
       map((action: ITreeAction): ITreeAction => {
@@ -26,7 +27,8 @@ export class TreeEffectsService {
       })
     );
 
-  @Effect() load$ = this.actions$
+  @Effect()
+  public load$ = this.actions$
     .ofType(TreeActionsService.TREE_LOAD)
     .pipe(
       mergeMap((action: ITreeAction) => this.loadNodes(action.payload.treeId, action.payload.id)
@@ -38,7 +40,8 @@ export class TreeEffectsService {
     );
 
 
-  @Effect() delete$ = this.actions$
+  @Effect()
+  public delete$ = this.actions$
     .ofType(TreeActionsService.TREE_DELETE_NODE)
     .pipe(
       switchMap((action: ITreeAction) => this.deleteNode(action.payload.treeId, action.payload.node)
@@ -50,7 +53,8 @@ export class TreeEffectsService {
     );
 
 
-  @Effect() save$ = this.actions$
+  @Effect()
+  public save$ = this.actions$
     .ofType(TreeActionsService.TREE_SAVE_NODE)
     .pipe(
       switchMap((action: ITreeAction) => this.saveNode(action.payload.treeId, {...action.payload.node})
@@ -61,7 +65,8 @@ export class TreeEffectsService {
       )
     );
 
-  @Effect() move$ = this.actions$
+  @Effect()
+  public move$ = this.actions$
     .ofType(TreeActionsService.TREE_MOVE_NODE)
     .pipe(
       filter((action: ITreeAction) => {
@@ -168,8 +173,6 @@ export class TreeEffectsService {
   protected deleteNode(treeId: string, node: IOuterNode): Observable<IOuterNode> {
     const nodeService = this.nodeDispatcherService.get(treeId);
 
-    console.log(nodeService);
-
     return node.id ? nodeService.remove(node.id) : Observable.of(node);
   }
 
@@ -191,8 +194,6 @@ export class TreeEffectsService {
 
   protected moveNode(treeId: string, source: IOuterNode, target: IOuterNode): Observable<IOuterNode> {
     const nodeService = this.nodeDispatcherService.get(treeId);
-
-    console.log(source, target)
 
     return nodeService.move(source, target);
   }
