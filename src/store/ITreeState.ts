@@ -35,6 +35,7 @@ export interface ITreeActionPayload {
   sourceOfDroppedData?: string;
   ids?: string[];
   silent?: boolean;
+  hasLoadedNodes?: boolean;
 }
 
 export interface ITreeAction extends Action {

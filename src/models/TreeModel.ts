@@ -4,7 +4,7 @@ import {IConfiguration} from '../interfaces/IConfiguration';
 import {ITreeData, ITreeNodes} from '../store/ITreeState';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {TreeActionsDispatcherService} from '../store/treeActionsDispatcher.service';
-import {distinctUntilChanged, map} from 'rxjs/operators';
+import {distinctUntilChanged, filter, map} from 'rxjs/operators';
 import 'rxjs/add/observable/combineLatest';
 import 'rxjs/add/operator/do';
 import * as isEqual from 'lodash.isequal';
@@ -51,16 +51,13 @@ export class TreeModel {
       this.nodes$
     )
       .pipe(
+        filter(([currentNode, nodes]: [IOuterNode, ITreeNodes]) => Boolean(currentNode)),
         map(([currentNode, nodes]: [IOuterNode, ITreeNodes]): IOuterNode[] => {
-          const parents: IOuterNode[] = [];
-          let node: IOuterNode = Object.assign({}, currentNode);
+          const parents: IOuterNode[] = currentNode.parents.map(id => nodes[id]);
 
-          do {
-            parents.push(node);
-            node = node.parentId ? nodes[node.parentId] : null;
-          } while (node);
+          parents.push(currentNode);
 
-          return parents.reverse();
+          return parents;
         })
       )
   }

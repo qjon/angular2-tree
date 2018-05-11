@@ -26,6 +26,7 @@ export class TreeModelGeneratorService {
     this.treeActionsDispatcher.setConfiguration(treeId, configuration);
 
     if (Boolean(nodes)) {
+      this.nodeDispatcherService.get(treeId).setAllNodes(nodes);
       this.treeActionsDispatcher.markAsFullyLoaded(treeId);
     }
 

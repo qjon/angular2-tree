@@ -45,9 +45,10 @@ function removeNode(state: ITreeState, action: ITreeAction): ITreeState {
   delete treeState.nodes.entities[node.id];
 
   if (parentId) {
-    const parent = treeState.nodes.entities[parentId];
+    const parent = {...treeState.nodes.entities[parentId]};
 
     parent.children = parent.children.filter((id) => id !== node.id);
+    treeState.nodes.entities[parentId] = parent;
   } else {
     treeState.nodes.rootNodes = treeState.nodes.rootNodes.filter((id) => id !== node.id);
   }
@@ -151,14 +152,17 @@ function saveNode(state: ITreeState, action: ITreeAction): ITreeState {
   treeState[nodeId] = newNode;
 
   const parentId = newNode.parentId;
+  const parent = treeState[parentId] || null;
 
   if (parentId) {
-    if (treeState[parentId]) {
-      if (!treeState[parentId].children) {
-        treeState[parentId].children = [];
+    if (parent) {
+      if (!parent.children) {
+        parent.children = [];
       }
 
-      treeState[parentId].children.push(nodeId);
+      parent.children.push(nodeId);
+
+      newNode.parents = [...parent.parents, parent.id];
     }
   } else if (old.id === NEW_NODE_ID) {
     newState[treeId].nodes.rootNodes = newState[treeId].nodes.rootNodes.filter((id) => id !== NEW_NODE_ID);
@@ -190,8 +194,11 @@ function moveNode(state: ITreeState, action: ITreeAction) {
     if (newParent.children) {
       newParent.children.push(newNode.id);
     }
+
+    newNode.parents = [...newParent.parents, newParent.id];
   } else {
     treeData.nodes.rootNodes.push(newNode.id);
+    newNode.parents = [];
   }
 
   // replace node data
@@ -221,6 +228,7 @@ function setAllNodes(state: ITreeState, action: ITreeAction): ITreeState {
   const treeId = action.payload.treeId;
   const nodes = action.payload.nodes;
   const newNodes: ITreeNodes = {};
+  const ids: string[] = nodes.map((nodeData: IOuterNode) => nodeData.id);
 
   nodes.forEach((nodeData: IOuterNode) => {
     nodeData.treeId = treeId;
@@ -231,9 +239,25 @@ function setAllNodes(state: ITreeState, action: ITreeAction): ITreeState {
     }
   });
 
+  newState[treeId].nodes.rootNodes.forEach((id) => updateParents(newNodes, id));
+
   newState[treeId].nodes.entities = newNodes;
 
   return newState;
+}
+
+function updateParents(nodes: ITreeNodes, nodeId: string, parents: string[] = []): void {
+  const node: IOuterNode = nodes[nodeId];
+
+  if (node) {
+    node.parents = parents;
+
+    if (node.children.length > 0) {
+      const newParents = [...parents, node.id];
+
+      node.children.forEach(childId => updateParents(nodes, childId, newParents));
+    }
+  }
 }
 
 function markTreeAsFullyLoaded(state: ITreeState, action: ITreeAction): ITreeState {

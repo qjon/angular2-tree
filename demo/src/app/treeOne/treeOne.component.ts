@@ -3,7 +3,6 @@ import {IConfiguration, IContextMenu, ITreeData, TreeModel} from '../../../../ma
 import {Observable} from 'rxjs/Observable';
 import {TreeModelGeneratorService} from '../../../../src/service/treeModelGenerator.service';
 import {IOuterNode} from '../../../../src/interfaces/IOuterNode';
-import {NodeDispatcherService} from '../../../../src/service/nodesDispatcher.service';
 import {TREE_ONE_ID} from './treeOneNode.service';
 
 @Component({
@@ -26,16 +25,18 @@ export class TreeOneComponent implements OnInit {
 
   public treeModel: TreeModel;
 
-  public constructor(private treeModelGenerator: TreeModelGeneratorService,
-                     private nodeDispatcherService: NodeDispatcherService) {
+  public constructor(private treeModelGenerator: TreeModelGeneratorService) {
   }
 
   public ngOnInit() {
-    const nodes: IOuterNode[] = JSON.parse(localStorage.getItem('treeOne'));
+    const nodes: IOuterNode[] = JSON.parse(localStorage.getItem('treeOne')) || [];
 
 
     this.treeModel = this.treeModelGenerator.createTreeModel(this.treeConfiguration, nodes);
-    this.nodeDispatcherService.get(TREE_ONE_ID).setAllNodes(nodes);
-    this.treeModel.initPath(['cca2ccca-fcb1-e44d-6623-7cebf40dd05a', 'ed361d54-ee45-09ea-b913-59bca72c531e']);
+    this.treeModel.initPath([
+      '2e1b8df0-e0ec-1f38-a3da-2780a65530bf',
+      'f2eda196-2a1a-95d3-72df-af5440ae2bda',
+      'f74f069a-ad27-84e2-24fd-e896944c9bff'
+    ]);
   }
 }
