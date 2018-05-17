@@ -63,7 +63,8 @@ export class TreeComponent implements OnInit, OnChanges {
   }
 
   public onAdd() {
-    const parent = this.treeModel.currentSelectedNode$.getValue();
+    // const parent = this.treeModel.currentSelectedNode$.getValue();
+    const parent = null;
     const parentId = parent ? parent.id : null;
 
     this.store.dispatch(this.treeActions.insertNode(this.treeModel.treeId, parentId));

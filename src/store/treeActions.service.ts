@@ -33,6 +33,7 @@ export class TreeActionsService {
   static TREE_MOVE_NODE_ERROR = 'TREE_MOVE_NODE_ERROR';
 
   static TREE_REGISTER = 'TREE_REGISTER';
+  static TREE_SELECT_NODE = 'TREE_SELECT_NODE';
   static TREE_SET_ALL_NODES = 'TREE_SET_ALL_NODES';
   static TREE_SET_CONFIGURATION = 'TREE_SET_CONFIGURATION';
 
@@ -231,6 +232,13 @@ export class TreeActionsService {
     return {
       type: TreeActionsService.TREE_LOAD_PATH,
       payload: {treeId, ids}
+    };
+  }
+
+  public selectNode(treeId: string, node: IOuterNode): ITreeAction {
+    return {
+      type: TreeActionsService.TREE_SELECT_NODE,
+      payload: {node, treeId}
     };
   }
 

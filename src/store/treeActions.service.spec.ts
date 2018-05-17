@@ -246,4 +246,15 @@ describe('TreeActionsService', () => {
       expect(service.loadPath(treeId, [id])).toEqual(action);
     });
   });
+
+  describe('selectNode', () => {
+    it('should return proper select node action', () => {
+      action = {
+        type: TreeActionsService.TREE_SELECT_NODE,
+        payload: {treeId, node}
+      };
+
+      expect(service.selectNode(treeId, node)).toEqual(action);
+    });
+  });
 });

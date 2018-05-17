@@ -52,4 +52,8 @@ export class TreeActionsDispatcherService {
   public setConfiguration(treeId: string, configuration: IConfiguration): void {
     this.store.dispatch(this.actions.setConfiguration(treeId, configuration));
   }
+
+  public selectNode(treeId: string, node: IOuterNode): void {
+    this.store.dispatch(this.actions.selectNode(treeId, node));
+  }
 }

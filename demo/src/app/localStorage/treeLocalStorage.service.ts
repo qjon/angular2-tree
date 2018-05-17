@@ -48,6 +48,11 @@ export class TreeLocalStorageNodeService extends NodeService {
       this.nodes[oldParentIndex].children = this.nodes[oldParentIndex].children.filter(id => id !== srcId);
     }
 
+    if (targetId) {
+      const newParentIndex = this.findIndexByNodeId(targetId);
+      this.nodes[newParentIndex].children.push(srcId);
+    }
+
     this.saveNodes();
 
     return Observable.of(this.nodes[index]);
@@ -113,7 +118,11 @@ export class TreeLocalStorageNodeService extends NodeService {
 
   private saveNodes() {
     try {
-      localStorage.setItem(this.treeName, JSON.stringify(this.nodes));
+      localStorage.setItem(this.treeName, JSON.stringify(this.nodes.map((node) => {
+        const newNode = {...node}
+
+        return newNode;
+      })));
     } catch (e) {
       console.warn('State not save');
     }

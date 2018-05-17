@@ -2,7 +2,6 @@ import {IOuterNode} from '../interfaces/IOuterNode';
 import {Observable} from 'rxjs/Observable';
 import {IConfiguration} from '../interfaces/IConfiguration';
 import {ITreeData, ITreeNodes} from '../store/ITreeState';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {TreeActionsDispatcherService} from '../store/treeActionsDispatcher.service';
 import {distinctUntilChanged, filter, map} from 'rxjs/operators';
 import 'rxjs/add/observable/combineLatest';
@@ -11,7 +10,6 @@ import * as isEqual from 'lodash.isequal';
 import {NEW_NODE_ID} from '../store/treeReducer';
 
 export class TreeModel {
-  public currentSelectedNode$: BehaviorSubject<IOuterNode> = new BehaviorSubject(null);
 
   public get treeId(): string {
     return this.configuration.treeId;
@@ -23,6 +21,7 @@ export class TreeModel {
 
   public nodes$: Observable<ITreeNodes>;
   public rootNodes$: Observable<IOuterNode[]>;
+  public currentSelectedNode$: Observable<IOuterNode>;
 
   public constructor(private treeActionDispatcher: TreeActionsDispatcherService,
                      private treeData$: Observable<ITreeData>,
@@ -42,12 +41,25 @@ export class TreeModel {
         distinctUntilChanged(),
       );
 
+    this.currentSelectedNode$ = this.treeData$
+      .pipe(
+        map((treeData: ITreeData): IOuterNode => {
+          const nodesData = treeData.nodes;
+          const selectedId = nodesData.selected;
+
+          return selectedId ? nodesData.entities[selectedId] : null
+        }),
+        // distinctUntilChanged((prev: IOuterNode, next: IOuterNode) => {
+        //   return isEqual(prev ? prev.id : null, next ? next.id : null)
+        // })
+      );
+
     this.initConfiguration();
   }
 
   public getParentsList(): Observable<IOuterNode[]> {
     return Observable.combineLatest(
-      this.currentSelectedNode$.asObservable(),
+      this.currentSelectedNode$,
       this.nodes$
     )
       .pipe(

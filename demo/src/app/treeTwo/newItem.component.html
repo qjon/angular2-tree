@@ -1,5 +1,5 @@
 <div class="tree-item row"
-     [ngClass]="{'tree-item-selected': isSelected}"
+     [ngClass]="{'tree-item-selected': (selectedNodeId$ | async) == node.id}"
      riDroppable
      riDraggable
      [dragZone]="treeModel.configuration.dragZone"

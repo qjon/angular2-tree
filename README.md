@@ -126,7 +126,7 @@ Also you can use your own template to display items. You can do that when you ex
 and _newItem.component.html_
 
     <div class="tree-item row"
-         [ngClass]="{'tree-item-selected': isSelected}"
+         [ngClass]="{'tree-item-selected': (selectedNodeId$ | async) == node.id}"
          riDroppable
          riDraggable
          [dragZone]="treeModel.configuration.dragZone"
@@ -189,6 +189,7 @@ Using _ngrx/store_ you can listen on below actions and do whatever you want:
     TreeActionsService.TREE_REGISTER
     TreeActionsService.TREE_SET_ALL_NODES
     TreeActionsService.TREE_LOAD_PATH
+    TreeActionsService.TREE_SELECT_NODE
 
 ## Translation
 
@@ -244,7 +245,8 @@ At the end do not forget to add this effects to your app.
 ### v3.0.0
 * change the way of injecting NodeService provider
 * change tree state - add root nodes list
-* save tree configuration in store
+* save tree configuration in store (action: TREE_SET_CONFIGURATION)
+* save selected node in the store (action: TREE_SELECT_NODE)
 
 ### v2.4.0
 * add possibility to open path of the tree

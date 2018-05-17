@@ -1,5 +1,5 @@
 <div class="tree-item"
-     [ngClass]="{'tree-item-selected': isSelected}"
+     [ngClass]="{'tree-item-selected': (selectedNodeId$ | async) == node.id}"
      (contextmenu)="onContextMenu($event)"
      riDroppable
      riDraggable

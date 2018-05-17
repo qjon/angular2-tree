@@ -8,7 +8,7 @@ import {Observable} from 'rxjs/Observable';
 import {TreeModel} from '../models/TreeModel';
 import {Actions} from '@ngrx/effects';
 import {animate, AnimationEvent, state, style, transition, trigger} from '@angular/animations';
-import {filter} from 'rxjs/operators';
+import {filter, map} from 'rxjs/operators';
 import {AnimationTriggerMetadata} from '@angular/animations/src/animation_metadata';
 import {Subscription} from 'rxjs/Subscription';
 import {TreeActionsDispatcherService} from '../store/treeActionsDispatcher.service';
@@ -78,6 +78,7 @@ export class ItemComponent implements OnInit, OnDestroy, OnChanges {
   protected subscription = new Subscription();
 
   protected _node: IOuterNode;
+  protected selectedNodeId$: Observable<string>;
 
   public constructor(protected treeActionsDispatcherService: TreeActionsDispatcherService,
                      protected contextMenuService: ContextMenuService,
@@ -113,16 +114,13 @@ export class ItemComponent implements OnInit, OnDestroy, OnChanges {
       this.markNodeAsExpanded();
     }
 
+    this.selectedNodeId$ = this.treeModel.currentSelectedNode$
+      .pipe(
+        map((node: IOuterNode) => node ? node.id : null)
+      );
+
     this.subscription.add(this.getSubscriptionToExpandNode());
     this.subscription.add(this.getSubscriptionToCollapseNode());
-
-    // @todo: rewrite it to node property in IOuterNode
-    this.subscription.add(
-      this.treeModel.currentSelectedNode$
-        .subscribe((node: IOuterNode) => {
-          this.isSelected = (node && node.id === this.node.id) ? true : false;
-        })
-    );
 
     this.subscription.add(
       this.actions$
@@ -206,7 +204,7 @@ export class ItemComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public onSelect() {
-    this.treeModel.currentSelectedNode$.next(this.isSelected ? null : this.node);
+    this.treeActionsDispatcherService.selectNode(this.treeModel.treeId, this.node);
   }
 
   public trackByFn(node: IOuterNode): string {

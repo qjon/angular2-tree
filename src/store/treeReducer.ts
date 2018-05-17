@@ -250,10 +250,10 @@ function updateParents(nodes: ITreeNodes, nodeId: string, parents: string[] = []
   const node: IOuterNode = nodes[nodeId];
 
   if (node) {
-    node.parents = parents;
+    node.parents = [...parents];
 
     if (node.children.length > 0) {
-      const newParents = [...parents, node.id];
+      const newParents = [...parents, ...[node.id]];
 
       node.children.forEach(childId => updateParents(nodes, childId, newParents));
     }
@@ -274,6 +274,16 @@ function setConfiguration(state: ITreeState, action: ITreeConfigurationAction): 
   const newState = copyState(state, treeId);
 
   newState[treeId].configuration = {...newState[treeId].configuration, ...action.payload.configuration};
+
+  return newState;
+}
+
+function selectNode(state: ITreeState, action: ITreeAction) {
+  const treeId = action.payload.treeId;
+  const node = action.payload.node;
+  const newState = copyState(state, treeId);
+
+  newState[treeId].nodes.selected = node ? node.id : null;
 
   return newState;
 }
@@ -302,6 +312,8 @@ export function treeReducer(state: ITreeState = {}, action: ITreeAction | ITreeC
       return expandNode(state, action);
     case TreeActionsService.TREE_COLLAPSE_NODE:
       return collapseNode(state, action);
+    case TreeActionsService.TREE_SELECT_NODE:
+      return selectNode(state, action);
     case TreeActionsService.TREE_DELETE_NODE:
     case TreeActionsService.TREE_EDIT_NODE_START:
     case TreeActionsService.TREE_LOAD:
