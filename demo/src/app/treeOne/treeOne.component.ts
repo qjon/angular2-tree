@@ -33,10 +33,10 @@ export class TreeOneComponent implements OnInit {
 
 
     this.treeModel = this.treeModelGenerator.createTreeModel(this.treeConfiguration, nodes);
-    this.treeModel.initPath([
-      '2e1b8df0-e0ec-1f38-a3da-2780a65530bf',
-      'f2eda196-2a1a-95d3-72df-af5440ae2bda',
-      'f74f069a-ad27-84e2-24fd-e896944c9bff'
-    ]);
+    // this.treeModel.initPath([
+    //   '2e1b8df0-e0ec-1f38-a3da-2780a65530bf',
+    //   'f2eda196-2a1a-95d3-72df-af5440ae2bda',
+    //   'f74f069a-ad27-84e2-24fd-e896944c9bff'
+    // ]);
   }
 }

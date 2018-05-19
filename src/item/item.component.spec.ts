@@ -33,8 +33,10 @@ describe('ItemComponent', () => {
   let treeModelMock: TreeModel;
   let actions$: Subject<ITreeAction>;
   let treeActionDispatcherMock: SpyObj<TreeActionsDispatcherService>;
+  let selection: Subject<IOuterNode>;
 
   beforeEach(() => {
+    selection = new Subject<IOuterNode>();
     actions$ = new Subject<ITreeAction>();
     treeActionDispatcherMock = jasmine.createSpyObj<TreeActionsDispatcherService>('TreeActionsDispatcherService', [
       'collapseNode',
@@ -42,7 +44,8 @@ describe('ItemComponent', () => {
       'expandNode',
       'loadPath',
       'loadTree',
-      'saveNode'
+      'saveNode',
+      'selectNode',
     ]);
 
     actionsMock = <Actions>jasmine.createSpyObj('actions', ['ofType']);
@@ -70,6 +73,7 @@ describe('ItemComponent', () => {
     });
 
     spyOn(treeModelMock, 'getChildren').and.returnValue(Observable.of(<ITreeData>{}));
+    treeModelMock.currentSelectedNode$ = selection.asObservable();
 
 
     TestBed.configureTestingModule({
@@ -450,11 +454,7 @@ describe('ItemComponent', () => {
 
       component.onSelect();
 
-      component.treeModel.currentSelectedNode$
-        .subscribe(handler);
-
-
-      expect(handler).toHaveBeenCalledWith(node);
+      expect(treeActionDispatcherMock.selectNode).toHaveBeenCalledWith(TREE_ID, node);
     });
 
 
@@ -469,7 +469,7 @@ describe('ItemComponent', () => {
         .subscribe(handler);
 
 
-      expect(handler).toHaveBeenCalledWith(null);
+      expect(treeActionDispatcherMock.selectNode).toHaveBeenCalledWith(TREE_ID, null);
     });
   });
 

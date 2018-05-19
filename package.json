@@ -18,7 +18,7 @@
     "clean:all": "rimraf dist/ && npm run clean:tmp",
     "clean:tmp": "rimraf tmp/",
     "lint": "ng lint",
-    "e2e": "ng e2e",
+    "e2e": "rm -rf e2e/screenshots/* && ng e2e -wu false -s false",
     "test": "./node_modules/.bin/karma --config karma.conf.js start",
     "gh-pages": "ng build --prod --base-href \"https://qjon.github.io/angular2-tree/\" &&  ./node_modules/.bin/angular-cli-ghpages -b gh-pages  --name=\"Rafał Ignaszewski\" --email=\"rafal@ignaszewski.pl\" --no-silent"
   },
@@ -69,6 +69,7 @@
     "copyfiles": "^1.2.0",
     "cpx": "^1.5.0",
     "gulp-inline-ng2-template": "^4.1.0",
+    "html-dnd": "^1.2.0",
     "jasmine-core": "~2.6.2",
     "jasmine-spec-reporter": "~4.1.0",
     "karma": "~1.7.0",
@@ -81,6 +82,7 @@
     "less": "^3.0.1",
     "ng2-inline-template": "^0.1.1",
     "protractor": "~5.1.2",
+    "protractor-take-screenshots-on-demand": "^1.2.0",
     "rollup": "^0.56.3",
     "rollup-plugin-alias": "^1.4.0",
     "rollup-plugin-angular": "^0.5.3",
@@ -92,7 +94,7 @@
     "rollup-plugin-typescript": "^0.8.1",
     "rollup-plugin-typescript2": "^0.11.1",
     "rxjs-es": "^5.0.0-beta.12",
-    "ts-node": "~3.0.4",
+    "ts-node": "~4.1.0",
     "tslint": "~5.7.0",
     "typescript": "2.6.2",
     "vinyl-fs": "^3.0.2"

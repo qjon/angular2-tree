@@ -2,7 +2,8 @@
 // https://github.com/angular/protractor/blob/master/lib/config.ts
 
 /*global jasmine */
-const { SpecReporter } = require('jasmine-spec-reporter');
+const {SpecReporter} = require('jasmine-spec-reporter');
+const screenshots = require('protractor-take-screenshots-on-demand');
 
 exports.config = {
   allScriptsTimeout: 11000,
@@ -10,22 +11,38 @@ exports.config = {
     './e2e/**/*.e2e-spec.ts'
   ],
   capabilities: {
-    'browserName': 'chrome'
+    'browserName': 'chrome',
+    chromeOptions: {
+      args: [
+        '--headless',
+        '--log-path=./chromedriver.log'
+      ]
+    }
   },
-  directConnect: true,
+  directConnect: false,
   baseUrl: 'http://localhost:4200/',
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,
     defaultTimeoutInterval: 30000,
-    print: function() {}
+    print: function () {
+    }
   },
-  beforeLaunch: function() {
-    require('ts-node').register({
-      project: 'e2e'
-    });
-  },
+  plugins: [
+    {
+      path: './e2e/plugins/mouse-plugin.js'
+    }
+  ],
   onPrepare() {
-    jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));
+    require('ts-node').register({
+      project: 'e2e/tsconfig.e2e.json'
+    });
+    jasmine.getEnv().addReporter(new SpecReporter({spec: {displayStacktrace: true}}));
+    //joiner between browser name and file name
+    screenshots.browserNameJoiner = ' - '; //this is the default
+    //folder of screenshots
+    screenshots.screenShotDirectory = './e2e/screenshots';
+    //creates folder of screenshots
+    screenshots.createDirectory();
   }
 };

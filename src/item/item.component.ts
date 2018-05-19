@@ -8,7 +8,7 @@ import {Observable} from 'rxjs/Observable';
 import {TreeModel} from '../models/TreeModel';
 import {Actions} from '@ngrx/effects';
 import {animate, AnimationEvent, state, style, transition, trigger} from '@angular/animations';
-import {filter, map} from 'rxjs/operators';
+import {distinctUntilChanged, filter, map} from 'rxjs/operators';
 import {AnimationTriggerMetadata} from '@angular/animations/src/animation_metadata';
 import {Subscription} from 'rxjs/Subscription';
 import {TreeActionsDispatcherService} from '../store/treeActionsDispatcher.service';
@@ -78,7 +78,6 @@ export class ItemComponent implements OnInit, OnDestroy, OnChanges {
   protected subscription = new Subscription();
 
   protected _node: IOuterNode;
-  protected selectedNodeId$: Observable<string>;
 
   public constructor(protected treeActionsDispatcherService: TreeActionsDispatcherService,
                      protected contextMenuService: ContextMenuService,
@@ -114,10 +113,14 @@ export class ItemComponent implements OnInit, OnDestroy, OnChanges {
       this.markNodeAsExpanded();
     }
 
-    this.selectedNodeId$ = this.treeModel.currentSelectedNode$
-      .pipe(
-        map((node: IOuterNode) => node ? node.id : null)
-      );
+    this.subscription.add(
+      this.treeModel.currentSelectedNode$
+        .pipe(
+          map((node: IOuterNode) => node ? node.id : null),
+          distinctUntilChanged()
+        )
+        .subscribe((id: string) => this.isSelected = id === this.node.id)
+    );
 
     this.subscription.add(this.getSubscriptionToExpandNode());
     this.subscription.add(this.getSubscriptionToCollapseNode());
@@ -204,7 +207,11 @@ export class ItemComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public onSelect() {
-    this.treeActionsDispatcherService.selectNode(this.treeModel.treeId, this.node);
+    if (this.isSelected) {
+      this.treeActionsDispatcherService.selectNode(this.treeModel.treeId, null);
+    } else {
+      this.treeActionsDispatcherService.selectNode(this.treeModel.treeId, this.node);
+    }
   }
 
   public trackByFn(node: IOuterNode): string {

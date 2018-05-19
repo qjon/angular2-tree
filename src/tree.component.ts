@@ -10,6 +10,7 @@ import {Store} from '@ngrx/store';
 import {ITreeState} from './store/ITreeState';
 import {filter} from 'rxjs/operators';
 import {Observable} from 'rxjs/Observable';
+import {Subscription} from 'rxjs/Subscription';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -45,6 +46,10 @@ export class TreeComponent implements OnInit, OnChanges {
 
   public rootNodes$: Observable<IOuterNode[]>;
 
+  protected currentSelectedNode: IOuterNode;
+
+  protected subscription = new Subscription();
+
   public constructor(protected store: Store<ITreeState>,
                      protected treeActions: TreeActionsService,
                      protected dragAndDrop: DragAndDrop) {
@@ -55,6 +60,11 @@ export class TreeComponent implements OnInit, OnChanges {
     this.registerMove();
 
     this.rootNodes$ = this.treeModel.rootNodes$;
+
+    this.subscription.add(
+      this.treeModel.currentSelectedNode$
+        .subscribe((node: IOuterNode) => this.currentSelectedNode = node)
+    );
   }
 
   public ngOnChanges(data: any) {
@@ -63,9 +73,7 @@ export class TreeComponent implements OnInit, OnChanges {
   }
 
   public onAdd() {
-    // const parent = this.treeModel.currentSelectedNode$.getValue();
-    const parent = null;
-    const parentId = parent ? parent.id : null;
+    const parentId = this.currentSelectedNode ? this.currentSelectedNode.id : null;
 
     this.store.dispatch(this.treeActions.insertNode(this.treeModel.treeId, parentId));
   }

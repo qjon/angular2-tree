@@ -126,12 +126,13 @@ Also you can use your own template to display items. You can do that when you ex
 and _newItem.component.html_
 
     <div class="tree-item row"
-         [ngClass]="{'tree-item-selected': (selectedNodeId$ | async) == node.id}"
+         [ngClass]="{'tree-item-selected': isSelected}"
          riDroppable
          riDraggable
          [dragZone]="treeModel.configuration.dragZone"
          [dropConfig]="{dropAllowedCssClass: 'drop-enabled', dropZone: treeModel.configuration.dropZone}"
          [data]="node"
+         id="node-{{node-id}}"
     >
       <div class="col-sm-8">
         <i *ngIf="!isExpanded" (click)="expand()" class="fa fa-plus pointer"></i>
@@ -247,8 +248,7 @@ At the end do not forget to add this effects to your app.
 * change tree state - add root nodes list
 * save tree configuration in store (action: TREE_SET_CONFIGURATION)
 * save selected node in the store (action: TREE_SELECT_NODE)
-
-### v2.4.0
+* display current selected node parents path with navigation
 * add possibility to open path of the tree
 * add new actions
   
