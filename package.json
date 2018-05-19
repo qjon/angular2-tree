@@ -20,7 +20,8 @@
     "lint": "ng lint",
     "e2e": "rm -rf e2e/screenshots/* && ng e2e -wu false -s false",
     "test": "./node_modules/.bin/karma --config karma.conf.js start",
-    "gh-pages": "ng build --prod --base-href \"https://qjon.github.io/angular2-tree/\" &&  ./node_modules/.bin/angular-cli-ghpages -b gh-pages  --name=\"Rafał Ignaszewski\" --email=\"rafal@ignaszewski.pl\" --no-silent"
+    "gh-pages": "ng build --prod --base-href \"https://qjon.github.io/angular2-tree/\" &&  ./node_modules/.bin/angular-cli-ghpages -b gh-pages  --name=\"Rafał Ignaszewski\" --email=\"rafal@ignaszewski.pl\" --no-silent",
+    "ci": "npm run test && ng e2e -wu false"
   },
   "repository": {
     "type": "git",
