@@ -1,10 +1,12 @@
-import {Injectable} from '@angular/core';
+import {Injectable, InjectionToken} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {IOuterNode} from '../interfaces/IOuterNode';
 import {IApiConfig} from '../IApiConfig.service';
 import {HttpClient, HttpParams} from '@angular/common/http';
 
 export interface INodeService {
+  readonly treeId: string;
+
   load(nodeId: string): Observable<IOuterNode[]>;
 
   add(node: IOuterNode, parentNodeId: string | null): Observable<IOuterNode>;
@@ -14,7 +16,11 @@ export interface INodeService {
   update(node: IOuterNode): Observable<IOuterNode>;
 
   remove(nodeId: string): Observable<IOuterNode>;
+
+  setAllNodes(nodes: IOuterNode[]): void;
 }
+
+export const NODE_SERVICE = new InjectionToken('NODE_SERVICE');
 
 @Injectable()
 export class NodeService implements INodeService {
@@ -26,7 +32,15 @@ export class NodeService implements INodeService {
     removeUrl: '/api/nodes',
   };
 
+  public get treeId(): string {
+    return 'tree';
+  }
+
   public constructor(protected http: HttpClient) {
+  }
+
+  public setAllNodes(nodes: IOuterNode[]): void {
+
   }
 
   public load(nodeId = ''): Observable<IOuterNode[]> {

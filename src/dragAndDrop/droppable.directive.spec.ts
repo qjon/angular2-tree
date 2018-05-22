@@ -1,5 +1,5 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {Component, DebugElement, Input} from '@angular/core';
+import {Component, DebugElement} from '@angular/core';
 import {DragAndDrop} from './dragAndDrop.service';
 import {IOuterNode} from '../interfaces/IOuterNode';
 import {By} from '@angular/platform-browser';
@@ -40,7 +40,8 @@ describe('DroppableDirective', () => {
       name: 'name',
       treeId: TREE_ID,
       children: [],
-      parents: []
+      parents: [],
+      isExpanded: false,
     };
 
     dropElement = {
@@ -48,7 +49,8 @@ describe('DroppableDirective', () => {
       name: 'name 2',
       treeId: TREE_ID,
       children: [],
-      parents: []
+      parents: [],
+      isExpanded: false,
     };
 
 

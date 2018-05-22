@@ -8,10 +8,10 @@ import {ItemComponent} from '../../../../main';
 })
 export class NewItemComponent extends ItemComponent {
   public onDelete($event: MouseEvent): void {
-    this.store.dispatch(this.treeActionsService.deleteNode(this.treeModel.treeId, this.node));
+    this.treeActionsDispatcherService.deleteNode(this.treeModel.treeId, this.node);
   }
 
   public onEdit($event: MouseEvent): void {
-    this.store.dispatch(this.treeActionsService.editNodeStart(this.node));
+    this.treeActionsDispatcherService.editNodeStart(this.node);
   }
 }

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {NodeService, IOuterNode} from '../../../../main';
+import {IOuterNode, NodeService} from '../../../../main';
 import {Observable} from 'rxjs/Observable';
 import {UUID} from 'angular2-uuid';
 
@@ -32,11 +32,25 @@ export class TreeLocalStorageNodeService extends NodeService {
 
   public move(srcNode: IOuterNode, targetNode: IOuterNode | null): Observable<IOuterNode> {
     const srcId = srcNode.id;
+    const oldParentId = srcNode.parentId;
     const targetId = targetNode ? targetNode.id : null;
 
     const index = this.findIndexByNodeId(srcId);
 
+    this.nodes[index] = {...this.nodes[index]};
     this.nodes[index].parentId = targetId;
+
+    if (oldParentId) {
+      const oldParentIndex = this.findIndexByNodeId(oldParentId);
+
+      this.nodes[oldParentIndex].children = this.nodes[oldParentIndex].children.filter(id => id !== srcId);
+    }
+
+    if (targetId) {
+      const newParentIndex = this.findIndexByNodeId(targetId);
+      this.nodes[newParentIndex].children.push(srcId);
+    }
+
     this.saveNodes();
 
     return Observable.of(this.nodes[index]);
@@ -66,7 +80,10 @@ export class TreeLocalStorageNodeService extends NodeService {
     } else {
       return Observable.throw('Node is not empty');
     }
+  }
 
+  public setAllNodes(nodes: IOuterNode[]): void {
+    this.nodes = [...nodes];
   }
 
   private findIndexByNodeId(nodeId: string): number {
@@ -97,7 +114,11 @@ export class TreeLocalStorageNodeService extends NodeService {
 
   private saveNodes() {
     try {
-      localStorage.setItem(this.treeName, JSON.stringify(this.nodes));
+      localStorage.setItem(this.treeName, JSON.stringify(this.nodes.map((node) => {
+        const newNode = {...node}
+
+        return newNode;
+      })));
     } catch (e) {
       console.warn('State not save');
     }

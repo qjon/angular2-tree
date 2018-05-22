@@ -1,8 +1,22 @@
 import {IOuterNode} from '../interfaces/IOuterNode';
 import {Action} from '@ngrx/store';
+import {IConfiguration} from '../interfaces/IConfiguration';
+
+export interface ITreeNodes {
+  [key: string]: IOuterNode
+}
+
+export interface ITreeConfiguration extends IConfiguration {
+  isFullyLoaded: boolean;
+}
 
 export interface ITreeData {
-  [key: string]: IOuterNode;
+  nodes: {
+    entities: ITreeNodes;
+    selected: string;
+    rootNodes: string[];
+  };
+  configuration: ITreeConfiguration;
 }
 
 export interface ITreeState {
@@ -18,7 +32,10 @@ export interface ITreeActionPayload {
   oldNode?: IOuterNode;
   source?: IOuterNode;
   target?: IOuterNode;
-  sourceOfDroppedData?: string
+  sourceOfDroppedData?: string;
+  ids?: string[];
+  silent?: boolean;
+  hasLoadedNodes?: boolean;
 }
 
 export interface ITreeAction extends Action {

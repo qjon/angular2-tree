@@ -1,22 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {
-  IConfiguration,
-  IContextMenu,
-  ITreeData,
-  ITreeState,
-  NodeDispatcherService,
-  TreeActionsService,
-  TreeModel,
-  treeStateSelector
-} from '../../../../main';
-import {Store} from '@ngrx/store';
+import {IConfiguration, IContextMenu, ITreeData, TreeModel} from '../../../../main';
 import {Observable} from 'rxjs/Observable';
-import {TreeTwoNodeService} from './treeTwoNode.service';
-import {filter, map} from 'rxjs/operators';
+import {TreeModelGeneratorService} from '../../../../src/service/treeModelGenerator.service';
 
 @Component({
   selector: 'app-tree-two',
-  templateUrl: './treeTwo.component.html'
+  templateUrl: './treeTwo.component.html',
 })
 export class TreeTwoComponent implements OnInit {
   public folders: Observable<ITreeData>;
@@ -33,26 +22,10 @@ export class TreeTwoComponent implements OnInit {
 
   public treeModel: TreeModel;
 
-  public constructor(private store: Store<ITreeState>,
-                     private treeActions: TreeActionsService,
-                     private nodeDispatcherService: NodeDispatcherService,
-                     private treeTwoNodeService: TreeTwoNodeService) {
+  public constructor(private treeModelGenerator: TreeModelGeneratorService) {
   }
 
   public ngOnInit() {
-    const treeId = this.treeConfiguration.treeId;
-    this.nodeDispatcherService.register(treeId, this.treeTwoNodeService);
-
-    this.store.dispatch(this.treeActions.registerTree(treeId));
-
-
-    this.folders = this.store.select(treeStateSelector)
-      .pipe(
-        map((data: ITreeState) => {
-          return data[treeId];
-        }),
-        filter((data: ITreeData) => !!data)
-      );
-    this.treeModel = new TreeModel(this.folders, this.treeConfiguration);
+    this.treeModel = this.treeModelGenerator.createTreeModel(this.treeConfiguration);
   }
 }

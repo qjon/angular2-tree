@@ -3,22 +3,32 @@ import {Actions, Effect} from '@ngrx/effects';
 import {TreeActionsService} from './treeActions.service';
 import {IOuterNode} from '../interfaces/IOuterNode';
 import {Observable} from 'rxjs/Observable';
-import {ITreeAction, ITreeActionPayload} from './ITreeState';
+import {ITreeAction, ITreeActionPayload, ITreeConfiguration, ITreeState} from './ITreeState';
 import {NodeDispatcherService} from '../service/nodesDispatcher.service';
 import {DragAndDrop} from '../dragAndDrop/dragAndDrop.service';
-import {catchError, filter, map, mergeMap, switchMap} from 'rxjs/operators';
+import {catchError, filter, map, mergeMap, switchMap, take} from 'rxjs/operators';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/combineLatest';
+import {Store} from '@ngrx/store';
+import {NEW_NODE_ID, treeConfigurationSelector} from './treeReducer';
 
 @Injectable()
 export class TreeEffectsService {
-
-  @Effect() register$ = this.actions$
+  @Effect()
+  public register$ = this.actions$
     .ofType(TreeActionsService.TREE_REGISTER)
     .pipe(
-      map((action: ITreeAction): ITreeAction => this.treeActions.loadTree(action.payload.treeId, null))
+      map((action: ITreeAction): ITreeAction => {
+        if (action.payload.silent) {
+          return this.treeActions.setAllNodes(action.payload.treeId, action.payload.nodes);
+        } else {
+          return this.treeActions.loadTree(action.payload.treeId, null)
+        }
+      })
     );
 
-  @Effect() load$ = this.actions$
+  @Effect()
+  public load$ = this.actions$
     .ofType(TreeActionsService.TREE_LOAD)
     .pipe(
       mergeMap((action: ITreeAction) => this.loadNodes(action.payload.treeId, action.payload.id)
@@ -30,7 +40,8 @@ export class TreeEffectsService {
     );
 
 
-  @Effect() delete$ = this.actions$
+  @Effect()
+  public delete$ = this.actions$
     .ofType(TreeActionsService.TREE_DELETE_NODE)
     .pipe(
       switchMap((action: ITreeAction) => this.deleteNode(action.payload.treeId, action.payload.node)
@@ -42,10 +53,11 @@ export class TreeEffectsService {
     );
 
 
-  @Effect() save$ = this.actions$
+  @Effect()
+  public save$ = this.actions$
     .ofType(TreeActionsService.TREE_SAVE_NODE)
     .pipe(
-      switchMap((action: ITreeAction) => this.saveNode(action.payload.treeId, action.payload.node)
+      switchMap((action: ITreeAction) => this.saveNode(action.payload.treeId, {...action.payload.node})
         .pipe(
           map((node: IOuterNode): ITreeAction => this.treeActions.saveNodeSuccess(action.payload.treeId, action.payload.node, node)),
           catchError(() => Observable.of(this.treeActions.saveNodeError(action.payload.treeId, action.payload.node)))
@@ -53,39 +65,109 @@ export class TreeEffectsService {
       )
     );
 
-  @Effect() move$ = this.actions$
+  @Effect()
+  public move$ = this.actions$
     .ofType(TreeActionsService.TREE_MOVE_NODE)
     .pipe(
       filter((action: ITreeAction) => {
         return action.payload.sourceOfDroppedData === DragAndDrop.DROP_DATA_TYPE;
       }),
-      switchMap((action: ITreeAction) => this.moveNode(action.payload.treeId, action.payload.oldNode, action.payload.node)
-        .pipe(
-          map((node: IOuterNode): ITreeActionPayload => {
-            return {
-              treeId: action.payload.treeId,
-              oldNode: action.payload.oldNode,
-              node: node
-            };
-          }),
-          catchError(() => {
-            this.treeActions.moveNodeError(action.payload.treeId, action.payload.oldNode, action.payload.node);
+      switchMap((action: ITreeAction) => {
+          const source = {...action.payload.oldNode};
+          const target = Boolean(action.payload.node) ? {...action.payload.node} : null;
 
-            return Observable.of(action.payload);
-          })
-        )
+          return this.moveNode(action.payload.treeId, source, target)
+            .pipe(
+              map((node: IOuterNode): ITreeActionPayload => {
+                return {
+                  treeId: action.payload.treeId,
+                  oldNode: action.payload.oldNode,
+                  node: node
+                };
+              }),
+              switchMap((data: ITreeActionPayload) => {
+                return this.store.select(treeConfigurationSelector(action.payload.treeId))
+                  .pipe(
+                    take(1),
+                    map((configuration: ITreeConfiguration) => {
+                      return {
+                        configuration,
+                        data
+                      }
+                    })
+                  )
+              }),
+              catchError(() => {
+                this.treeActions.moveNodeError(action.payload.treeId, action.payload.oldNode, action.payload.node);
+
+                return Observable.of(action.payload);
+              })
+            );
+        }
       ),
-      mergeMap((data: ITreeActionPayload) => {
-        return [
+      mergeMap((value: { data: ITreeActionPayload, configuration: ITreeConfiguration }) => {
+        const data = value.data;
+        const actions = [
           this.treeActions.moveNodeSuccess(data.treeId, data.oldNode, data.node),
-          this.treeActions.loadTree(data.treeId, data.node.parentId)
         ];
+
+        if (!value.configuration.isFullyLoaded) {
+          actions.push(this.treeActions.loadTree(data.treeId, data.node.parentId));
+        }
+
+        return actions;
       })
+    );
+
+  @Effect()
+  public insert$ = this.actions$
+    .ofType(TreeActionsService.TREE_INSERT_NODE)
+    .pipe(
+      map((action: ITreeAction) => {
+        return this.treeActions.expandNode(action.payload.treeId, action.payload.id);
+      })
+    );
+
+  @Effect()
+  public initPathForFullyLoadedTreeEffect$ = this.actions$
+    .ofType(TreeActionsService.TREE_LOAD_PATH)
+    .pipe(
+      switchMap((action: ITreeAction) => {
+        return this.store.select(treeConfigurationSelector(action.payload.treeId))
+          .pipe(
+            take(1),
+            map((configuration: ITreeConfiguration) => {
+              return {action, configuration};
+            })
+          );
+      }),
+      map((value: { action: ITreeAction, configuration: ITreeConfiguration }) => {
+          const {action, configuration} = value;
+
+          if (configuration.isFullyLoaded) {
+            return action.payload.ids.map((id: string) => this.treeActions.expandNode(action.payload.treeId, id));
+          } else {
+            const loadActions = action.payload.ids.map((id: string) => this.loadNodes(action.payload.treeId, id))
+            return Observable.combineLatest(loadActions)
+              .pipe(
+                take(1),
+                mergeMap((data: IOuterNode[][]) => {
+                  const loadSuccess = data.map((nodes: IOuterNode[], index) => this.treeActions.loadTreeSuccess(action.payload.treeId, action.payload.ids[index], nodes))
+                  const expandNodes = action.payload.ids.map((id: string) => this.treeActions.expandNode(action.payload.treeId, id));
+
+                  return [...loadSuccess, ...expandNodes];
+                })
+              )
+          }
+        }
+      ),
+      mergeMap((actions: any[]) => actions)
     );
 
   constructor(private actions$: Actions,
               private treeActions: TreeActionsService,
-              private nodeDispatcherService: NodeDispatcherService) {
+              private nodeDispatcherService: NodeDispatcherService,
+              private store: Store<ITreeState>) {
   }
 
   protected deleteNode(treeId: string, node: IOuterNode): Observable<IOuterNode> {
@@ -103,10 +185,10 @@ export class TreeEffectsService {
   protected saveNode(treeId: string, node: IOuterNode): Observable<IOuterNode> {
     const nodeService = this.nodeDispatcherService.get(treeId);
 
-    if (node.id) {
-      return nodeService.update(node);
-    } else {
+    if (node.id === NEW_NODE_ID) {
       return nodeService.add(node, node.parentId);
+    } else {
+      return nodeService.update(node);
     }
   }
 

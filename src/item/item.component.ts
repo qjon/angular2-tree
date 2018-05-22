@@ -1,16 +1,19 @@
-import {AfterViewInit, Component, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {ContextMenuComponent, ContextMenuService} from 'ngx-contextmenu';
 import {IOuterNode} from '../interfaces/IOuterNode';
 import {TreeActionsService} from '../store/treeActions.service';
-import {Action, Store} from '@ngrx/store';
-import {ITreeAction, ITreeState} from '../store/ITreeState';
+import {ITreeAction} from '../store/ITreeState';
 import {Observable} from 'rxjs/Observable';
 import {TreeModel} from '../models/TreeModel';
 import {Actions} from '@ngrx/effects';
 import {animate, AnimationEvent, state, style, transition, trigger} from '@angular/animations';
-import {filter} from 'rxjs/operators';
+import {distinctUntilChanged, filter, map} from 'rxjs/operators';
 import {AnimationTriggerMetadata} from '@angular/animations/src/animation_metadata';
+import {Subscription} from 'rxjs/Subscription';
+import {TreeActionsDispatcherService} from '../store/treeActionsDispatcher.service';
+import 'rxjs/add/observable/empty';
+import {NEW_NODE_ID} from '../store/treeReducer';
 
 export function expand(): AnimationTriggerMetadata {
   return trigger('isExpanded', [
@@ -34,7 +37,7 @@ export function expand(): AnimationTriggerMetadata {
   styleUrls: ['./item.component.less'],
   animations: [expand()]
 })
-export class ItemComponent implements OnInit, AfterViewInit {
+export class ItemComponent implements OnInit, OnDestroy, OnChanges {
   /**
    * Input field where we can change data name
    */
@@ -43,7 +46,16 @@ export class ItemComponent implements OnInit, AfterViewInit {
   /**
    * Node instance
    */
-  @Input() node: IOuterNode;
+  @Input()
+  public set node(node: IOuterNode) {
+    this._node = node;
+
+    this.initEditModeIfNeeded(node);
+  }
+
+  public get node(): IOuterNode {
+    return this._node;
+  }
 
   @Input() treeModel: TreeModel;
 
@@ -59,94 +71,90 @@ export class ItemComponent implements OnInit, AfterViewInit {
   public isExpanded = false;
   public animationState = null;
 
-  public children$: Observable<IOuterNode[]>;
-
-
-  protected insert$: Observable<Action> = this.actions$
-    .ofType(TreeActionsService.TREE_INSERT_NODE)
-    .pipe(
-      filter((action: ITreeAction) => {
-        return action.payload && action.payload.id === this.node.id;
-      })
-    );
+  public children$: Observable<IOuterNode[]> = Observable.empty();
 
   protected isStartSave = false;
 
+  protected subscription = new Subscription();
 
-  public constructor(protected store: Store<ITreeState>,
-                     protected treeActionsService: TreeActionsService,
+  protected _node: IOuterNode;
+
+  public constructor(protected treeActionsDispatcherService: TreeActionsDispatcherService,
                      protected contextMenuService: ContextMenuService,
                      protected actions$: Actions) {
-    actions$
-      .ofType(TreeActionsService.TREE_EXPAND_NODE)
-      .pipe(
-        filter((action: ITreeAction): boolean => {
-          return !this.isExpanded && action.payload.node && this.node.id === action.payload.node.id;
-        })
-      )
-      .subscribe(() => {
-        this.expand();
-      });
   }
 
-  public ngAfterViewInit() {
-    if (this.isEditMode) {
-      this.setFocus();
+  public ngOnChanges(values): void {
+    // if node is added to the tree then some part of nodes is moving down
+    // and the new one is inserted, then all sub nodes should be rewritten
+    const node = values.node;
+
+    if (node && !node.firstChange && node.previousValue.id !== node.currentValue.id) {
+      this.children$ = this.treeModel.getChildren(this.node.id);
+
+      if (this.node.isExpanded) {
+        this.markNodeAsExpanded();
+      } else {
+        this.markNodeAsCollapsed();
+      }
     }
+  }
+
+  public ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   public ngOnInit() {
-    if (this.treeModel.configuration.isAnimation) {
-      this.animationState = 'inactive';
-    }
-
-    this.isEditMode = this.node.id === null;
+    this.markNodeAsCollapsed();
 
     this.children$ = this.treeModel.getChildren(this.node.id);
 
-    this.insert$
-      .pipe(
-        filter((action: ITreeAction) => {
-          return Boolean(action.payload.id);
+    if (this.node.isExpanded) {
+      this.markNodeAsExpanded();
+    }
+
+    this.subscription.add(
+      this.treeModel.currentSelectedNode$
+        .pipe(
+          map((node: IOuterNode) => node ? node.id : null),
+          distinctUntilChanged()
+        )
+        .subscribe((id: string) => this.isSelected = id === this.node.id)
+    );
+
+    this.subscription.add(this.getSubscriptionToExpandNode());
+    this.subscription.add(this.getSubscriptionToCollapseNode());
+
+    this.subscription.add(
+      this.actions$
+        .ofType(TreeActionsService.TREE_EDIT_NODE_START)
+        .pipe(
+          filter((action: ITreeAction) => action.payload.node === this.node)
+        )
+        .subscribe((action: ITreeAction) => {
+          this.nameField.setValue(this.node.name);
+          this.isEditMode = true;
+          this.setFocus();
         })
-      )
-      .subscribe(() => {
-        this.expand();
-      });
-
-    this.treeModel.currentSelectedNode$
-      .subscribe((node: IOuterNode) => {
-        this.isSelected = (node && node.id === this.node.id) ? true : false;
-      });
-
-    this.actions$
-      .ofType(TreeActionsService.TREE_EDIT_NODE_START)
-      .pipe(
-        filter((action: ITreeAction) => action.payload.node === this.node)
-      )
-      .subscribe((action: ITreeAction) => {
-        this.nameField.setValue(this.node.name);
-        this.isEditMode = true;
-        this.setFocus();
-      });
-
+    );
   }
 
-  public collapse() {
-    if (this.treeModel.configuration.isAnimation) {
-      this.animationState = 'inactive';
-    } else {
-      this.isExpanded = false;
-    }
+  /**
+   * Collapse node
+   */
+  public collapse(): void {
+    this.treeActionsDispatcherService.collapseNode(this.treeModel.treeId, this.node.id);
   }
 
-  public expand() {
-    if (this.treeModel.configuration.isAnimation) {
-      this.animationState = 'active';
-    }
+  /**
+   * Expand node
+   */
+  public expand(): void {
+    this.treeActionsDispatcherService.expandNode(this.treeModel.treeId, this.node.id);
 
-    this.isExpanded = true;
-    this.store.dispatch(this.treeActionsService.loadTree(this.treeModel.treeId, this.node.id));
+    if (!this.treeModel.isFullyLoaded) {
+      this.treeActionsDispatcherService.loadTree(this.treeModel.treeId, this.node.id);
+    }
   }
 
   public onAnimationDone($event: AnimationEvent): void {
@@ -176,10 +184,11 @@ export class ItemComponent implements OnInit, AfterViewInit {
         name: this.nameField.value,
         parentId: this.node.parentId,
         children: this.node.children,
-        parents: this.node.parents
+        parents: this.node.parents,
+        isExpanded: false
       };
 
-      this.store.dispatch(this.treeActionsService.saveNode(this.treeModel.treeId, node));
+      this.treeActionsDispatcherService.saveNode(this.treeModel.treeId, node);
       this.isEditMode = false;
     }
   }
@@ -198,22 +207,86 @@ export class ItemComponent implements OnInit, AfterViewInit {
   }
 
   public onSelect() {
-    this.treeModel.currentSelectedNode$.next(this.isSelected ? null : this.node);
+    if (this.isSelected) {
+      this.treeActionsDispatcherService.selectNode(this.treeModel.treeId, null);
+    } else {
+      this.treeActionsDispatcherService.selectNode(this.treeModel.treeId, this.node);
+    }
   }
 
   protected isNewNode() {
-    return this.node.id === null;
+    return this.node.id === NEW_NODE_ID;
   }
 
   protected setFocus() {
-    setTimeout(() => this.input.nativeElement.focus());
+    setTimeout(() => this.input.nativeElement.focus(), 0);
   }
 
   protected undoChanges() {
     this.isEditMode = false;
 
     if (this.isNewNode()) {
-      this.store.dispatch(this.treeActionsService.deleteNode(this.treeModel.treeId, this.node));
+      this.treeActionsDispatcherService.deleteNode(this.treeModel.treeId, this.node);
+    }
+  }
+
+  protected markNodeAsExpanded(): void {
+    if (this.treeModel.configuration.isAnimation) {
+      this.animationState = 'active';
+    }
+
+    this.isExpanded = true;
+  }
+
+  protected markNodeAsCollapsed(): void {
+    if (this.treeModel.configuration.isAnimation) {
+      this.animationState = 'inactive';
+    } else {
+      this.isExpanded = false;
+    }
+  }
+
+  protected getSubscriptionToExpandNode() {
+    return this.actions$
+      .ofType(TreeActionsService.TREE_EXPAND_NODE)
+      .pipe(
+        filter((action: ITreeAction): boolean => {
+          return !this.isExpanded
+            && action.payload.treeId === this.treeModel.treeId
+            && this.node.id === action.payload.id;
+        })
+      )
+      .subscribe(() => {
+        this.markNodeAsExpanded();
+        this.isExpanded = true;
+      });
+  }
+
+  protected getSubscriptionToCollapseNode() {
+    return this.actions$
+      .ofType(TreeActionsService.TREE_COLLAPSE_NODE)
+      .pipe(
+        filter((action: ITreeAction): boolean => {
+          return this.isExpanded
+            && action.payload.treeId === this.treeModel.treeId
+            && this.node.id === action.payload.id;
+        })
+      )
+      .subscribe(() => {
+        this.markNodeAsCollapsed();
+      });
+  }
+
+  protected initEditModeIfNeeded(node: IOuterNode) {
+    if (!node) {
+      return;
+    }
+
+    this.isEditMode = node.id === NEW_NODE_ID;
+
+    if (this.isEditMode) {
+      this.nameField.setValue('');
+      this.setFocus();
     }
   }
 }

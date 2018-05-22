@@ -1,35 +1,19 @@
-import {Injectable} from '@angular/core';
-import {INodeService, NodeService} from './node.service';
+import {Inject, Injectable} from '@angular/core';
+import {INodeService, NODE_SERVICE, NodeService} from './node.service';
 
 @Injectable()
 export class NodeDispatcherService {
-  private services: { [key: string]: INodeService } = {};
-
-  constructor(nodeService: NodeService) {
-    this.services['tree'] = nodeService;
-  }
-
-  public register(key: string, service: INodeService): NodeDispatcherService {
-    this.services[key] = service;
-
-    return this;
-  }
-
-  public unregister(key: string): NodeDispatcherService {
-    if (this.services[key]) {
-      delete this.services[key];
-    } else {
-      console.warn('[NodeDispatcherService] No service for key ' + key);
-    }
-
-    return this;
+  constructor(@Inject(NODE_SERVICE) private nodeService: NodeService[]) {
   }
 
   public get(key: string): INodeService {
-    if (this.services[key]) {
-      return this.services[key];
+    const nodeService: NodeService = this.nodeService.find((service: NodeService) => service.treeId === key);
+
+    if (Boolean(nodeService)) {
+      return nodeService;
     } else {
-      throw new Error('[NodeDispatcherService] No service for key ' + key);
+      // default node service provider
+      return this.nodeService[0];
     }
   }
 }
