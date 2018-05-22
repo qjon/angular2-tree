@@ -214,10 +214,6 @@ export class ItemComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  public trackByFn(node: IOuterNode): string {
-    return node.id;
-  }
-
   protected isNewNode() {
     return this.node.id === NEW_NODE_ID;
   }

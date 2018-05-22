@@ -27,6 +27,5 @@ export class TreeTwoComponent implements OnInit {
 
   public ngOnInit() {
     this.treeModel = this.treeModelGenerator.createTreeModel(this.treeConfiguration);
-    // this.treeModel.initPath(['800d4e06-29e9-4153-ebca-3e571f0f9744', '30b32b5d-bb90-f4e1-3597-6794d6e93d56']);
   }
 }

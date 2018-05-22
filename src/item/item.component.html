@@ -18,7 +18,7 @@
 </div>
 <div class="tree" [@isExpanded]="animationState" (@isExpanded.done)="onAnimationDone($event)">
   <div *ngIf="isExpanded">
-    <ri-tree-item *ngFor="let child of children$ | async; trackBy: trackByFn" [node]="child" [treeModel]="treeModel"
+    <ri-tree-item *ngFor="let child of children$ | async" [node]="child" [treeModel]="treeModel"
                   [contextMenu]="contextMenu"></ri-tree-item>
   </div>
 </div>

@@ -13,9 +13,27 @@ Simple component to display tree structure
     npm i @rign/angular2-tree
    
 
-## Usage
+## Usage    
     
-Include _TreeModule_  in your application module and create Store with empty state and initialize Effects. 
+First you have to create your own loader service        
+
+    @Injectable()
+    export class AppNodeService extends NodeService {
+      public get treeId(): string {
+        return 'tree';
+      }
+      
+      protected apiConfig = {
+        addUrl: '/api/nodes',
+        getUrl: '/api/nodes',
+        updateUrl: '/api/nodes',
+        removeUrl: '/api/nodes',
+      }
+    }
+
+and use it to load/save/delete/etc. your node data. Or you can extend and rewrite all methods of that service to store your data wherever you want. See example _localStorage.service.ts_
+    
+Include _TreeModule_  in your application module and create Store with empty state and initialize Effects. Do not forget to pass yours _AppNodesService_ as a parameter of _TreeModule_.  
 
     import {TreeModule} from '@rign/angular2-tree';
     
@@ -40,7 +58,7 @@ You need also init translations and animations module, because Tree needs it to 
       imports: [
         ...
         BrowserAnimationsModule,
-        TranslationModule.forRoot(),
+        TranslateModule.forRoot(),
         TreeModule.forRoot(AppNodeService)
       ]
     })
@@ -50,27 +68,8 @@ More information about translations you can find below in section _Translation_.
 In any html file put 
 
     <ri-tree [treeModel]="treeModel"></ri-tree>
-    
-Create your own loader service as it is done in example        
 
-    @Injectable()
-    export class AppNodeService extends NodeService {
-      public get treeId(): string {
-        return 'tree';
-      }
-      
-      protected apiConfig = {
-        addUrl: '/api/nodes',
-        getUrl: '/api/nodes',
-        updateUrl: '/api/nodes',
-        removeUrl: '/api/nodes',
-      }
-    }
-
-and use it to load data. Or you can extend and rewrite all methods of that service to store your data wherever you want. See example _localStorage.service.ts_
-
-
-In component where you create tree, you should register _tree store_, create _TreeModel_ and load root tree
+In component where you create tree, you should create _TreeModel_.
 
     export class MyTreeComponent implements OnInit {
       public folders: Observable<ITreeData>;
@@ -96,6 +95,8 @@ In component where you create tree, you should register _tree store_, create _Tr
         this.treeModel = this.treeModelGenerator.createTreeModel(this.treeConfiguration);
       }
     }
+    
+If function _createTreeModel_ has got second parameter - array of nodes, then the tree will be marked as fully loaded. It will not use _load API_ function to get new subnodes it will use only passed nodes. 
 
 ### CSS Styles
 
@@ -169,27 +170,43 @@ Then when you create tree component in your application use such construction
     
 and that is all. Please see Demo where is such example.
 
+### Open initial path
+
+If you would like to open some path at the begin you can do that invoking such method after creating _TreeModel_.
+
+     this.treeModel.initPath([
+       // list of node ids sorted by level of node (grandparent id, parent id, child id)
+     ]);
+      
+### Display parents path
+
+From version 3.0.0 there is possibility to display current selected node path. To do that place in your component html file such code:
+
+    <ri-tree-parents-list [treeModel]="treeModel"></ri-tree-parents-list>
+    
+The _treeModel_ value is the same object that is used in _ri-tree_.
+
 ## Events(Actions)
 
 Using _ngrx/store_ you can listen on below actions and do whatever you want:
 
     TreeActionsService.TREE_SAVE_NODE
-    TreeActionsService.TREE_SAVE_NODE_SUCCESS
     TreeActionsService.TREE_SAVE_NODE_ERROR
+    TreeActionsService.TREE_SAVE_NODE_SUCCESS
     TreeActionsService.TREE_DELETE_NODE
-    TreeActionsService.TREE_DELETE_NODE_SUCCESS
     TreeActionsService.TREE_DELETE_NODE_ERROR
+    TreeActionsService.TREE_DELETE_NODE_SUCCESS
     TreeActionsService.TREE_EDIT_NODE_START
     TreeActionsService.TREE_EXPAND_NODE
     TreeActionsService.TREE_LOAD
-    TreeActionsService.TREE_LOAD_SUCCESS
     TreeActionsService.TREE_LOAD_ERROR
+    TreeActionsService.TREE_LOAD_SUCCESS
+    TreeActionsService.TREE_LOAD_PATH
     TreeActionsService.TREE_MOVE_NODE
-    TreeActionsService.TREE_MOVE_NODE_SUCCESS
     TreeActionsService.TREE_MOVE_NODE_ERROR
+    TreeActionsService.TREE_MOVE_NODE_SUCCESS
     TreeActionsService.TREE_REGISTER
     TreeActionsService.TREE_SET_ALL_NODES
-    TreeActionsService.TREE_LOAD_PATH
     TreeActionsService.TREE_SELECT_NODE
 
 ## Translation
@@ -250,7 +267,6 @@ At the end do not forget to add this effects to your app.
 * save selected node in the store (action: TREE_SELECT_NODE)
 * display current selected node parents path with navigation
 * add possibility to open path of the tree
-* add new actions
   
 ### v2.3.0
 * fix problem with building tree component in AOT

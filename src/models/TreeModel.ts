@@ -6,7 +6,7 @@ import {TreeActionsDispatcherService} from '../store/treeActionsDispatcher.servi
 import {distinctUntilChanged, map} from 'rxjs/operators';
 import 'rxjs/add/observable/combineLatest';
 import 'rxjs/add/operator/do';
-import * as isEqual from 'lodash.isequal';
+import isEqual from 'lodash.isequal';
 import {NEW_NODE_ID} from '../store/treeReducer';
 
 export class TreeModel {

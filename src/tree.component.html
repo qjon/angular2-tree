@@ -8,7 +8,7 @@
   <div *ngIf="customTemplate.childNodes.length === 0">
     <ri-tree-item
       class="root-node"
-      *ngFor="let node of rootNodes$ | async; trackBy: trackByFn"
+      *ngFor="let node of rootNodes$ | async"
       [node]="node"
       [treeModel]="treeModel"
       [contextMenu]="contextMenu"></ri-tree-item>

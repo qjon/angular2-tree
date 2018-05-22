@@ -472,11 +472,4 @@ describe('ItemComponent', () => {
       expect(treeActionDispatcherMock.selectNode).toHaveBeenCalledWith(TREE_ID, null);
     });
   });
-
-  describe('trackByFn', () => {
-    it('should return node id', () => {
-      expect(component.trackByFn(node)).toBe('node-id');
-    });
-  });
-
 });
