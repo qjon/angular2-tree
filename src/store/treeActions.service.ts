@@ -1,7 +1,15 @@
 import {Injectable} from '@angular/core';
 import {IOuterNode} from '../interfaces/IOuterNode';
-import {Action} from '@ngrx/store';
 import {ITreeAction} from './ITreeState';
+import {Action} from '@ngrx/store';
+import {IConfiguration} from '../interfaces/IConfiguration';
+
+export interface ITreeConfigurationAction extends Action {
+  payload: {
+    treeId: string;
+    configuration?: IConfiguration;
+  };
+}
 
 @Injectable()
 export class TreeActionsService {
@@ -12,23 +20,27 @@ export class TreeActionsService {
   static TREE_DELETE_NODE_SUCCESS = 'TREE_DELETE_NODE_SUCCESS';
   static TREE_DELETE_NODE_ERROR = 'TREE_DELETE_NODE_ERROR';
   static TREE_EDIT_NODE_START = 'TREE_EDIT_NODE_START';
+  static TREE_COLLAPSE_NODE = 'TREE_COLLAPSE_NODE';
   static TREE_EXPAND_NODE = 'TREE_EXPAND_NODE';
   static TREE_INSERT_NODE = 'TREE_INSERT_NODE';
   static TREE_LOAD = 'TREE_LOAD';
+  static TREE_LOAD_PATH = 'TREE_LOAD_PATH';
   static TREE_LOAD_SUCCESS = 'TREE_LOAD_SUCCESS';
   static TREE_LOAD_ERROR = 'TREE_LOAD_ERROR';
+  static TREE_MARK_AS_FULLY_LOADED = 'TREE_MARK_AS_FULLY_LOADED';
   static TREE_MOVE_NODE = 'TREE_MOVE_NODE';
   static TREE_MOVE_NODE_SUCCESS = 'TREE_MOVE_NODE_SUCCESS';
   static TREE_MOVE_NODE_ERROR = 'TREE_MOVE_NODE_ERROR';
 
   static TREE_REGISTER = 'TREE_REGISTER';
+  static TREE_SELECT_NODE = 'TREE_SELECT_NODE';
+  static TREE_SET_ALL_NODES = 'TREE_SET_ALL_NODES';
+  static TREE_SET_CONFIGURATION = 'TREE_SET_CONFIGURATION';
 
-  public registerTree(treeId: string): ITreeAction {
+  public registerTree(treeId: string, silent = false, nodes: IOuterNode[] = []): ITreeAction {
     return {
       type: TreeActionsService.TREE_REGISTER,
-      payload: {
-        treeId: treeId
-      }
+      payload: {treeId, silent, nodes}
     };
   }
 
@@ -83,13 +95,17 @@ export class TreeActionsService {
     };
   }
 
-  public expandNode(treeId: string, node: IOuterNode): ITreeAction {
+  public collapseNode(treeId: string, id: string): ITreeAction {
+    return {
+      type: TreeActionsService.TREE_COLLAPSE_NODE,
+      payload: {treeId, id}
+    };
+  }
+
+  public expandNode(treeId: string, id: string): ITreeAction {
     return {
       type: TreeActionsService.TREE_EXPAND_NODE,
-      payload: {
-        treeId: treeId,
-        node: node
-      }
+      payload: {treeId, id}
     };
   }
 
@@ -154,6 +170,13 @@ export class TreeActionsService {
     };
   }
 
+  public markAsFullyLoaded(treeId: string): ITreeConfigurationAction {
+    return {
+      type: TreeActionsService.TREE_MARK_AS_FULLY_LOADED,
+      payload: {treeId}
+    };
+  }
+
   public moveNode(type: string, treeId: string, source: any, target: IOuterNode | null): ITreeAction {
     return {
       type: TreeActionsService.TREE_MOVE_NODE,
@@ -185,6 +208,37 @@ export class TreeActionsService {
         source: source,
         target: target
       }
+    };
+  }
+
+  public setAllNodes(treeId: string, nodes: IOuterNode[]): ITreeAction {
+    return {
+      type: TreeActionsService.TREE_SET_ALL_NODES,
+      payload: {
+        treeId: treeId,
+        nodes: nodes
+      }
+    };
+  }
+
+  public setConfiguration(treeId: string, configuration: IConfiguration): ITreeConfigurationAction {
+    return {
+      type: TreeActionsService.TREE_SET_CONFIGURATION,
+      payload: {treeId, configuration}
+    };
+  }
+
+  public loadPath(treeId: string, ids: string[]): ITreeAction {
+    return {
+      type: TreeActionsService.TREE_LOAD_PATH,
+      payload: {treeId, ids}
+    };
+  }
+
+  public selectNode(treeId: string, node: IOuterNode): ITreeAction {
+    return {
+      type: TreeActionsService.TREE_SELECT_NODE,
+      payload: {node, treeId}
     };
   }
 

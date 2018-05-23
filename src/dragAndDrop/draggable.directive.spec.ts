@@ -1,6 +1,6 @@
 import {DraggableDirective} from './draggable.directive';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {Component, DebugElement, Input} from '@angular/core';
+import {Component, DebugElement} from '@angular/core';
 import {DragAndDrop} from './dragAndDrop.service';
 import {IOuterNode} from '../interfaces/IOuterNode';
 import {By} from '@angular/platform-browser';
@@ -31,7 +31,8 @@ describe('DraggableDirective', () => {
       id: 'node-id',
       name: 'name',
       treeId: TREE_ID,
-      children: []
+      children: [],
+      isExpanded: false
     };
 
     TestBed.configureTestingModule({

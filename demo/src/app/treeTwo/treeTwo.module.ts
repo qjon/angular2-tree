@@ -20,9 +20,11 @@ import {HttpClientModule} from '@angular/common/http';
     HttpClientModule,
     TreeLocalStorageModule,
     ReactiveFormsModule,
-    TreeModule
+    TreeModule.forFeature(TreeTwoNodeService)
   ],
-  providers: [TreeTwoNodeService]
+  providers: [
+    TreeTwoNodeService,
+  ]
 })
 export class TreeTwoModule {
 }

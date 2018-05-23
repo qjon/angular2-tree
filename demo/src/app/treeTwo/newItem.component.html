@@ -1,10 +1,11 @@
 <div class="tree-item row"
-     [ngClass]="{'tree-item-selected': isSelected}"
+     [ngClass]="{'tree-item-selected': (selectedNodeId$ | async) == node.id}"
      riDroppable
      riDraggable
      [dragZone]="treeModel.configuration.dragZone"
      [dropConfig]="{dropAllowedCssClass: 'drop-enabled', dropZone: treeModel.configuration.dropZone}"
      [data]="node"
+     id="node-{{node.id}}"
 >
   <div class="col-sm-8">
     <i *ngIf="!isExpanded" (click)="expand()" class="fa fa-plus pointer"></i>

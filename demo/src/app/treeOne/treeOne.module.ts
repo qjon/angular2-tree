@@ -13,9 +13,11 @@ import {HttpClientModule} from '@angular/common/http';
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    TreeModule
+    TreeModule.forFeature(TreeOneNodeService)
   ],
-  providers: [TreeOneNodeService]
+  providers: [
+    TreeOneNodeService,
+  ]
 })
 export class TreeOneModule {
 }

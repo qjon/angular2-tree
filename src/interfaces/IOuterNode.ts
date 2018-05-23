@@ -5,4 +5,5 @@ export interface IOuterNode {
   parentId?: string | null;
   children?: Array<string>;
   parents?: Array<string>;
+  isExpanded: boolean;
 }

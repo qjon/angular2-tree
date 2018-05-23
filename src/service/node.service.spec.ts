@@ -21,7 +21,8 @@ describe('NodeService', () => {
       name: 'abc',
       parentId: null,
       children: ['5610ff44-5bf4-e4e7-09f9-f98ddfb7d760', 'acf34b93-0a4e-c533-5167-ce7cc7e35bc8'],
-      parents: []
+      parents: [],
+      isExpanded: false,
     };
 
     targetNode = {
@@ -30,7 +31,8 @@ describe('NodeService', () => {
       name: 'xyz dfhjasdhklfa',
       parentId: null,
       children: ['cca2ccca-fcb1-e44d-6623-7cebf40dd05a'],
-      parents: []
+      parents: [],
+      isExpanded: false,
     };
 
     service = new NodeService(http);
