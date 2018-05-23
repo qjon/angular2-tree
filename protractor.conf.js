@@ -14,6 +14,7 @@ exports.config = {
     'browserName': 'chrome',
     chromeOptions: {
       args: [
+        '--headless',
         '--log-path=./chromedriver.log'
       ]
     }
