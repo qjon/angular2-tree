@@ -20,7 +20,7 @@ First you have to create your own loader service
     @Injectable()
     export class AppNodeService extends NodeService {
       public get treeId(): string {
-        return 'tree';
+        return 'tree3';
       }
       
       protected apiConfig = {
@@ -69,7 +69,7 @@ In any html file put
 
     <ri-tree [treeModel]="treeModel"></ri-tree>
 
-In component where you create tree, you should create _TreeModel_.
+In component where you create tree, you should initialize _TreeModel_, remember that in configuration object, parameter _treeId_ should be the same as in _AppNodeService_ it allows to use proper API service in each instance of node.
 
     export class MyTreeComponent implements OnInit {
       public folders: Observable<ITreeData>;
