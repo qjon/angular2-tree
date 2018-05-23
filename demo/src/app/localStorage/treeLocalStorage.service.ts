@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {IOuterNode, NodeService} from '../../../../main';
 import {Observable} from 'rxjs/Observable';
 import {UUID} from 'angular2-uuid';
+import 'rxjs/add/observable/throw'
 
 @Injectable()
 export class TreeLocalStorageNodeService extends NodeService {
