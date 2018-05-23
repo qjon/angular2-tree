@@ -1,5 +1,5 @@
 <ul class="parents-list">
-  <li class="fa fa-home" (click)="selectNode(null)"></li>
-  <li *ngFor="let node of parents$ | async; last as currentNode" (click)="selectNode(node, currentNode)">{{node.name}}
+  <li class="fa fa-home" (click)="selectNode(null, false)"></li>
+  <li *ngFor="let node of parents$ | async; last as isLast" (click)="selectNode(node, isLast)">{{node.name}}
   </li>
 </ul>
