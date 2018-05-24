@@ -180,7 +180,7 @@ If you would like to open some path at the begin you can do that invoking such m
       
 ### Display parents path
 
-From version 3.0.0 there is possibility to display current selected node path. To do that place in your component html file such code:
+From version 3.0.1 there is possibility to display current selected node path. To do that place in your component html file such code:
 
     <ri-tree-parents-list [treeModel]="treeModel"></ri-tree-parents-list>
     
@@ -260,11 +260,9 @@ At the end do not forget to add this effects to your app.
  
 ## Changes
 
-### v3.0.0
+### v3.0.1
 * change the way of injecting NodeService provider
-* change tree state - add root nodes list
-* save tree configuration in store (action: TREE_SET_CONFIGURATION)
-* save selected node in the store (action: TREE_SELECT_NODE)
+* save in store: tree root nodes list, tree configuration  and selected node
 * display current selected node parents path with navigation
 * add possibility to open path of the tree
   
