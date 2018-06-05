@@ -29,7 +29,7 @@ export interface ITreeActionPayload {
   id?: string | null;
   node?: IOuterNode;
   nodes?: IOuterNode[];
-  oldNode?: IOuterNode;
+  oldNode?: any;
   source?: IOuterNode;
   target?: IOuterNode;
   sourceOfDroppedData?: string;

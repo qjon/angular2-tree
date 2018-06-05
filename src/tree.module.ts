@@ -20,7 +20,7 @@ import {treeReducer} from './store/treeReducer';
 import {TreeModelGeneratorService} from './service/treeModelGenerator.service';
 import {TreeActionsDispatcherService} from './store/treeActionsDispatcher.service';
 import {ParentsListComponent} from './parents-list/parents-list.component';
-import {NODE_SERVICE, NodeService} from './service/node.service';
+import {INodeService, NODE_SERVICE, NodeService} from './service/node.service';
 
 @NgModule({
   imports: [
@@ -60,7 +60,7 @@ import {NODE_SERVICE, NodeService} from './service/node.service';
 })
 export class TreeModule {
 
-  public static forRoot(nodeService: Type<NodeService>): ModuleWithProviders {
+  public static forRoot(nodeService: Type<INodeService>): ModuleWithProviders {
     return {
       ngModule: TreeModule,
       providers: [
@@ -75,7 +75,7 @@ export class TreeModule {
     }
   }
 
-  public static forFeature(nodeService: Type<NodeService>): ModuleWithProviders {
+  public static forFeature(nodeService: Type<INodeService>): ModuleWithProviders {
     return {
       ngModule: TreeModule,
       providers: [
