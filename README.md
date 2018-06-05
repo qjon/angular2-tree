@@ -262,6 +262,7 @@ At the end do not forget to add this effects to your app.
 
 ### v3.0.2
 * small fixes with interfaces
+* fix export CSS styles
 
 ### v3.0.1
 * change the way of injecting NodeService provider

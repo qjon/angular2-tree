@@ -17,7 +17,7 @@ describe('e2e App', () => {
 
   it('should display welcome message', () => {
     page.navigateTo();
-    expect(page.getTitle()).toEqual('Angular2 - Tree v3.0.1');
+    expect(page.getTitle()).toEqual('Angular2 - Tree v3.0.2');
   });
 
   describe('add node', () => {
