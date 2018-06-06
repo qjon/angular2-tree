@@ -260,6 +260,10 @@ At the end do not forget to add this effects to your app.
  
 ## Changes
 
+### v3.0.2
+* small fixes with interfaces
+* fix export CSS styles
+
 ### v3.0.1
 * change the way of injecting NodeService provider
 * save in store: tree root nodes list, tree configuration  and selected node
