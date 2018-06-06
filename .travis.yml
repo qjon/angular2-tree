@@ -16,4 +16,4 @@ install:
   - npm install
 script:
   - ./node_modules/.bin/webdriver-manager update
-  - npm run e2e -wu false
+  - npm run ci
