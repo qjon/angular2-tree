@@ -154,6 +154,8 @@ function saveNode(state: ITreeState, action: ITreeAction): ITreeState {
   const parentId = newNode.parentId;
   const parent = treeState[parentId] || null;
 
+  newNode.parents = [];
+
   if (parentId) {
     if (parent) {
       if (!parent.children) {

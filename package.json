@@ -4,7 +4,8 @@
   "license": "MIT",
   "angular-cli": {},
   "scripts": {
-    "start": "ng serve",
+    "start": "ng serve --proxy demo/proxy.conf.json",
+    "backend": "cd backend && npm run start:dev",
     "build": "npm run clean:all && npm run build:inline && npm run build:esm2015 && npm run build:fesm2015 && npm run build:esm5 && npm run build:fesm5 && npm run build:umd && npm run build:min && npm run move:assets && npm run less && npm run clean:tmp",
     "build:inline": "rm -rf ./tmp && rsync -a --exclude *spec.ts *.ts  ./tmp & node config/inlineAssets.js",
     "build:esm2015": "ngc -p config/tsconfig-es2015.json",
