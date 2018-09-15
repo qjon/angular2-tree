@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {IConfiguration, IContextMenu, ITreeData, TreeModel} from '../../../../main';
 import {Observable} from 'rxjs/Observable';
-import {TreeModelGeneratorService} from '../../../../src/service/treeModelGenerator.service';
+import {TreeInitializerService} from '../../../../src/service/initializer.service';
+import {TreeTwoNodeService} from './treeTwoNode.service';
 
 @Component({
   selector: 'app-tree-two',
-  templateUrl: './treeTwo.component.html',
+  templateUrl: './treeTwo.component.html'
 })
 export class TreeTwoComponent implements OnInit {
   public folders: Observable<ITreeData>;
@@ -22,10 +23,11 @@ export class TreeTwoComponent implements OnInit {
 
   public treeModel: TreeModel;
 
-  public constructor(private treeModelGenerator: TreeModelGeneratorService) {
+  public constructor(private treeInitializerService: TreeInitializerService,
+                     private treeTwoNodeService: TreeTwoNodeService) {
   }
 
-  public ngOnInit() {
-    this.treeModel = this.treeModelGenerator.createTreeModel(this.treeConfiguration);
+  public ngOnInit(): void {
+    this.treeModel = this.treeInitializerService.init(this.treeConfiguration, this.treeTwoNodeService);
   }
 }

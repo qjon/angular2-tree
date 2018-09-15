@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {IConfiguration, IContextMenu, ITreeData, TreeModel} from '../../../../main';
 import {Observable} from 'rxjs/Observable';
-import {TreeModelGeneratorService} from '../../../../src/service/treeModelGenerator.service';
 import {IOuterNode} from '../../../../src/interfaces/IOuterNode';
-import {TREE_ONE_ID} from './treeOneNode.service';
+import {TREE_ONE_ID, TreeOneNodeService} from './treeOneNode.service';
+import {TreeInitializerService} from '../../../../src/service/initializer.service';
 
 @Component({
   selector: 'app-tree-one',
-  templateUrl: './treeOne.component.html'
+  templateUrl: './treeOne.component.html',
 })
 export class TreeOneComponent implements OnInit {
   public folders: Observable<ITreeData>;
@@ -25,13 +25,13 @@ export class TreeOneComponent implements OnInit {
 
   public treeModel: TreeModel;
 
-  public constructor(private treeModelGenerator: TreeModelGeneratorService) {
+  public constructor(private treeInitializerService: TreeInitializerService,
+                     private treeOneNodeService: TreeOneNodeService) {
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     const nodes: IOuterNode[] = JSON.parse(localStorage.getItem('treeOne')) || [];
 
-
-    this.treeModel = this.treeModelGenerator.createTreeModel(this.treeConfiguration, nodes);
+    this.treeModel = this.treeInitializerService.init(this.treeConfiguration, this.treeOneNodeService, nodes);
   }
 }

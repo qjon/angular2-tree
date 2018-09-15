@@ -59,7 +59,7 @@ You need also init translations and animations module, because Tree needs it to 
         ...
         BrowserAnimationsModule,
         TranslateModule.forRoot(),
-        TreeModule.forRoot(AppNodeService)
+        TreeModule.forRoot()
       ]
     })
     
@@ -69,7 +69,7 @@ In any html file put
 
     <ri-tree [treeModel]="treeModel"></ri-tree>
 
-In component where you create tree, you should initialize _TreeModel_, remember that in configuration object, parameter _treeId_ should be the same as in _AppNodeService_ it allows to use proper API service in each instance of node.
+In component where you create tree, you should create _TreeModel_ passing _configuration_ and _AppNodeService_.
 
     export class MyTreeComponent implements OnInit {
       public folders: Observable<ITreeData>;
@@ -88,15 +88,18 @@ In component where you create tree, you should initialize _TreeModel_, remember 
       public treeModel: TreeModel;
     
 
-      public constructor(private treeModelGenerator: TreeModelGeneratorService) {
+      public constructor(private treeInitializerService: TreeInitializerService,
+                         private appNodeService: AppNodeService) {
       }
     
-      public ngOnInit() {
-        this.treeModel = this.treeModelGenerator.createTreeModel(this.treeConfiguration);
+      public ngOnInit(): void {
+        const nodes: IOuterNode[] = JSON.parse(localStorage.getItem('treeOne')) || [];
+    
+        this.treeModel = this.treeInitializerService.init(this.treeConfiguration, this.appNodeService, nodes);
       }
     }
     
-If function _createTreeModel_ has got second parameter - array of nodes, then the tree will be marked as fully loaded. It will not use _load API_ function to get new subnodes it will use only passed nodes. 
+If function _init_ has got third parameter - array of nodes, then the tree will be marked as fully loaded. It will not use _load API_ function to get new subnodes it will use only passed nodes. 
 
 ### CSS Styles
 
@@ -260,6 +263,9 @@ At the end do not forget to add this effects to your app.
  
 ## Changes
 
+### v3.1.0
+* change tree model initialize and injecting NodeService
+
 ### v3.0.2
 * small fixes with interfaces
 * fix export CSS styles
@@ -344,6 +350,16 @@ At the end do not forget to add this effects to your app.
 
 Working demo with _local storage_ you can find [here](https://qjon.github.io/angular2-tree/).
 To run Demo locally clone this repository and run
+
+    npm start
+    
+If you would like to use demo with real API then run real backend written in NestJS
+
+    cd backend
+    npm install
+    npm start
+    
+in second terminal run tree application
 
     npm start
 

@@ -1,4 +1,4 @@
-import {CUSTOM_ELEMENTS_SCHEMA, ModuleWithProviders, NgModule, Type} from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ItemComponent} from './item/item.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -20,7 +20,8 @@ import {treeReducer} from './store/treeReducer';
 import {TreeModelGeneratorService} from './service/treeModelGenerator.service';
 import {TreeActionsDispatcherService} from './store/treeActionsDispatcher.service';
 import {ParentsListComponent} from './parents-list/parents-list.component';
-import {INodeService, NODE_SERVICE, NodeService} from './service/node.service';
+import {NODE_SERVICE, NodeService} from './service/node.service';
+import {TreeInitializerService} from './service/initializer.service';
 
 @NgModule({
   imports: [
@@ -60,7 +61,7 @@ import {INodeService, NODE_SERVICE, NodeService} from './service/node.service';
 })
 export class TreeModule {
 
-  public static forRoot(nodeService: Type<INodeService>): ModuleWithProviders {
+  public static forRoot(): ModuleWithProviders {
     return {
       ngModule: TreeModule,
       providers: [
@@ -69,25 +70,20 @@ export class TreeModule {
         TreeActionsDispatcherService,
         TreeActionsService,
         TreeEffectsService,
+        TreeInitializerService,
         TreeModelGeneratorService,
-        {provide: NODE_SERVICE, useClass: nodeService, multi: true}
       ]
     }
   }
 
-  public static forFeature(nodeService: Type<INodeService>): ModuleWithProviders {
-    return {
-      ngModule: TreeModule,
-      providers: [
-        DragAndDrop,
-        NodeDispatcherService,
-        TreeActionsDispatcherService,
-        TreeActionsService,
-        TreeEffectsService,
-        TreeModelGeneratorService,
-        {provide: NODE_SERVICE, useClass: nodeService, multi: true}
-      ]
-    }
+  /**
+   * @Deprecated In version 4.0.0
+   *
+   * Instead of this function use TreeModule.forRoot in main application,
+   * in other modules only import TreeModule
+   */
+  public static forFeature(): ModuleWithProviders {
+    return TreeModule.forRoot()
   }
 
   public constructor(private translate: TranslateService) {
