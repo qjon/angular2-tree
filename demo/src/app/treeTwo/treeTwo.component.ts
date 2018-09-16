@@ -1,14 +1,14 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {IConfiguration, IContextMenu, ITreeData, TreeModel} from '../../../../main';
 import {Observable} from 'rxjs/Observable';
 import {TreeInitializerService} from '../../../../src/service/initializer.service';
-import {TreeTwoNodeService} from './treeTwoNode.service';
+import {TreeTwoNodeBackendService} from './treeTwoNodeBackend.service';
 
 @Component({
   selector: 'app-tree-two',
   templateUrl: './treeTwo.component.html'
 })
-export class TreeTwoComponent implements OnInit {
+export class TreeTwoComponent implements OnInit, OnDestroy {
   public folders: Observable<ITreeData>;
 
   public contextMenu: IContextMenu[] = [];
@@ -24,10 +24,14 @@ export class TreeTwoComponent implements OnInit {
   public treeModel: TreeModel;
 
   public constructor(private treeInitializerService: TreeInitializerService,
-                     private treeTwoNodeService: TreeTwoNodeService) {
+                     private treeTwoNodeService: TreeTwoNodeBackendService) {
   }
 
   public ngOnInit(): void {
     this.treeModel = this.treeInitializerService.init(this.treeConfiguration, this.treeTwoNodeService);
+  }
+
+  public ngOnDestroy(): void {
+    this.treeModel.destroy();
   }
 }

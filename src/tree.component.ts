@@ -5,12 +5,17 @@ import {TreeModel} from './models/TreeModel';
 import {ContextMenuComponent} from 'ngx-contextmenu';
 import {DragAndDrop} from './dragAndDrop/dragAndDrop.service';
 import {IDragAndDrop} from './interfaces/IDragAndDrop';
-import {TreeActionsService} from './store/treeActions.service';
 import {Store} from '@ngrx/store';
 import {ITreeState} from './store/ITreeState';
 import {filter} from 'rxjs/operators';
 import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Subscription';
+import {
+  TreeDeleteNodeAction,
+  TreeEditNodeStartAction,
+  TreeInsertNodeAction,
+  TreeMoveNodeAction
+} from './store/treeActions.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -51,7 +56,6 @@ export class TreeComponent implements OnInit, OnChanges {
   protected subscription = new Subscription();
 
   public constructor(protected store: Store<ITreeState>,
-                     protected treeActions: TreeActionsService,
                      protected dragAndDrop: DragAndDrop) {
 
   }
@@ -75,7 +79,7 @@ export class TreeComponent implements OnInit, OnChanges {
   public onAdd() {
     const parentId = this.currentSelectedNode ? this.currentSelectedNode.id : null;
 
-    this.store.dispatch(this.treeActions.insertNode(this.treeModel.treeId, parentId));
+    this.store.dispatch(new TreeInsertNodeAction({treeId: this.treeModel.treeId, parentId}));
   }
 
   /**
@@ -89,10 +93,10 @@ export class TreeComponent implements OnInit, OnChanges {
     switch (name) {
       case 'onEdit':
         event.stopPropagation();
-        this.store.dispatch(this.treeActions.editNodeStart(node));
+        this.store.dispatch(new TreeEditNodeStartAction({node}));
         break;
       case 'onDelete':
-        this.store.dispatch(this.treeActions.deleteNode(this.treeModel.treeId, node));
+        this.store.dispatch(new TreeDeleteNodeAction({treeId: this.treeModel.treeId, node}));
         break;
       default:
         console.warn('Unknown context menu action: ' + name);
@@ -127,7 +131,13 @@ export class TreeComponent implements OnInit, OnChanges {
       )
       .subscribe((data: IDragAndDrop) => {
         const dropNode = data.dropNode ? data.dropNode.data : null;
-        this.store.dispatch(this.treeActions.moveNode(data.type, this.treeModel.treeId, data.dragNode.data, dropNode));
+        this.store.dispatch(new TreeMoveNodeAction({
+            sourceOfDroppedData: data.type,
+            treeId: this.treeModel.treeId,
+            oldNode: data.dragNode.data,
+            node: dropNode
+          }
+        ));
       });
   }
 }

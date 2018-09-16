@@ -11,6 +11,8 @@
       *ngFor="let node of rootNodes$ | async"
       [node]="node"
       [treeModel]="treeModel"
+      [isSelected]="treeModel.isSelected(node.id)"
+      [isExpanded]="treeModel.isExpanded(node.id)"
       [contextMenu]="contextMenu"></ri-tree-item>
   </div>
   <ri-dropzone [treeModel]="treeModel"></ri-dropzone>

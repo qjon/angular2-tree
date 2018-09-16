@@ -28,6 +28,10 @@
   </div>
 </div>
 <div class="tree" *ngIf="isExpanded">
-  <new-tree-item *ngFor="let child of children$ | async" [node]="child" [treeModel]="treeModel"
+  <new-tree-item *ngFor="let child of children$ | async"
+                 [node]="child"
+                 [treeModel]="treeModel"
+                 [isExpanded]="treeModel.isExpanded(child.id)"
+                 [isSelected]="treeModel.isSelected(child.id)"
                  [contextMenu]="contextMenu"></new-tree-item>
 </div>

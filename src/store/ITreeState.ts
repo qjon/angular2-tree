@@ -1,5 +1,4 @@
 import {IOuterNode} from '../interfaces/IOuterNode';
-import {Action} from '@ngrx/store';
 import {IConfiguration} from '../interfaces/IConfiguration';
 
 export interface ITreeNodes {
@@ -13,8 +12,10 @@ export interface ITreeConfiguration extends IConfiguration {
 export interface ITreeData {
   nodes: {
     entities: ITreeNodes;
+    previouslySelected: string;
     selected: string;
     rootNodes: string[];
+    expanded: string[];
   };
   configuration: ITreeConfiguration;
 }
@@ -36,8 +37,4 @@ export interface ITreeActionPayload {
   ids?: string[];
   silent?: boolean;
   hasLoadedNodes?: boolean;
-}
-
-export interface ITreeAction extends Action {
-  payload: ITreeActionPayload;
 }

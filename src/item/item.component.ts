@@ -1,32 +1,51 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {ContextMenuComponent, ContextMenuService} from 'ngx-contextmenu';
 import {IOuterNode} from '../interfaces/IOuterNode';
-import {TreeActionsService} from '../store/treeActions.service';
-import {ITreeAction} from '../store/ITreeState';
+import {
+  TreeActionTypes,
+  TreeCollapseNodeAction,
+  TreeDeleteNodeAction,
+  TreeEditNodeStartAction,
+  TreeExpandNodeAction,
+  TreeSaveNodeAction,
+  TreeSelectNodeAction
+} from '../store/treeActions.service';
 import {Observable} from 'rxjs/Observable';
 import {TreeModel} from '../models/TreeModel';
 import {Actions} from '@ngrx/effects';
-import {animate, AnimationEvent, state, style, transition, trigger} from '@angular/animations';
-import {distinctUntilChanged, filter, map} from 'rxjs/operators';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 import {AnimationTriggerMetadata} from '@angular/animations/src/animation_metadata';
 import {Subscription} from 'rxjs/Subscription';
-import {TreeActionsDispatcherService} from '../store/treeActionsDispatcher.service';
 import 'rxjs/add/observable/empty';
-import {NEW_NODE_ID} from '../store/treeReducer';
+import {select, Store} from '@ngrx/store';
+import {ITreeState} from '../store/ITreeState';
+import {NEW_NODE_ID, previouslySelectedNodeSelector} from '../store/treeReducer';
+import {filter} from 'rxjs/operators';
+
 
 export function expand(): AnimationTriggerMetadata {
-  return trigger('isExpanded', [
-    state('inactive', style({
-      height: 0,
-      opacity: 0,
-      transform: 'scaleY(0)'
-    })),
-    state('active', style({
-      transform: 'scaleY(1)'
-    })),
-    transition('inactive => active', animate('300ms')),
-    transition('active => inactive', animate('300ms'))
+  return trigger('expand', [
+    state('*', style({'overflow-y': 'hidden'})),
+    state('void', style({'overflow-y': 'hidden'})),
+    transition('* => void', [
+      style({height: '*'}),
+      animate(300, style({height: 0}))
+    ]),
+    transition('void => *', [
+      style({height: '0'}),
+      animate(300, style({height: '*'}))
+    ])
   ]);
 }
 
@@ -35,6 +54,7 @@ export function expand(): AnimationTriggerMetadata {
   selector: 'ri-tree-item',
   templateUrl: './item.component.html',
   styleUrls: ['./item.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [expand()]
 })
 export class ItemComponent implements OnInit, OnDestroy, OnChanges {
@@ -57,9 +77,17 @@ export class ItemComponent implements OnInit, OnDestroy, OnChanges {
     return this._node;
   }
 
-  @Input() treeModel: TreeModel;
+  @Input()
+  public treeModel: TreeModel;
 
-  @Input() contextMenu: ContextMenuComponent;
+  @Input()
+  public contextMenu: ContextMenuComponent;
+
+  @Input()
+  public isExpanded = false;
+
+  @Input()
+  public isSelected = false;
 
   /**
    * Form field to change data name
@@ -67,9 +95,6 @@ export class ItemComponent implements OnInit, OnDestroy, OnChanges {
   public nameField = new FormControl();
 
   public isEditMode = false;
-  public isSelected = false;
-  public isExpanded = false;
-  public animationState = null;
 
   public children$: Observable<IOuterNode[]> = Observable.empty();
 
@@ -79,9 +104,10 @@ export class ItemComponent implements OnInit, OnDestroy, OnChanges {
 
   protected _node: IOuterNode;
 
-  public constructor(protected treeActionsDispatcherService: TreeActionsDispatcherService,
-                     protected contextMenuService: ContextMenuService,
-                     protected actions$: Actions) {
+  public constructor(protected contextMenuService: ContextMenuService,
+                     protected actions$: Actions,
+                     protected store: Store<ITreeState>,
+                     protected cdr: ChangeDetectorRef) {
   }
 
   public ngOnChanges(values): void {
@@ -90,13 +116,7 @@ export class ItemComponent implements OnInit, OnDestroy, OnChanges {
     const node = values.node;
 
     if (node && !node.firstChange && node.previousValue.id !== node.currentValue.id) {
-      this.children$ = this.treeModel.getChildren(this.node.id);
-
-      if (this.node.isExpanded) {
-        this.markNodeAsExpanded();
-      } else {
-        this.markNodeAsCollapsed();
-      }
+      this.children$ = this.getChildren();
     }
   }
 
@@ -105,37 +125,17 @@ export class ItemComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnInit() {
-    this.markNodeAsCollapsed();
+    this.children$ = this.getChildren();
 
-    this.children$ = this.treeModel.getChildren(this.node.id);
-
-    if (this.node.isExpanded) {
-      this.markNodeAsExpanded();
-    }
+    this.subscribeForOnEdit();
 
     this.subscription.add(
-      this.treeModel.currentSelectedNode$
+      this.store
         .pipe(
-          map((node: IOuterNode) => node ? node.id : null),
-          distinctUntilChanged()
+          select(previouslySelectedNodeSelector(this.node.treeId)),
+          filter((previouslySelected: string) => previouslySelected === this.node.id)
         )
-        .subscribe((id: string) => this.isSelected = id === this.node.id)
-    );
-
-    this.subscription.add(this.getSubscriptionToExpandNode());
-    this.subscription.add(this.getSubscriptionToCollapseNode());
-
-    this.subscription.add(
-      this.actions$
-        .ofType(TreeActionsService.TREE_EDIT_NODE_START)
-        .pipe(
-          filter((action: ITreeAction) => action.payload.node === this.node)
-        )
-        .subscribe((action: ITreeAction) => {
-          this.nameField.setValue(this.node.name);
-          this.isEditMode = true;
-          this.setFocus();
-        })
+        .subscribe(() => this.cdr.markForCheck())
     );
   }
 
@@ -143,24 +143,17 @@ export class ItemComponent implements OnInit, OnDestroy, OnChanges {
    * Collapse node
    */
   public collapse(): void {
-    this.treeActionsDispatcherService.collapseNode(this.treeModel.treeId, this.node.id);
+    this.store.dispatch(new TreeCollapseNodeAction({
+      treeId: this.treeModel.treeId,
+      id: this.node.id,
+    }));
   }
 
   /**
    * Expand node
    */
   public expand(): void {
-    this.treeActionsDispatcherService.expandNode(this.treeModel.treeId, this.node.id);
-
-    if (!this.treeModel.isFullyLoaded) {
-      this.treeActionsDispatcherService.loadTree(this.treeModel.treeId, this.node.id);
-    }
-  }
-
-  public onAnimationDone($event: AnimationEvent): void {
-    if ($event.toState === 'inactive') {
-      this.isExpanded = false;
-    }
+    this.store.dispatch(new TreeExpandNodeAction({treeId: this.treeModel.treeId, id: this.node.id}));
   }
 
   public onBlur() {
@@ -188,7 +181,10 @@ export class ItemComponent implements OnInit, OnDestroy, OnChanges {
         isExpanded: false
       };
 
-      this.treeActionsDispatcherService.saveNode(this.treeModel.treeId, node);
+      this.store.dispatch(new TreeSaveNodeAction({
+        treeId: this.treeModel.treeId,
+        node,
+      }));
       this.isEditMode = false;
     }
   }
@@ -208,73 +204,20 @@ export class ItemComponent implements OnInit, OnDestroy, OnChanges {
 
   public onSelect() {
     if (this.isSelected) {
-      this.treeActionsDispatcherService.selectNode(this.treeModel.treeId, null);
+      this.store.dispatch(new TreeSelectNodeAction({
+        treeId: this.treeModel.treeId,
+        node: null,
+      }));
     } else {
-      this.treeActionsDispatcherService.selectNode(this.treeModel.treeId, this.node);
+      this.store.dispatch(new TreeSelectNodeAction({
+        treeId: this.treeModel.treeId,
+        node: this.node,
+      }));
     }
   }
 
-  protected isNewNode() {
-    return this.node.id === NEW_NODE_ID;
-  }
-
-  protected setFocus() {
-    setTimeout(() => this.input.nativeElement.focus(), 0);
-  }
-
-  protected undoChanges() {
-    this.isEditMode = false;
-
-    if (this.isNewNode()) {
-      this.treeActionsDispatcherService.deleteNode(this.treeModel.treeId, this.node);
-    }
-  }
-
-  protected markNodeAsExpanded(): void {
-    if (this.treeModel.configuration.isAnimation) {
-      this.animationState = 'active';
-    }
-
-    this.isExpanded = true;
-  }
-
-  protected markNodeAsCollapsed(): void {
-    if (this.treeModel.configuration.isAnimation) {
-      this.animationState = 'inactive';
-    } else {
-      this.isExpanded = false;
-    }
-  }
-
-  protected getSubscriptionToExpandNode() {
-    return this.actions$
-      .ofType(TreeActionsService.TREE_EXPAND_NODE)
-      .pipe(
-        filter((action: ITreeAction): boolean => {
-          return !this.isExpanded
-            && action.payload.treeId === this.treeModel.treeId
-            && this.node.id === action.payload.id;
-        })
-      )
-      .subscribe(() => {
-        this.markNodeAsExpanded();
-        this.isExpanded = true;
-      });
-  }
-
-  protected getSubscriptionToCollapseNode() {
-    return this.actions$
-      .ofType(TreeActionsService.TREE_COLLAPSE_NODE)
-      .pipe(
-        filter((action: ITreeAction): boolean => {
-          return this.isExpanded
-            && action.payload.treeId === this.treeModel.treeId
-            && this.node.id === action.payload.id;
-        })
-      )
-      .subscribe(() => {
-        this.markNodeAsCollapsed();
-      });
+  protected getChildren(): Observable<IOuterNode[]> {
+    return this.treeModel.getChildren(this.node.id);
   }
 
   protected initEditModeIfNeeded(node: IOuterNode) {
@@ -287,6 +230,41 @@ export class ItemComponent implements OnInit, OnDestroy, OnChanges {
     if (this.isEditMode) {
       this.nameField.setValue('');
       this.setFocus();
+    }
+  }
+
+  protected isNewNode() {
+    return this.node.id === NEW_NODE_ID;
+  }
+
+  protected setFocus() {
+    setTimeout(() => this.input.nativeElement.focus(), 0);
+  }
+
+  protected subscribeForOnEdit(): void {
+    this.subscription.add(
+      this.actions$
+        .ofType(TreeActionTypes.TREE_EDIT_NODE_START)
+        .pipe(
+          filter((action: TreeEditNodeStartAction) => action.payload.node === this.node)
+        )
+        .subscribe((action: TreeEditNodeStartAction) => {
+          this.nameField.setValue(this.node.name);
+          this.isEditMode = true;
+          this.cdr.markForCheck();
+          this.setFocus();
+        })
+    );
+  }
+
+  protected undoChanges() {
+    this.isEditMode = false;
+
+    if (this.isNewNode()) {
+      this.store.dispatch(new TreeDeleteNodeAction({
+        treeId: this.treeModel.treeId,
+        node: this.node,
+      }));
     }
   }
 }

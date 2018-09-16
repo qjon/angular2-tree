@@ -158,17 +158,24 @@ and _newItem.component.html_
           </span>
       </div>
     </div>
-    <div class="tree" [@isExpanded]="animationState" (@isExpanded.done)="onAnimationDone($event)">
-      <div *ngIf="isExpanded">
-        <new-tree-item  *ngFor="let child of children$ | async" [node]="child" [treeModel]="treeModel" [contextMenu]="contextMenu"></new-tree-item>
-      </div>
+    <div class="tree" *ngIf="isExpanded" [@expand]>
+      <ri-tree-item *ngFor="let child of children$ | async" [node]="child"
+                    [treeModel]="treeModel"
+                    [isExpanded]="treeModel.isExpanded(child.id)"
+                    [isSelected]="treeModel.isSelected(child.id)"
+                    [contextMenu]="contextMenu"></ri-tree-item>
     </div>
 
     
 Then when you create tree component in your application use such construction
 
     <rign-tree [treeModel]="treeModel">
-      <new-tree-item *ngFor="let node of treeModel.getRootNodes() | async" [node]="node" [treeModel]="treeModel" [contextMenu]="contextMenu"></new-tree-item>
+      <new-tree-item *ngFor="let node of treeModel.getRootNodes() | async" 
+                      [node]="node" 
+                      [treeModel]="treeModel" 
+                      [isSelected]="treeModel.isSelected(node.id)"
+                      [isExpanded]="treeModel.isExpanded(node.id)"
+                      [contextMenu]="contextMenu"></new-tree-item>
     </rign-tree>
     
 and that is all. Please see Demo where is such example.
@@ -193,24 +200,24 @@ The _treeModel_ value is the same object that is used in _ri-tree_.
 
 Using _ngrx/store_ you can listen on below actions and do whatever you want:
 
-    TreeActionsService.TREE_SAVE_NODE
-    TreeActionsService.TREE_SAVE_NODE_ERROR
-    TreeActionsService.TREE_SAVE_NODE_SUCCESS
-    TreeActionsService.TREE_DELETE_NODE
-    TreeActionsService.TREE_DELETE_NODE_ERROR
-    TreeActionsService.TREE_DELETE_NODE_SUCCESS
-    TreeActionsService.TREE_EDIT_NODE_START
-    TreeActionsService.TREE_EXPAND_NODE
-    TreeActionsService.TREE_LOAD
-    TreeActionsService.TREE_LOAD_ERROR
-    TreeActionsService.TREE_LOAD_SUCCESS
-    TreeActionsService.TREE_LOAD_PATH
-    TreeActionsService.TREE_MOVE_NODE
-    TreeActionsService.TREE_MOVE_NODE_ERROR
-    TreeActionsService.TREE_MOVE_NODE_SUCCESS
-    TreeActionsService.TREE_REGISTER
-    TreeActionsService.TREE_SET_ALL_NODES
-    TreeActionsService.TREE_SELECT_NODE
+    TreeActionTypes.TREE_SAVE_NODE
+    TreeActionTypes.TREE_SAVE_NODE_ERROR
+    TreeActionTypes.TREE_SAVE_NODE_SUCCESS
+    TreeActionTypes.TREE_DELETE_NODE
+    TreeActionTypes.TREE_DELETE_NODE_ERROR
+    TreeActionTypes.TREE_DELETE_NODE_SUCCESS
+    TreeActionTypes.TREE_EDIT_NODE_START
+    TreeActionTypes.TREE_EXPAND_NODE
+    TreeActionTypes.TREE_LOAD
+    TreeActionTypes.TREE_LOAD_ERROR
+    TreeActionTypes.TREE_LOAD_SUCCESS
+    TreeActionTypes.TREE_LOAD_PATH
+    TreeActionTypes.TREE_MOVE_NODE
+    TreeActionTypes.TREE_MOVE_NODE_ERROR
+    TreeActionTypes.TREE_MOVE_NODE_SUCCESS
+    TreeActionTypes.TREE_REGISTER
+    TreeActionTypes.TREE_SET_ALL_NODES
+    TreeActionTypes.TREE_SELECT_NODE
 
 ## Translation
 
@@ -243,7 +250,7 @@ where:
 Then you have to create _@Effects_ similar to that one in _[treeEffects.service](src/store/treeEffects.service.ts)_or create only Observable and subscribe to it.
 
     @Effect() move$ = this.actions$
-      .ofType(TreeActionsService.TREE_MOVE_NODE)
+      .ofType(TreeActionTypes.TREE_MOVE_NODE)
       .pipe(
         filter((action: ITreeAction) => {
           return action.payload.sourceOfDroppedData === DragAndDrop.DROP_DATA_TYPE;
@@ -253,7 +260,7 @@ Then you have to create _@Effects_ similar to that one in _[treeEffects.service]
       
 but you have to replace 
 
-    .ofType(TreeActionsService.TREE_MOVE_NODE)
+    .ofType(TreeActionTypes.TREE_MOVE_NODE)
 
 to 
 
@@ -265,6 +272,16 @@ At the end do not forget to add this effects to your app.
 
 ### v3.1.0
 * change tree model initialize and injecting NodeService
+* add NestJS server with new _TreeTwoNodeBackendService_ angular service to show how Tree works with real backend (details in _Demo_ section)
+* actions and reducer
+  * change events from TreeActionService to TreeActionTypes (the first one will be removed in 4.0.0)
+  * rewrite actions from one class to many simpler classes
+  * create one type _TreeAction_ which cover all tree actions
+* rewrite _TreeItemComponent_ - improved performance and reduce code
+   * move information about expanded nodes from _TreeItemComponent_ to _store_, these cause that _isExpanded_ is now _@Input()_ property for _TreeItemComponent_
+   * _TreeItemComponent_ has new _@Input()_ property _isSelected_  
+   * small changes in expand animation
+* fix issue - when add new node parent node was expanded but not loaded
 
 ### v3.0.2
 * small fixes with interfaces
@@ -353,13 +370,15 @@ To run Demo locally clone this repository and run
 
     npm start
     
-If you would like to use demo with real API then run real backend written in NestJS
+If you would like to use demo with real API then you have to make small change. 
+In _demo/srx/app/treeTwo.component.ts_ change injection from _TreeTwoNodeService_ to _TreeTwoNodeBackendService_.  
+Then run real backend written in NestJS
 
     cd backend
     npm install
     npm start
     
-in second terminal run tree application
+and in second terminal run tree application
 
     npm start
 

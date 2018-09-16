@@ -2,5 +2,7 @@
   <new-tree-item class="root-node"
                  *ngFor="let node of treeModel.rootNodes$ | async" [node]="node"
                  [treeModel]="treeModel"
+                 [isExpanded]="treeModel.isExpanded(node.id)"
+                 [isSelected]="treeModel.isSelected(node.id)"
                  [contextMenu]="contextMenu"></new-tree-item>
 </ri-tree>

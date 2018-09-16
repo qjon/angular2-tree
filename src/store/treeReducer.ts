@@ -1,5 +1,20 @@
-import {ITreeAction, ITreeConfiguration, ITreeData, ITreeNodes, ITreeState} from './ITreeState';
-import {ITreeConfigurationAction, TreeActionsService} from './treeActions.service';
+import {ITreeConfiguration, ITreeData, ITreeNodes, ITreeState} from './ITreeState';
+import {
+  TreeAction,
+  TreeActionTypes,
+  TreeCollapseNodeAction,
+  TreeDeleteNodeSuccessAction,
+  TreeExpandNodeAction,
+  TreeInsertNodeAction,
+  TreeLoadNodesSuccessAction,
+  TreeMarkAsFullyLoadedAction,
+  TreeMoveNodeSuccessAction,
+  TreeRegisterAction,
+  TreeSaveNodeSuccessAction,
+  TreeSelectNodeAction,
+  TreeSetAllNodesAction,
+  TreeSetConfigurationAction
+} from './treeActions.service';
 import {IOuterNode} from '../interfaces/IOuterNode';
 import {createFeatureSelector, createSelector} from '@ngrx/store';
 import {MemoizedSelector} from '@ngrx/store/src/selector';
@@ -9,8 +24,10 @@ export const NEW_NODE_ID = 'ri-new-node-id';
 export const emptyTreeData: ITreeData = {
   nodes: {
     entities: {},
+    previouslySelected: null,
     selected: null,
-    rootNodes: []
+    rootNodes: [],
+    expanded: [],
   },
   configuration: {
     isFullyLoaded: false
@@ -25,8 +42,10 @@ function copyState(state: ITreeState, treeId: string = null) {
     newState[treeId] = {
       nodes: {
         entities: {...state[treeId].nodes.entities},
+        previouslySelected: state[treeId].nodes.previouslySelected,
         selected: state[treeId].nodes.selected,
-        rootNodes: [...state[treeId].nodes.rootNodes]
+        rootNodes: [...state[treeId].nodes.rootNodes],
+        expanded: [...state[treeId].nodes.expanded],
       },
       configuration: {...state[treeId].configuration}
     };
@@ -35,7 +54,7 @@ function copyState(state: ITreeState, treeId: string = null) {
   return newState;
 }
 
-function removeNode(state: ITreeState, action: ITreeAction): ITreeState {
+function removeNode(state: ITreeState, action: TreeDeleteNodeSuccessAction): ITreeState {
   const newState = copyState(state, action.payload.treeId);
   const treeId = action.payload.treeId;
   const treeState = newState[treeId];
@@ -47,7 +66,9 @@ function removeNode(state: ITreeState, action: ITreeAction): ITreeState {
   if (parentId) {
     const parent = {...treeState.nodes.entities[parentId]};
 
-    parent.children = parent.children.filter((id) => id !== node.id);
+    if (parent.children) {
+      parent.children = parent.children.filter((id) => id !== node.id);
+    }
     treeState.nodes.entities[parentId] = parent;
   } else {
     treeState.nodes.rootNodes = treeState.nodes.rootNodes.filter((id) => id !== node.id);
@@ -57,7 +78,7 @@ function removeNode(state: ITreeState, action: ITreeAction): ITreeState {
 }
 
 
-function loadNodes(state: ITreeState, action: ITreeAction) {
+function loadNodes(state: ITreeState, action: TreeLoadNodesSuccessAction) {
   const newState = copyState(state, action.payload.treeId);
   let parent: IOuterNode | null = null;
   const treeId = action.payload.treeId;
@@ -90,32 +111,35 @@ function loadNodes(state: ITreeState, action: ITreeAction) {
 }
 
 
-function expandNode(state: ITreeState, action: ITreeAction): ITreeState {
+function expandNode(state: ITreeState, action: TreeExpandNodeAction): ITreeState {
   const treeId = action.payload.treeId;
   const newState = copyState(state, treeId);
   const nodeId = action.payload.id;
 
-  newState[treeId].nodes.entities[nodeId] = Object.assign({}, newState[treeId].nodes.entities[nodeId], {isExpanded: true});
+  // newState[treeId].nodes.entities[nodeId] = Object.assign({}, newState[treeId].nodes.entities[nodeId], {isExpanded: true});
+  newState[treeId].nodes.expanded = [...newState[treeId].nodes.expanded, nodeId];
 
   return newState;
 }
 
 
-function collapseNode(state: ITreeState, action: ITreeAction): ITreeState {
+function collapseNode(state: ITreeState, action: TreeCollapseNodeAction): ITreeState {
   const treeId = action.payload.treeId;
   const newState = copyState(state, treeId);
   const nodeId = action.payload.id;
 
-  newState[treeId].nodes.entities[nodeId] = {...newState[treeId].nodes.entities[nodeId], ...{isExpanded: false}};
+  // newState[treeId].nodes.entities[nodeId] = {...newState[treeId].nodes.entities[nodeId], ...{isExpanded: false}};
+  newState[treeId].nodes.expanded = newState[treeId].nodes.expanded.filter((id) => id !== nodeId);
+
 
   return newState;
 }
 
 
-function insertNode(state: ITreeState, action: ITreeAction): ITreeState {
+function insertNode(state: ITreeState, action: TreeInsertNodeAction): ITreeState {
   const treeId = action.payload.treeId;
   const newState = copyState(state, treeId);
-  const parentId = action.payload.id;
+  const parentId = action.payload.parentId;
   const newNode: IOuterNode = {
     id: NEW_NODE_ID,
     treeId: treeId,
@@ -135,7 +159,7 @@ function insertNode(state: ITreeState, action: ITreeAction): ITreeState {
   return newState;
 }
 
-function saveNode(state: ITreeState, action: ITreeAction): ITreeState {
+function saveNode(state: ITreeState, action: TreeSaveNodeSuccessAction): ITreeState {
   const newState = copyState(state, action.payload.treeId);
   const old = action.payload.oldNode;
   const newNode = action.payload.node;
@@ -174,7 +198,7 @@ function saveNode(state: ITreeState, action: ITreeAction): ITreeState {
   return newState;
 }
 
-function moveNode(state: ITreeState, action: ITreeAction) {
+function moveNode(state: ITreeState, action: TreeMoveNodeSuccessAction) {
   const newState = copyState(state, action.payload.treeId);
   const oldNode = action.payload.source;
   const newNode = action.payload.target;
@@ -209,14 +233,16 @@ function moveNode(state: ITreeState, action: ITreeAction) {
   return newState;
 }
 
-function registerTree(state: ITreeState, action: ITreeAction) {
+function registerTree(state: ITreeState, action: TreeRegisterAction) {
   const newState = copyState(state);
 
   newState[action.payload.treeId] = {
     nodes: {
       entities: {...emptyTreeData.nodes.entities},
+      previouslySelected: emptyTreeData.nodes.previouslySelected,
       selected: emptyTreeData.nodes.selected,
-      rootNodes: [...emptyTreeData.nodes.rootNodes]
+      rootNodes: [...emptyTreeData.nodes.rootNodes],
+      expanded: [...emptyTreeData.nodes.expanded]
     },
     configuration: {...emptyTreeData.configuration}
   };
@@ -225,7 +251,7 @@ function registerTree(state: ITreeState, action: ITreeAction) {
 }
 
 
-function setAllNodes(state: ITreeState, action: ITreeAction): ITreeState {
+function setAllNodes(state: ITreeState, action: TreeSetAllNodesAction): ITreeState {
   const newState = copyState(state, action.payload.treeId);
   const treeId = action.payload.treeId;
   const nodes = action.payload.nodes;
@@ -262,7 +288,7 @@ function updateParents(nodes: ITreeNodes, nodeId: string, parents: string[] = []
   }
 }
 
-function markTreeAsFullyLoaded(state: ITreeState, action: ITreeAction): ITreeState {
+function markTreeAsFullyLoaded(state: ITreeState, action: TreeMarkAsFullyLoadedAction): ITreeState {
   const treeId = action.payload.treeId;
   const newState = copyState(state, treeId);
 
@@ -271,7 +297,7 @@ function markTreeAsFullyLoaded(state: ITreeState, action: ITreeAction): ITreeSta
   return newState;
 }
 
-function setConfiguration(state: ITreeState, action: ITreeConfigurationAction): ITreeState {
+function setConfiguration(state: ITreeState, action: TreeSetConfigurationAction): ITreeState {
   const treeId = action.payload.treeId;
   const newState = copyState(state, treeId);
 
@@ -280,47 +306,48 @@ function setConfiguration(state: ITreeState, action: ITreeConfigurationAction): 
   return newState;
 }
 
-function selectNode(state: ITreeState, action: ITreeAction) {
+function selectNode(state: ITreeState, action: TreeSelectNodeAction) {
   const treeId = action.payload.treeId;
   const node = action.payload.node;
   const newState = copyState(state, treeId);
 
+  newState[treeId].nodes.previouslySelected = newState[treeId].nodes.selected;
   newState[treeId].nodes.selected = node ? node.id : null;
 
   return newState;
 }
 
-export function treeReducer(state: ITreeState = {}, action: ITreeAction | ITreeConfigurationAction): ITreeState {
+export function treeReducer(state: ITreeState = {}, action: TreeAction): ITreeState {
   switch (action.type) {
-    case TreeActionsService.TREE_REGISTER:
+    case TreeActionTypes.TREE_REGISTER:
       return registerTree(state, action);
-    case TreeActionsService.TREE_SAVE_NODE_SUCCESS:
+    case TreeActionTypes.TREE_SAVE_NODE_SUCCESS:
       return saveNode(state, action);
-    case TreeActionsService.TREE_DELETE_NODE_SUCCESS:
+    case TreeActionTypes.TREE_DELETE_NODE_SUCCESS:
       return removeNode(state, action);
-    case TreeActionsService.TREE_INSERT_NODE:
+    case TreeActionTypes.TREE_INSERT_NODE:
       return insertNode(state, action);
-    case TreeActionsService.TREE_LOAD_SUCCESS:
+    case TreeActionTypes.TREE_LOAD_SUCCESS:
       return loadNodes(state, action);
-    case TreeActionsService.TREE_MOVE_NODE_SUCCESS:
+    case TreeActionTypes.TREE_MOVE_NODE_SUCCESS:
       return moveNode(state, action);
-    case TreeActionsService.TREE_SET_ALL_NODES:
+    case TreeActionTypes.TREE_SET_ALL_NODES:
       return setAllNodes(state, action);
-    case TreeActionsService.TREE_MARK_AS_FULLY_LOADED:
+    case TreeActionTypes.TREE_MARK_AS_FULLY_LOADED:
       return markTreeAsFullyLoaded(state, action);
-    case TreeActionsService.TREE_SET_CONFIGURATION:
-      return setConfiguration(state, <ITreeConfigurationAction>action);
-    case TreeActionsService.TREE_EXPAND_NODE:
+    case TreeActionTypes.TREE_SET_CONFIGURATION:
+      return setConfiguration(state, action);
+    case TreeActionTypes.TREE_EXPAND_NODE:
       return expandNode(state, action);
-    case TreeActionsService.TREE_COLLAPSE_NODE:
+    case TreeActionTypes.TREE_COLLAPSE_NODE:
       return collapseNode(state, action);
-    case TreeActionsService.TREE_SELECT_NODE:
+    case TreeActionTypes.TREE_SELECT_NODE:
       return selectNode(state, action);
-    case TreeActionsService.TREE_DELETE_NODE:
-    case TreeActionsService.TREE_EDIT_NODE_START:
-    case TreeActionsService.TREE_LOAD:
-    case TreeActionsService.TREE_MOVE_NODE:
-    case TreeActionsService.TREE_SAVE_NODE:
+    case TreeActionTypes.TREE_DELETE_NODE:
+    case TreeActionTypes.TREE_EDIT_NODE_START:
+    case TreeActionTypes.TREE_LOAD:
+    case TreeActionTypes.TREE_MOVE_NODE:
+    case TreeActionTypes.TREE_SAVE_NODE:
       return state;
     default:
       return state;
@@ -336,4 +363,16 @@ export function treeSelector(treeId: string): MemoizedSelector<object, ITreeData
 
 export function treeConfigurationSelector(treeId: string): MemoizedSelector<object, ITreeConfiguration> {
   return createSelector(treeStateSelector, (state: ITreeState) => state[treeId].configuration || null);
+}
+
+export function expandedNodesSelector(treeId: string): MemoizedSelector<object, string[]> {
+  return createSelector(treeStateSelector, (state: ITreeState) => state[treeId].nodes.expanded || []);
+}
+
+export function selectedNodeSelector(treeId: string): MemoizedSelector<object, string> {
+  return createSelector(treeStateSelector, (state: ITreeState) => state[treeId].nodes.selected || null);
+}
+
+export function previouslySelectedNodeSelector(treeId: string): MemoizedSelector<object, string> {
+  return createSelector(treeStateSelector, (state: ITreeState) => state[treeId].nodes.previouslySelected || null);
 }
