@@ -8,11 +8,11 @@
   <div *ngIf="customTemplate.childNodes.length === 0">
     <ri-tree-item
       class="root-node"
-      *ngFor="let node of rootNodes$ | async"
+      *ngFor="let node of rootNodes$ | async; trackBy: trackByFn"
       [node]="node"
       [treeModel]="treeModel"
-      [isSelected]="treeModel.isSelected(node.id)"
-      [isExpanded]="treeModel.isExpanded(node.id)"
+      [isSelected]="treeModel.isSelected(node)"
+      [isExpanded]="treeModel.isExpanded(node)"
       [contextMenu]="contextMenu"></ri-tree-item>
   </div>
   <ri-dropzone [treeModel]="treeModel"></ri-dropzone>

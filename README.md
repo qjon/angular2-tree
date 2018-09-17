@@ -159,10 +159,10 @@ and _newItem.component.html_
       </div>
     </div>
     <div class="tree" *ngIf="isExpanded" [@expand]>
-      <ri-tree-item *ngFor="let child of children$ | async" [node]="child"
+      <ri-tree-item *ngFor="let child of children$ | async" [node]="child; trackBy: trackByFn"
                     [treeModel]="treeModel"
-                    [isExpanded]="treeModel.isExpanded(child.id)"
-                    [isSelected]="treeModel.isSelected(child.id)"
+                    [isExpanded]="treeModel.isExpanded(child)"
+                    [isSelected]="treeModel.isSelected(child)"
                     [contextMenu]="contextMenu"></ri-tree-item>
     </div>
 
@@ -170,11 +170,11 @@ and _newItem.component.html_
 Then when you create tree component in your application use such construction
 
     <rign-tree [treeModel]="treeModel">
-      <new-tree-item *ngFor="let node of treeModel.getRootNodes() | async" 
+      <new-tree-item *ngFor="let node of treeModel.getRootNodes() | async; trackBy: trackByFn" 
                       [node]="node" 
                       [treeModel]="treeModel" 
-                      [isSelected]="treeModel.isSelected(node.id)"
-                      [isExpanded]="treeModel.isExpanded(node.id)"
+                      [isSelected]="treeModel.isSelected(node)"
+                      [isExpanded]="treeModel.isExpanded(node)"
                       [contextMenu]="contextMenu"></new-tree-item>
     </rign-tree>
     

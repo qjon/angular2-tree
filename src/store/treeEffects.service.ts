@@ -179,6 +179,7 @@ export class TreeEffectsService {
   public insert$ = this.actions$
     .ofType(TreeActionTypes.TREE_INSERT_NODE)
     .pipe(
+      filter((action: TreeInsertNodeAction) => !!action.payload.parentId),
       map((action: TreeInsertNodeAction) => {
         return new TreeExpandNodeAction({treeId: action.payload.treeId, id: action.payload.parentId});
       })

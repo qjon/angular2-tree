@@ -216,6 +216,10 @@ export class ItemComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
+  public trackByFn(item: IOuterNode): string {
+    return item.id;
+  }
+
   protected getChildren(): Observable<IOuterNode[]> {
     return this.treeModel.getChildren(this.node.id);
   }

@@ -103,6 +103,10 @@ export class TreeComponent implements OnInit, OnChanges {
     }
   }
 
+  public trackByFn(item: IOuterNode): string {
+    return item.id;
+  }
+
   /**
    * Register data "move event"
    */

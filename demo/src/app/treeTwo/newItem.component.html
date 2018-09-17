@@ -28,10 +28,10 @@
   </div>
 </div>
 <div class="tree" *ngIf="isExpanded">
-  <new-tree-item *ngFor="let child of children$ | async"
+  <new-tree-item *ngFor="let child of children$ | async; trackBy: trackByFn"
                  [node]="child"
                  [treeModel]="treeModel"
-                 [isExpanded]="treeModel.isExpanded(child.id)"
-                 [isSelected]="treeModel.isSelected(child.id)"
+                 [isExpanded]="treeModel.isExpanded(child)"
+                 [isSelected]="treeModel.isSelected(child)"
                  [contextMenu]="contextMenu"></new-tree-item>
 </div>

@@ -19,10 +19,10 @@
     "clean:all": "rimraf dist/ && npm run clean:tmp",
     "clean:tmp": "rimraf tmp/",
     "lint": "ng lint",
-    "e2e": "rm -rf e2e/screenshots/* && ng e2e -wu false -s false",
+    "e2e": "rm -rf e2e/screenshots/* && ng e2e -wu false",
     "test": "./node_modules/.bin/karma --config karma.conf.js start",
     "gh-pages": "ng build --prod --base-href \"https://qjon.github.io/angular2-tree/\" &&  ./node_modules/.bin/angular-cli-ghpages -b gh-pages  --name=\"Rafał Ignaszewski\" --email=\"rafal@ignaszewski.pl\" --no-silent",
-    "ci": "npm run test && ng e2e -wu false"
+    "ci": "npm run test && ng e2e"
   },
   "repository": {
     "type": "git",

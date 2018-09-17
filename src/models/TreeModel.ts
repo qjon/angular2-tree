@@ -112,12 +112,20 @@ export class TreeModel {
     this.store.dispatch(new TreeLoadPathAction({treeId: this.configuration.treeId, ids: path}));
   }
 
-  public isExpanded(nodeId: string): boolean {
-    return this.expanded.has(nodeId);
+  public isExpanded(node: IOuterNode): boolean {
+    if (!node) {
+      return false;
+    }
+
+    return this.expanded.has(node.id);
   }
 
-  public isSelected(nodeId: string): boolean {
-    return this.selected === nodeId;
+  public isSelected(node: IOuterNode): boolean {
+    if (!node) {
+      return false;
+    }
+
+    return this.selected === node.id;
   }
 
   public wasPreviouslySelected(nodeId: string): boolean {

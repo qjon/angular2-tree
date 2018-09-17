@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {IConfiguration, IContextMenu, ITreeData, TreeModel} from '../../../../main';
+import {IConfiguration, IContextMenu, IOuterNode, ITreeData, TreeModel} from '../../../../main';
 import {Observable} from 'rxjs/Observable';
 import {TreeInitializerService} from '../../../../src/service/initializer.service';
-import {TreeTwoNodeBackendService} from './treeTwoNodeBackend.service';
+import {TreeTwoNodeService} from './treeTwoNode.service';
 
 @Component({
   selector: 'app-tree-two',
@@ -24,7 +24,7 @@ export class TreeTwoComponent implements OnInit, OnDestroy {
   public treeModel: TreeModel;
 
   public constructor(private treeInitializerService: TreeInitializerService,
-                     private treeTwoNodeService: TreeTwoNodeBackendService) {
+                     private treeTwoNodeService: TreeTwoNodeService) {
   }
 
   public ngOnInit(): void {
@@ -33,5 +33,9 @@ export class TreeTwoComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.treeModel.destroy();
+  }
+
+  public trackByFn(item: IOuterNode): string {
+    return item.id;
   }
 }
