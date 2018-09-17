@@ -11,6 +11,7 @@ export * from './src/IApiConfig.service';
 export * from './src/parents-list/parents-list.component';
 export * from './src/service/nodesDispatcher.service';
 export * from './src/service/treeModelGenerator.service';
+export * from './src/service/initializer.service';
 export * from './src/store/treeActions.service';
 export * from './src/store/treeActionsDispatcher.service';
 export * from './src/store/treeEffects.service';

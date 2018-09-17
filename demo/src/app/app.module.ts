@@ -10,6 +10,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DndModule} from 'ng2-dnd';
 import {TreeOneModule} from './treeOne/treeOne.module';
 import {TreeTwoModule} from './treeTwo/treeTwo.module';
+import {TreeModule} from '../../../src/tree.module';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import {TreeTwoModule} from './treeTwo/treeTwo.module';
     HttpClientModule,
     TreeTwoModule,
     TreeOneModule,
+    TreeModule.forRoot(),
     TranslateModule.forRoot(),
     EffectsModule.forRoot([]),
     StoreModule.forRoot({}),

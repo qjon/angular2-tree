@@ -13,7 +13,7 @@ import {HttpClientModule} from '@angular/common/http';
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    TreeModule.forFeature(TreeOneNodeService)
+    TreeModule
   ],
   providers: [
     TreeOneNodeService,

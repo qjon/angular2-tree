@@ -2,7 +2,9 @@ import {Component, Input, OnInit} from '@angular/core';
 import {TreeModel} from '../models/TreeModel';
 import {Observable} from 'rxjs/Observable';
 import {IOuterNode} from '../interfaces/IOuterNode';
-import {TreeActionsDispatcherService} from '../store/treeActionsDispatcher.service';
+import {TreeSelectNodeAction} from '../store/treeActions.service';
+import {ITreeState} from '../store/ITreeState';
+import {Store} from '@ngrx/store';
 
 @Component({
   selector: 'ri-tree-parents-list',
@@ -15,7 +17,7 @@ export class ParentsListComponent implements OnInit {
 
   public parents$: Observable<IOuterNode[]>;
 
-  public constructor(protected nodeDispatcherService: TreeActionsDispatcherService) {
+  public constructor(protected store: Store<ITreeState>) {
 
   }
 
@@ -25,7 +27,10 @@ export class ParentsListComponent implements OnInit {
 
   public selectNode(node: IOuterNode, isCurrentSelectedNode: boolean): void {
     if (!isCurrentSelectedNode) {
-      this.nodeDispatcherService.selectNode(this.treeModel.treeId, node);
+      this.store.dispatch(new TreeSelectNodeAction({
+        treeId: this.treeModel.treeId,
+        node,
+      }));
     }
   }
 

@@ -5,13 +5,16 @@ import {treeSelector} from '../store/treeReducer';
 import {Store} from '@ngrx/store';
 import {ITreeState} from '../store/ITreeState';
 import {NodeDispatcherService} from './nodesDispatcher.service';
-import {TreeActionsDispatcherService} from '../store/treeActionsDispatcher.service';
 import {IOuterNode} from '../interfaces/IOuterNode';
+import {
+  TreeMarkAsFullyLoadedAction,
+  TreeRegisterAction,
+  TreeSetConfigurationAction
+} from '../store/treeActions.service';
 
 @Injectable()
 export class TreeModelGeneratorService {
   public constructor(private nodeDispatcherService: NodeDispatcherService,
-                     private treeActionsDispatcher: TreeActionsDispatcherService,
                      private store: Store<ITreeState>) {
   }
 
@@ -20,18 +23,22 @@ export class TreeModelGeneratorService {
     const isFullyLoaded = Boolean(nodes);
 
     // register new tree in store
-    this.treeActionsDispatcher.registerTree(treeId, isFullyLoaded, nodes);
+    this.store.dispatch(new TreeRegisterAction({
+      treeId,
+      silent: isFullyLoaded,
+      nodes
+    }));
 
     // init tree configuration
-    this.treeActionsDispatcher.setConfiguration(treeId, configuration);
+    this.store.dispatch(new TreeSetConfigurationAction({treeId, configuration}));
 
     if (Boolean(nodes)) {
       this.nodeDispatcherService.get(treeId).setAllNodes(nodes);
-      this.treeActionsDispatcher.markAsFullyLoaded(treeId);
+      this.store.dispatch(new TreeMarkAsFullyLoadedAction({treeId}));
     }
 
     const folders$ = this.store.select(treeSelector(configuration.treeId));
 
-    return new TreeModel(this.treeActionsDispatcher, folders$, configuration, isFullyLoaded);
+    return new TreeModel(this.store, folders$, configuration, isFullyLoaded);
   }
 }

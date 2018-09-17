@@ -1,13 +1,20 @@
 import {IOuterNode} from '../interfaces/IOuterNode';
 import {Observable} from 'rxjs/Observable';
 import {IConfiguration} from '../interfaces/IConfiguration';
-import {ITreeData, ITreeNodes} from '../store/ITreeState';
-import {TreeActionsDispatcherService} from '../store/treeActionsDispatcher.service';
+import {ITreeData, ITreeNodes, ITreeState} from '../store/ITreeState';
 import {distinctUntilChanged, map} from 'rxjs/operators';
 import 'rxjs/add/observable/combineLatest';
 import 'rxjs/add/operator/do';
 import * as _isEqual from 'lodash.isequal';
-import {NEW_NODE_ID} from '../store/treeReducer';
+import {
+  expandedNodesSelector,
+  NEW_NODE_ID,
+  previouslySelectedNodeSelector,
+  selectedNodeSelector
+} from '../store/treeReducer';
+import {select, Store} from '@ngrx/store';
+import {TreeLoadPathAction} from '../store/treeActions.service';
+import {Subscription} from 'rxjs/Subscription';
 
 const isEqual = _isEqual;
 
@@ -24,8 +31,13 @@ export class TreeModel {
   public nodes$: Observable<ITreeNodes>;
   public rootNodes$: Observable<IOuterNode[]>;
   public currentSelectedNode$: Observable<IOuterNode>;
+  private expanded: Set<string>;
+  private selected: string = null;
+  private previouslySelected: string = null;
 
-  public constructor(private treeActionDispatcher: TreeActionsDispatcherService,
+  private subscription = new Subscription();
+
+  public constructor(private store: Store<ITreeState>,
                      private treeData$: Observable<ITreeData>,
                      public configuration: IConfiguration,
                      private _fullyLoaded = false) {
@@ -57,6 +69,13 @@ export class TreeModel {
       );
 
     this.initConfiguration();
+    this.subscribeExpanded();
+    this.subscribeSelected();
+    this.subscribePreviouslySelected();
+  }
+
+  public destroy(): void {
+    this.subscription.unsubscribe();
   }
 
   public getParentsList(): Observable<IOuterNode[]> {
@@ -79,7 +98,7 @@ export class TreeModel {
       )
   }
 
-  public getChildren(nodeId: string | null) {
+  public getChildren(nodeId: string | null): Observable<IOuterNode[]> {
     return this.nodes$
       .pipe(
         map((state: ITreeNodes): IOuterNode[] => this.getNodesByParentId(state, nodeId)),
@@ -90,7 +109,27 @@ export class TreeModel {
   }
 
   public initPath(path: string[]): void {
-    this.treeActionDispatcher.loadPath(this.configuration.treeId, path);
+    this.store.dispatch(new TreeLoadPathAction({treeId: this.configuration.treeId, ids: path}));
+  }
+
+  public isExpanded(node: IOuterNode): boolean {
+    if (!node) {
+      return false;
+    }
+
+    return this.expanded.has(node.id);
+  }
+
+  public isSelected(node: IOuterNode): boolean {
+    if (!node) {
+      return false;
+    }
+
+    return this.selected === node.id;
+  }
+
+  public wasPreviouslySelected(nodeId: string): boolean {
+    return this.previouslySelected === nodeId;
   }
 
   private initConfiguration(): void {
@@ -122,5 +161,35 @@ export class TreeModel {
     }
 
     return first.name > second.name ? 1 : -1;
+  }
+
+  private subscribeExpanded(): void {
+    this.subscription.add(
+      this.store
+        .pipe(
+          select(expandedNodesSelector(this.treeId))
+        )
+        .subscribe((expanded: string[]) => this.expanded = new Set(expanded))
+    )
+  }
+
+  private subscribeSelected(): void {
+    this.subscription.add(
+      this.store
+        .pipe(
+          select(selectedNodeSelector(this.treeId))
+        )
+        .subscribe((selected: string) => this.selected = selected)
+    )
+  }
+
+  private subscribePreviouslySelected(): void {
+    this.subscription.add(
+      this.store
+        .pipe(
+          select(previouslySelectedNodeSelector(this.treeId))
+        )
+        .subscribe((selected: string) => this.previouslySelected = selected)
+    )
   }
 }
