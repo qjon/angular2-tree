@@ -1,10 +1,11 @@
 {
   "name": "@rign/angular2-tree",
-  "version": "3.0.2",
+  "version": "3.1.0",
   "license": "MIT",
   "angular-cli": {},
   "scripts": {
-    "start": "ng serve",
+    "start": "ng serve --proxy demo/proxy.conf.json",
+    "backend": "cd backend && npm run start:dev",
     "build": "npm run clean:all && npm run build:inline && npm run build:esm2015 && npm run build:fesm2015 && npm run build:esm5 && npm run build:fesm5 && npm run build:umd && npm run build:min && npm run move:assets && npm run less && npm run clean:tmp",
     "build:inline": "rm -rf ./tmp && rsync -a --exclude *spec.ts *.ts  ./tmp & node config/inlineAssets.js",
     "build:esm2015": "ngc -p config/tsconfig-es2015.json",
@@ -18,10 +19,10 @@
     "clean:all": "rimraf dist/ && npm run clean:tmp",
     "clean:tmp": "rimraf tmp/",
     "lint": "ng lint",
-    "e2e": "rm -rf e2e/screenshots/* && ng e2e -wu false -s false",
+    "e2e": "rm -rf e2e/screenshots/* && ng e2e -wu false",
     "test": "./node_modules/.bin/karma --config karma.conf.js start",
     "gh-pages": "ng build --prod --base-href \"https://qjon.github.io/angular2-tree/\" &&  ./node_modules/.bin/angular-cli-ghpages -b gh-pages  --name=\"Rafał Ignaszewski\" --email=\"rafal@ignaszewski.pl\" --no-silent",
-    "ci": "npm run test && ng e2e -wu false"
+    "ci": "npm run test && ng e2e"
   },
   "repository": {
     "type": "git",

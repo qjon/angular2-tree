@@ -25,7 +25,11 @@ describe('NodeDispatcherService', () => {
       }
     };
 
-    service = new NodeDispatcherService([baseNodeService, nodeService, nodeService2]);
+    service = new NodeDispatcherService();
+
+    service.registerService('tree_base', baseNodeService);
+    service.registerService('tree', nodeService);
+    service.registerService('tree2', nodeService2);
   });
 
   describe('get', () => {
@@ -33,8 +37,8 @@ describe('NodeDispatcherService', () => {
       expect(service.get('tree')).toEqual(nodeService);
     });
 
-    it('should return BaseNodeService if node service is not found', () => {
-      expect(service.get('some_tree')).toEqual(baseNodeService);
+    it('should throw exception node service is not found', () => {
+      expect(() => service.get('some_tree')).toThrowError('No tree service with name some_tree');
     });
   });
 

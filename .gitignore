@@ -44,3 +44,4 @@ proxy.config.json
 
 .rpt2_cache
 /e2e/screenshots/
+backend/node_modules

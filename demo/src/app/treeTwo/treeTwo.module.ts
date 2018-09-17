@@ -4,9 +4,10 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TreeModule} from '../../../../main';
 import {TreeTwoComponent} from './treeTwo.component';
 import {NewItemComponent} from './newItem.component';
-import {TreeTwoNodeService} from './treeTwoNode.service';
 import {TreeLocalStorageModule} from '../localStorage/treeLocalStorage.module';
 import {HttpClientModule} from '@angular/common/http';
+import {TreeTwoNodeService} from './treeTwoNode.service';
+import {TreeTwoNodeBackendService} from './treeTwoNodeBackend.service';
 
 @NgModule({
   declarations: [
@@ -20,10 +21,11 @@ import {HttpClientModule} from '@angular/common/http';
     HttpClientModule,
     TreeLocalStorageModule,
     ReactiveFormsModule,
-    TreeModule.forFeature(TreeTwoNodeService)
+    TreeModule
   ],
   providers: [
     TreeTwoNodeService,
+    TreeTwoNodeBackendService,
   ]
 })
 export class TreeTwoModule {
