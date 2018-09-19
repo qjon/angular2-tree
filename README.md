@@ -270,7 +270,7 @@ At the end do not forget to add this effects to your app.
  
 ## Changes
 
-### v3.1.1
+### v3.1.2
 * fix Item template error 
 * update bootstrap to 4.1.3
 
