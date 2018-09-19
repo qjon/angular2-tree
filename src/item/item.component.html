@@ -1,5 +1,5 @@
 <div class="tree-item"
-     [ngClass]="{'tree-item-selected': isSelected && !wasPreviouslySelected}"
+     [ngClass]="{'tree-item-selected': isSelected && !treeModel.wasPreviouslySelected(node.id)}"
      (contextmenu)="onContextMenu($event)"
      riDroppable
      riDraggable

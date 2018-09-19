@@ -270,6 +270,10 @@ At the end do not forget to add this effects to your app.
  
 ## Changes
 
+### v3.1.1
+* fix Item template error 
+* update bootstrap to 4.1.3
+
 ### v3.1.0
 * change tree model initialize and injecting NodeService
 * add NestJS server with new _TreeTwoNodeBackendService_ angular service to show how Tree works with real backend (details in _Demo_ section)
