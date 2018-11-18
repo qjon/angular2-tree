@@ -1,5 +1,7 @@
 # angular2-tree
 
+# [New version of repo is here (v4.0.0)](https://github.com/qjon/angular/tree/master/projects/tree)
+
 Simple component to display tree structure
 
 [![npm (scoped)](https://img.shields.io/npm/v/@rign/angular2-tree.svg)]()
